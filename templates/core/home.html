@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block body %}
+<div class="mt-5"></div>
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            {% for album in albuns %}
+            <div class="col-md-4">
+                <div class="card">
+                  <img class="card-img-top" src="{{ album.capa.url }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ album.nome }}</h5>
+                    <p class="card-text">{{ album.banda.nome }}</p>
+                    <a href="{% url 'musicas' album.id %}" class="btn btn-warning">
+                        Ouvir
+                        <i data-feather="headphones"></i>
+                    </a>
+                  </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

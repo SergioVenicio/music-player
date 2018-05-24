@@ -1,0 +1,87 @@
+#bg {
+    display: none;
+}
+.controls {
+    border: thin solid black;
+    line-height: 0.5em;
+    border-radius: 0.2em;
+    padding-left: 0.5em;
+}
+.controls span {
+    text-align: left;
+}
+
+/* The slider itself */
+#vol-control {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 18px;
+    outline: none;
+    opacity: 0.8;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 0.1em;
+    background: transparent;
+}
+
+/* Mouse-over effects */
+#vol-control:hover {
+    opacity: 1;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+#vol-control::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 1px solid #000000;
+    height: 16px;
+    width: 14px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+    border-radius: 100%;
+}
+
+#vol-control::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 16px;
+    width: 14px;
+    border-radius: 3px;
+    background: #ffffff;
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+#vol-control::-ms-track {
+    width: 100%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+#vol-control::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: #FFF;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+#vol-control::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #343a40;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+
+.card {
+    width: 18rem;
+}
+.card > img {
+    max-height: 13.5rem;
+}

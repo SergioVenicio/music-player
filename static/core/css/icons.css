@@ -1,0 +1,11 @@
+.feather {
+  width: 16px;
+  height: 16px;
+  margin-left: 0.5em;
+}
+
+.controls .feather {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.5em;
+}

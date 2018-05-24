@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container-fluid">
+  <div class="mt-5"></div>
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <form id="form_musica">
+        {% for field in form %}
+          <div class="form-group">
+            <label for="{{ field.name }}">{{ field.name }}</label>
+            {{ field }}
+          </div>
+        {% endfor %}
+        <div class="btn_wrapper text-center">
+          <input type="hidden" id="file">
+          <button type="button" id="btn-save" class="btn btn-primary">
+            <i class="save" data-feather="save"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'core/js/token.js' %}"></script>
+  <script src="{% static 'core/js/add_music.js' %}"></script>
+{% endblock %}

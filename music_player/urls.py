@@ -1,13 +1,11 @@
-from django.contrib import admin
-from rest_framework.routers import DefaultRouter
-from django.urls import include, path
 from core import views, viewset
 from django.conf import settings
+from django.contrib import admin
+from django.urls import include, path
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
 
-
-router = DefaultRouter()
-
+router = DefaultRouter(trailing_slash=False)
 router.register(r'genero', viewset.GeneroViewSet, base_name='genero')
 router.register(r'banda', viewset.BandaViewSet, base_name='banda')
 router.register(r'album', viewset.AlbumViewSet, base_name='album')
@@ -16,6 +14,8 @@ router.register(
     r'musicas/album/(?P<album_id>.+)', viewset.MusicaViewSet,
     base_name='musica_filter'
 )
+
+app_name = 'teste'
 
 urlpatterns = [
     path('', views.home, name='home'),

@@ -1,3 +1,6 @@
+"""
+    Modelos do banco de dados
+"""
 import os
 from django.db import models
 from music_player.settings import MEDIA_ROOT
@@ -9,9 +12,18 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
+    """
+        Classe de manipulação de usuários
+    """
     use_in_migration = True
 
     def create_user(self, email, password):
+        """
+            Cria um novo usuário
+            :param email: Email do usuário
+            :param password: Senha do usuário
+            :return: Uma instancia de usuário
+        """
         if not email:
             raise ValueError('O e-mail é obrigatorio!')
 
@@ -24,19 +36,28 @@ class UserManager(BaseUserManager):
         usuario = self.model(
             email=self.normalize_email(email)
         )
+        usuario.is_staff = True
         usuario.set_password(password)
         usuario.save()
         return usuario
 
     def create_superuser(self, email, password):
+        """
+            Cria um  usuário administrador
+            :param email: Email do usuário
+            :param password: Senha do usuário
+            :return: Uma instancia de usuário administrador
+        """
         usuario = self.create_user(email, password)
         usuario.is_admin = True
-        usuario.is_staff = True
         usuario.save()
         return usuario
 
 
 class Usuario(AbstractBaseUser):
+    """
+        Modelo de usuários
+    """
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -48,20 +69,35 @@ class Usuario(AbstractBaseUser):
 
     @property
     def is_superuser(self):
+        """
+            Propriedade que define usuários administradores
+        """
         return self.is_admin
 
     @property
     def is_staff(self):
+        """
+            Propriedade que define usuários comuns
+        """
         return self.is_admin
 
     def has_perm(self, perm, obj=None):
+        """
+            Permissões do usuário
+        """
         return self.is_admin
 
     def has_module_perms(self, app_label):
+        """
+            Permissões do usuário em módulos
+        """
         return self.is_admin
 
 
 class Genero(models.Model):
+    """
+        Modelo de genero musical
+    """
     descricao = models.CharField(max_length=250)
 
     def __str__(self):
@@ -69,6 +105,9 @@ class Genero(models.Model):
 
 
 class Banda(models.Model):
+    """
+        Modelo de bandas
+    """
     nome = models.CharField(max_length=250)
     genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
 
@@ -77,6 +116,9 @@ class Banda(models.Model):
 
 
 class Album(models.Model):
+    """
+        Modelo de albuns
+    """
     nome = models.CharField(max_length=250)
     banda = models.ForeignKey(Banda, on_delete=models.CASCADE)
     data_lancamento = models.PositiveIntegerField()
@@ -87,6 +129,9 @@ class Album(models.Model):
 
 
 class Musica(models.Model):
+    """
+        Modelo de musicas
+    """
     nome = models.CharField(max_length=250)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     ordem = models.PositiveIntegerField(null=True)
@@ -97,11 +142,15 @@ class Musica(models.Model):
         return self.nome
 
     class Meta:
+        """ Ordenação utilizando o atributor ordem """
         ordering = ('ordem',)
 
 
 @receiver(pre_save, sender=Musica)
 def change_tipo(sender, instance, **kwargs):
+    """
+        Altera o tipo do arquivo
+    """
     arquivo_tipo = os.path.splitext(instance.arquivo.name)[1]
     arquivo_tipo = arquivo_tipo[1::].lower()
 
@@ -117,6 +166,9 @@ def change_tipo(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Musica)
 def apaga_musica(sender, instance, **kwargs):
+    """
+        Apaga uma musica do hd quando ela for apagada do banco de dados
+    """
     try:
         os.remove(os.path.join(MEDIA_ROOT, instance.arquivo.name))
     except FileNotFoundError:
@@ -127,5 +179,8 @@ def apaga_musica(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Album)
 def apaga_capa(sender, instance, **kwargs):
+    """
+        Apaga uma capa do hd quando o album for apagada do banco de dados
+    """
     arquivo = os.path.join(BASE_DIR, 'static', str(instance.capa))
     os.remove(arquivo)

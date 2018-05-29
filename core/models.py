@@ -36,7 +36,7 @@ class UserManager(BaseUserManager):
         usuario = self.model(
             email=self.normalize_email(email)
         )
-        usuario.is_staff = True
+        usuario.is_staff = False
         usuario.set_password(password)
         usuario.save()
         return usuario
@@ -50,6 +50,7 @@ class UserManager(BaseUserManager):
         """
         usuario = self.create_user(email, password)
         usuario.is_admin = True
+        usuario.is_staff = True
         usuario.save()
         return usuario
 
@@ -77,7 +78,7 @@ class Usuario(AbstractBaseUser):
     @property
     def is_staff(self):
         """
-            Propriedade que define usuários comuns
+            Propriedade que define se o usuário pode logar no admin
         """
         return self.is_admin
 

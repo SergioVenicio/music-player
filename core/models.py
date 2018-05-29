@@ -104,6 +104,9 @@ class Genero(models.Model):
     def __str__(self):
         return self.descricao
 
+    def __repr__(self):
+        return f'Genero({self.descricao})'
+
 
 class Banda(models.Model):
     """
@@ -114,6 +117,9 @@ class Banda(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def __repr__(self):
+        return f'Banda({self.nome}, {self.genero})'
 
 
 class Album(models.Model):
@@ -128,6 +134,9 @@ class Album(models.Model):
     def __str__(self):
         return self.nome
 
+    def __repr__(self):
+        return f'Album({self.nome}, {self.banda}, {self.data_lancamento}, {self.capa})'
+
 
 class Musica(models.Model):
     """
@@ -141,6 +150,10 @@ class Musica(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def __repr__(self):
+        return f'Musica({self.nome}, {self.album}, {self.ordem}, {self.arquivo})'
+
 
     class Meta:
         """ Ordenação utilizando o atributor ordem """

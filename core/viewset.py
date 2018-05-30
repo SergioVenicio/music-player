@@ -1,5 +1,6 @@
 import json
 from core import serializers
+from rest_framework import status
 from rest_framework import viewsets
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -46,8 +47,10 @@ class MusicaViewSet(viewsets.ModelViewSet):
     queryset = Musica.objects.all()
     serializer_class = serializers.MusicaSerializer
     http_method_names = ['get', 'post']
+        
 
     def get_queryset(self):
+        self.serializer_class = serializers.MusicaSerializerList
         try:
             musicas = Musica.objects.filter(album_id=self.kwargs['album_id'])
         except KeyError:
@@ -60,32 +63,35 @@ class MusicaViewSet(viewsets.ModelViewSet):
         ordem = request.data['ordem']
         arquivo = request.data['arquivo']
         tipo = get_file_type(arquivo)
-        if tipo:
-            try:
-                existe = Musica.objects.get(ordem=ordem, album_id=album)
-            except Musica.DoesNotExist:
-                existe = False
+        try:
+            existe = Musica.objects.get(ordem=ordem, album_id=album)
+        except Musica.DoesNotExist:
+            existe = False
 
-            if not existe:
-                arquivo = ContentFile(
-                    decode_file(arquivo), (nome + tipo)
-                )
-                musica = Musica(
-                    nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
-                )
-                musica.save()
-                response = json.dumps({
+        if not existe and tipo:
+            arquivo = ContentFile(
+                decode_file(arquivo), (nome + tipo)
+            )
+            musica = Musica(
+                nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
+            )
+            musica.save()
+            response = json.dumps({
+                'musica': {
                     'id': musica.id,
                     'nome': musica.nome,
                     'ordem': musica.ordem,
                     'tipo': musica.arquivo_tipo,
                     'arquivo': musica.arquivo.path
-                })
-                return JsonResponse(response, safe=False)
-            else:
-                response = json.dumps({
-                    'erro': 'Já existe uma música com essa ordem'
-                })
-                return JsonResponse(response, safe=False)
+                }
+            })
+            return JsonResponse(response, safe=False, status=status.HTTP_201_CREATED)
         else:
-            return JsonResponse('Tipo de arquivo inválido')
+            erros = []
+            if existe:
+                erros.append('Já existe uma música com essa ordem')
+            if not tipo:
+                erros.append('Tipo de arquivo inválido')
+
+            response = json.dumps({'erros': erros})
+            return JsonResponse(response, safe=False, status=400)

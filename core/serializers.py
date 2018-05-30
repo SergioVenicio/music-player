@@ -18,7 +18,6 @@ class BandaSerializer(serializers.HyperlinkedModelSerializer):
 
 class AlbumSerializer(serializers.HyperlinkedModelSerializer):
     banda = serializers.ReadOnlyField(source='banda.nome')
-    # capa = serializers.SerializerMethodField('get_path')
 
     def get_path(self, object):
         return f'http://localhost:8000/{object.capa.url}'
@@ -30,7 +29,6 @@ class AlbumSerializer(serializers.HyperlinkedModelSerializer):
 
 class MusicaSerializer(serializers.HyperlinkedModelSerializer):
     album = serializers.ReadOnlyField(source='album.nome')
-    # arquivo = serializers.SerializerMethodField('get_path')
 
     def get_path(self, object):
         return f'http://localhost:8000/{object.arquivo.url}'
@@ -44,3 +42,20 @@ class MusicaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Musica
         fields = ('nome', 'album', 'ordem', 'arquivo',)
+
+
+class MusicaSerializerList(serializers.HyperlinkedModelSerializer):
+    album = serializers.ReadOnlyField(source='album.nome')
+
+    def get_path(self, object):
+        return f'http://localhost:8000/{object.arquivo.url}'
+
+    def create(self, validated_data):
+        return Musica(**validated_data)
+
+    def validate(self, data):
+        return data
+
+    class Meta:
+        model = Musica
+        fields = ('nome', 'album', 'ordem', 'arquivo', 'arquivo_tipo')

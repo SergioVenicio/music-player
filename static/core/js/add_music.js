@@ -28,12 +28,35 @@ $(document).ready( function (){
       }
 
       $.ajax({
-        url: '/api_v1/musicas/',
+        url: '/api_v1/musicas',
         type: 'POST',
         data: musica,
         dataType: 'json',
-        success: function (data) {
-          console.log(data);
+        statusCode: {
+          201: function (data) {
+            data = JSON.parse(data);
+            if(data.musica) {
+              $('#btn-close').addClass('btn-success');
+              $("#modal-text").text('Música cadastrada com sucesso!');
+            } else {
+              $('#btn-close').addClass('btn-danger');
+              $('#modal-text').text(data.erros.join(', '));
+            }
+            $('#addmusic').modal();
+          },
+          400: function (data) {
+            console.log(data);
+            
+            data = JSON.parse(data.responseJSON);
+            $('#btn-close').addClass('btn-danger');
+            $('#modal-text').text(data.erros.join(', '));
+            $('#addmusic').modal();
+          },
+          404: function () {
+            $('#btn-close').addClass('btn-warning');
+            $('#modal-text').text('Erro ao acessar a api');
+            $('#addmusic').modal();
+          }
         }
       });
     }

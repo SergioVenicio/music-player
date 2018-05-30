@@ -5,6 +5,7 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
+
 router = DefaultRouter(trailing_slash=False)
 router.register(r'genero', viewset.GeneroViewSet, base_name='genero')
 router.register(r'banda', viewset.BandaViewSet, base_name='banda')
@@ -15,8 +16,7 @@ router.register(
     base_name='musica_filter'
 )
 
-app_name = 'teste'
-
+app_name="music-player"
 urlpatterns = [
     path('', views.home, name='home'),
     path('musicas/<int:album_id>/', views.musicas, name="musicas"),

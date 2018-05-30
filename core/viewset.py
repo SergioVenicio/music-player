@@ -1,6 +1,5 @@
 import json
 from core import serializers
-from rest_framework import status
 from rest_framework import viewsets
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -47,7 +46,6 @@ class MusicaViewSet(viewsets.ModelViewSet):
     queryset = Musica.objects.all()
     serializer_class = serializers.MusicaSerializer
     http_method_names = ['get', 'post']
-        
 
     def get_queryset(self):
         self.serializer_class = serializers.MusicaSerializerList
@@ -68,6 +66,8 @@ class MusicaViewSet(viewsets.ModelViewSet):
         except Musica.DoesNotExist:
             existe = False
 
+        print(existe)
+        print(tipo)
         if not existe and tipo:
             arquivo = ContentFile(
                 decode_file(arquivo), (nome + tipo)
@@ -85,7 +85,7 @@ class MusicaViewSet(viewsets.ModelViewSet):
                     'arquivo': musica.arquivo.path
                 }
             })
-            return JsonResponse(response, safe=False, status=status.HTTP_201_CREATED)
+            return JsonResponse(response, safe=False, status=201)
         else:
             erros = []
             if existe:

@@ -18,9 +18,11 @@ def get_all_musics(album_id=None):
 
 def get_file_type(base64_data):
     data_type = base64_data[:10]
-    extenxion = base64_data[11:15]
+    extension = base64_data[11:15]
+    print(data_type)
+    print(extension)
     if data_type == 'data:audio':
-        if extenxion == 'mpeg':
+        if extension == 'mpeg':
             return '.mp3'
     else:
         return False

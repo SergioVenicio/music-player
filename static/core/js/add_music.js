@@ -8,17 +8,22 @@ $(document).ready( function (){
       }
   });
 
-  $("#btn-save").on({
-    'click': function () {
-      let nome = $("#id_nome").val();
-      let album = $("#id_album").val();
-      let ordem = $("#id_ordem").val();
+  $("#id_arquivo").on({
+    change: function () {
       let arquivo = document.getElementById('id_arquivo').files[0];
       let reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
       }
       reader.readAsDataURL(arquivo);
+    }
+  })
+
+  $("#btn-save").on({
+    'click': function () {
+      let nome = $("#id_nome").val();
+      let album = $("#id_album").val();
+      let ordem = $("#id_ordem").val();
       let base_arquivo = $("#file").val();
       let token = $('meta[name="csrf-token"]').attr('content');
 
@@ -46,7 +51,7 @@ $(document).ready( function (){
           },
           400: function (data) {
             console.log(data);
-            
+
             data = JSON.parse(data.responseJSON);
             $('#btn-close').addClass('btn-danger');
             $('#modal-text').text(data.erros.join(', '));

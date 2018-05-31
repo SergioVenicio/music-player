@@ -1,18 +1,35 @@
 {% extends 'core/base.html' %}
 {% load static %}
-
 {% block css %}
-    <link rel="stylesheet" href="{% static 'core/css/plyr.min.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/player.css' %}">
 {% endblock %}
-
 {% block body %}
 <div class="container-fluid">
-    <div class="row justify-content-end">
-        <div class="col-md-4">
-            <audio id="player" controls></audio>
-            <ul id="playlist" class="list-group"></ul>
+  <div class="mt-5"></div>
+  <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3 offset-9 text-left">
+            <div class="controls">
+                <div id='bg'>
+                  <audio id="audio"></audio>
+                </div>
+                <input id="vol-control" type="range" min="0" max="100" step="1"></input>
+                <span class="prev">
+                    <i data-feather="rewind"></i>
+                </span>
+                <span class="pause-play">
+                    <i class="play" data-feather="play"></i>
+                    <i class="pause" data-feather="pause"></i>
+                </span>
+                <span class="next">
+                    <i data-feather="fast-forward"></i>
+                </span>
+            </div>
+            <ul id="playlist" class="list-group">
+            </ul>
         </div>
-    </div>
+      </div>
+  </div>
 </div>
 {% endblock %}
 {% block js %}
@@ -20,5 +37,4 @@
   let album_id = {{ album.id }};
 </script>
 <script src="{% static 'core/js/player.js' %}"></script>
-<script src="{% static 'core/js/plyr.polyfilled.js' %}"></script>
 {% endblock %}

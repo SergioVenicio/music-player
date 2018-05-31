@@ -58,4 +58,6 @@ class MusicaSerializerList(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Musica
-        fields = ('nome', 'album', 'ordem', 'arquivo', 'arquivo_tipo')
+        fields = (
+            'nome', 'album', 'ordem', 'arquivo', 'arquivo_tipo', 'duracao'
+        )

@@ -16,7 +16,7 @@ router.register(
     base_name='musica_filter'
 )
 
-app_name="music-player"
+app_name = "music-player"
 urlpatterns = [
     path('', views.home, name='home'),
     path('musicas/<int:album_id>/', views.musicas, name="musicas"),

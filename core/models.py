@@ -2,12 +2,15 @@
     Modelos do banco de dados
 """
 import os
+import eyed3
+from mutagen.mp3 import MP3
 from django.db import models
 from music_player.settings import MEDIA_ROOT
 from django.dispatch import receiver
 from music_player.settings import BASE_DIR
+from datetime import timedelta
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import pre_save, post_delete
+from django.db.models.signals import pre_save, post_save, post_delete
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
@@ -135,7 +138,9 @@ class Album(models.Model):
         return self.nome
 
     def __repr__(self):
-        return f'Album({self.nome}, {self.banda}, {self.data_lancamento}, {self.capa})'
+        return f'Album(\
+            {self.nome}, {self.banda}, {self.data_lancamento}, {self.capa}\
+        )'
 
 
 class Musica(models.Model):
@@ -147,13 +152,15 @@ class Musica(models.Model):
     ordem = models.PositiveIntegerField(null=True)
     arquivo = models.FileField(_('File'), upload_to='musics')
     arquivo_tipo = models.CharField(max_length=10, blank=True)
+    duracao = models.DurationField(blank=True, null=True)
 
     def __str__(self):
         return self.nome
 
     def __repr__(self):
-        return f'Musica({self.nome}, {self.album}, {self.ordem}, {self.arquivo})'
-
+        return f'Musica(\
+            {self.nome}, {self.album}, {self.ordem}, {self.arquivo}\
+        )'
 
     class Meta:
         """ Ordenação utilizando o atributor ordem """
@@ -176,6 +183,22 @@ def change_tipo(sender, instance, **kwargs):
         arquivo_tipo = 'audio/wav'
     else:
         raise ValueError('Tipo de arquivo não permitido!')
+
+    instance.arquivo_tipo = arquivo_tipo
+
+
+@receiver(post_save, sender=Musica)
+def get_duration(sender, instance, **kwargs):
+    file = eyed3.load(instance.arquivo.path)
+    file.initTag()
+    file.tag.album = str(instance.album)
+    file.tag.artist = str(instance.album.banda.nome)
+    file.tag.genre = str(instance.album.banda.genero)
+    file.tag.title = str(instance.nome)
+    file.tag.track_num = str(instance.ordem)
+    file.tag.save()
+    duracao = timedelta(seconds=MP3(instance.arquivo.path).info.length)
+    Musica.objects.filter(pk=instance.id).update(duracao=duracao)
 
 
 @receiver(post_delete, sender=Musica)

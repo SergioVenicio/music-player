@@ -33,4 +33,4 @@ class MusicaForm(forms.ModelForm):
 
     class Meta:
         model = models.Musica
-        exclude = ('arquivo_tipo',)
+        exclude = ('arquivo_tipo', 'duracao',)

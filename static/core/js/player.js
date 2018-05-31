@@ -1,77 +1,84 @@
+var mus = 0;
+var _player = document.getElementById("audio");
+
 $(document).ready(function() {
-  let options = {
-    'autoplay': false
-  }
-  let controls = `
-  <div class="plyr__controls">
-      <button type="button" class="plyr__control" data-plyr="restart">
-          <svg role="presentation"><use xlink:href="#plyr-restart"></use></svg>
-          <span class="plyr__tooltip" role="tooltip">Restart</span>
-      </button>
-      <button type="button" class="plyr__control" data-plyr="rewind">
-          <svg role="presentation"><use xlink:href="#plyr-rewind"></use></svg>
-          <span class="plyr__tooltip" role="tooltip">Rewind {seektime} secs</span>
-      </button>
-      <button type="button" class="plyr__control" aria-pressed="false" aria-label="Play, {title}" data-plyr="play">
-          <svg class="icon--pressed" role="presentation"><use xlink:href="#plyr-pause"></use></svg>
-          <svg class="icon--not-pressed" role="presentation"><use xlink:href="#plyr-play"></use></svg>
-          <span class="label--pressed plyr__tooltip" role="tooltip">Pause</span>
-          <span class="label--not-pressed plyr__tooltip" role="tooltip">Play</span>
-      </button>
-      <button type="button" class="plyr__control" data-plyr="fast-forward">
-          <svg role="presentation"><use xlink:href="#plyr-fast-forward"></use></svg>
-          <span class="plyr__tooltip" role="tooltip">Forward {seektime} secs</span>
-      </button>
-      <div class="plyr__progress">
-          <label for="plyr-seek-{id}" class="plyr__sr-only">Seek</label>
-          <input data-plyr="seek" type="range" min="0" max="100" step="0.01" value="0" id="plyr-seek-{id}">
-          <progress class="plyr__progress--buffer" min="0" max="100" value="0">% buffered</progress>
-          <span role="tooltip" class="plyr__tooltip">00:00</span>
-      </div>
-      <div class="plyr__time plyr__time--current" aria-label="Current time">00:00</div>
-      <div class="plyr__time plyr__time--duration" aria-label="Duration">00:00</div>
-      <button type="button" class="plyr__control" aria-pressed="false" aria-label="Mute" data-plyr="mute">
-          <svg class="icon--pressed" role="presentation"><use xlink:href="#plyr-muted"></use></svg>
-          <svg class="icon--not-pressed" role="presentation"><use xlink:href="#plyr-volume"></use></svg>
-          <span class="label--pressed plyr__tooltip" role="tooltip">Unmute</span>
-          <span class="label--not-pressed plyr__tooltip" role="tooltip">Mute</span>
-      </button>
-      <div class="plyr__volume">
-          <label for="plyr-volume-{id}" class="plyr__sr-only">Volume</label>
-          <input data-plyr="volume" type="range" min="0" max="1" step="0.05" value="1" autocomplete="off" id="plyr-volume-{id}">
-      </div>
-      <button type="button" class="plyr__control" aria-pressed="true" aria-label="Enable captions" data-plyr="captions">
-          <svg class="icon--pressed" role="presentation"><use xlink:href="#plyr-captions-on"></use></svg>
-          <svg class="icon--not-pressed" role="presentation"><use xlink:href="#plyr-captions-off"></use></svg>
-          <span class="label--pressed plyr__tooltip" role="tooltip">Disable captions</span>
-          <span class="label--not-pressed plyr__tooltip" role="tooltip">Enable captions</span>
-      </button>
-      <button type="button" class="plyr__control" aria-pressed="false" aria-label="Enter fullscreen" data-plyr="fullscreen">
-          <svg class="icon--pressed" role="presentation"><use xlink:href="#plyr-exit-fullscreen"></use></svg>
-          <svg class="icon--not-pressed" role="presentation"><use xlink:href="#plyr-enter-fullscreen"></use></svg>
-          <span class="label--pressed plyr__tooltip" role="tooltip">Exit fullscreen</span>
-          <span class="label--not-pressed plyr__tooltip" role="tooltip">Enter fullscreen</span>
-      </button>
-  </div>
-  `;
-  let player = new Plyr('#player', {controls});
-  let musicas = [];
-  $.ajax({
-    'url': '/api_v1/musicas/album/' + album_id,
-    'type': 'GET',
-    success: function (data) {       
-      for(var i = 0; i < data.length; i++) {
-          musicas.push({
-            'src': data[i].arquivo,
-            'type': 'audio/mp3'
-          });
-          $("#playlist").append("<li class='list-group-item'>" + data[i].nome + "</li>");
+    let playlist = [];
+    $.ajax({
+      'url': '/api_v1/musicas/album/' + album_id,
+      'type': 'GET',
+      success: function (data) {
+        for(var i = 0; i < data.length; i++) {
+            playlist.push(data[i].arquivo);
+            if(data[i].duracao)
+            {
+              $("#playlist").append("<li class='list-group-item'>"+ data[i].nome + " <span class='badge badge-warning'>" + data[i].duracao.substr(3, 5) + "</li>");
+            } else {
+              $("#playlist").append("<li class='list-group-item'>"+ data[i].nome + " <span class='badge badge-warning'>00:00</li>");
+            }
+        }
       }
-      player.source = {
-        type: 'audio',
-        title: 'Music Player',
-        sources: musicas
+    });
+    $(".pause").hide();
+    _player.volume = 0.3;
+    _player.controls = true;
+
+
+  function player(x) {
+    var i = 0;
+    _player.src = playlist[x];
+    _player.load();
+    _player.play();
+    _player.onended = function() {
+      i++;
+      if (i > playlist.length) {
+        i = 0;
+      }
+      _player.src = playlist[i];
+      if(time != 0) {
+          _player.play();
+      } else {
+          _player.load();
+          _player.play();
       }
     }
+  }
+
+  $("#vol-control").on({
+      change: function () {
+          _player.volume = $(this).val() / 100;
+      }
+  })
+
+  $(".pause-play").on({
+      click: function () {
+          if(!_player.paused) {
+             $(".pause").hide();
+             $(".play").show();
+            _player.pause();
+        } else {
+            $(".play").hide();
+            $(".pause").show();
+            player(mus);
+        }
+      }
   });
-})
+
+  $(".next").on({
+    click: function() {
+      mus = mus + 1;
+      if(mus > playlist.length) {
+        mus = 0;
+      }
+      player(mus);
+    }
+  })
+  $(".prev").on({
+    click: function () {
+      mus = mus - 1;
+      if(mus < 0) {
+        mus = 0;
+      }
+      player(mus);
+    }
+  });
+});

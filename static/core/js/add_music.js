@@ -41,9 +41,11 @@ $(document).ready( function (){
           201: function (data) {
             data = JSON.parse(data);
             if(data.musica) {
+              $('#btn-close').removeClass('btn-danger');
               $('#btn-close').addClass('btn-success');
               $("#modal-text").text('Música cadastrada com sucesso!');
             } else {
+              $('#btn-close').removeClass('btn-success');
               $('#btn-close').addClass('btn-danger');
               $('#modal-text').text(data.erros.join(', '));
             }

@@ -5,10 +5,11 @@ import os
 import eyed3
 from mutagen.mp3 import MP3
 from django.db import models
-from music_player.settings import MEDIA_ROOT
-from django.dispatch import receiver
-from music_player.settings import BASE_DIR
 from datetime import timedelta
+from django.dispatch import receiver
+from mutagen.wavpack import WavPackInfo
+from music_player.settings import BASE_DIR
+from music_player.settings import MEDIA_ROOT
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -143,6 +144,11 @@ class Album(models.Model):
         )'
 
 
+def upload_musica(instance, filename):
+    album = instance.album
+    return f"musics/{album.banda.nome}/{album.nome}/{filename}"
+
+
 class Musica(models.Model):
     """
         Modelo de musicas
@@ -150,7 +156,7 @@ class Musica(models.Model):
     nome = models.CharField(max_length=250)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     ordem = models.PositiveIntegerField(null=True)
-    arquivo = models.FileField(_('File'), upload_to='musics')
+    arquivo = models.FileField(_('File'), upload_to=upload_musica)
     arquivo_tipo = models.CharField(max_length=10, blank=True)
     duracao = models.DurationField(blank=True, null=True)
 
@@ -164,7 +170,7 @@ class Musica(models.Model):
 
     class Meta:
         """ Ordenação utilizando o atributor ordem """
-        ordering = ('ordem',)
+        ordering = ('album', 'ordem',)
 
 
 @receiver(pre_save, sender=Musica)
@@ -177,8 +183,6 @@ def change_tipo(sender, instance, **kwargs):
 
     if arquivo_tipo == ('mp3' or '.mp3'):
         arquivo_tipo = 'audio/mpeg'
-    elif arquivo_tipo == 'ogg':
-        arquivo_tipo = 'audio/ogg'
     elif arquivo_tipo == 'wav':
         arquivo_tipo = 'audio/wav'
     else:
@@ -197,7 +201,12 @@ def get_duration(sender, instance, **kwargs):
     file.tag.title = str(instance.nome)
     file.tag.track_num = str(instance.ordem)
     file.tag.save()
-    duracao = timedelta(seconds=MP3(instance.arquivo.path).info.length)
+    if instance.arquivo_tipo == 'audio/mpeg':
+        duracao = timedelta(seconds=MP3(instance.arquivo.path).info.length)
+    elif instance.arquivo_tipo == 'audio/wav':
+        duracao = timedelta(
+            seconds=WavPackInfo(instance.arquivo.path).info.length
+        )
     Musica.objects.filter(pk=instance.id).update(duracao=duracao)
 
 
@@ -207,7 +216,12 @@ def apaga_musica(sender, instance, **kwargs):
         Apaga uma musica do hd quando ela for apagada do banco de dados
     """
     try:
-        os.remove(os.path.join(MEDIA_ROOT, instance.arquivo.name))
+        os.remove(
+            os.path.join(
+                MEDIA_ROOT,
+                instance.arquivo.path
+            )
+        )
     except FileNotFoundError:
         print('Arquivo não encontrado: {}'.format(
             instance.arquivo.path

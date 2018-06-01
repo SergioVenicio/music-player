@@ -2,31 +2,45 @@
 {% load static %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'core/css/player.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/icons.css' %}">
 {% endblock %}
 {% block body %}
 <div class="container-fluid">
   <div class="mt-5"></div>
   <div class="container-fluid">
       <div class="row">
-        <div class="col-md-3 offset-9 text-left">
+        <div class="col-md-2 offset-5">
+          <div class="card">
+            <img class="card-img-top" src="{{ album.capa.url }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ album.nome }}</h5>
+              <p class="card-text">{{ album.banda.nome }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 offset-1 text-left">
+            <ul id="playlist" class="list-group"></ul>
             <div class="controls">
                 <div id='bg'>
-                  <audio id="audio"></audio>
+                  <audio id="audio" controls></audio>
                 </div>
-                <input id="vol-control" type="range" min="0" max="100" step="1"></input>
                 <span class="prev">
-                    <i data-feather="rewind"></i>
+                  <i class="fas fa-step-backward"></i>
                 </span>
                 <span class="pause-play">
-                    <i class="play" data-feather="play"></i>
-                    <i class="pause" data-feather="pause"></i>
+                  <i class="fas fa-play play"></i>
+                  <i class="fas fa-pause pause"></i>
                 </span>
                 <span class="next">
-                    <i data-feather="fast-forward"></i>
+                  <i class="fas fa-step-forward"></i>
                 </span>
+                <p class="music-description"></p>
+                <div class="control-volume">
+                  <i class="fas fa-volume-up volume"></i>
+                  <i class="fas fa-volume-off mute"></i>
+                  <input id="vol-control" type="range" min="0" max="100" step="1" />
+                </div>
             </div>
-            <ul id="playlist" class="list-group">
-            </ul>
         </div>
       </div>
   </div>

@@ -13,16 +13,13 @@ def get_all_musics(album_id=None):
     if album_id is None:
         return Musica.objects.all()
 
-    return Musica.objects.filter(album_id=album_id).order_by('ordem')
+    return Musica.objects.filter(album_id=album_id)
 
 
 def get_file_type(base64_data):
     data_type = base64_data[:10]
-    extension = base64_data[11:15]
-    print(data_type)
-    print(extension)
     if data_type == 'data:audio':
-        if extension == 'mpeg':
+        if base64_data[11:15] == 'mpeg':
             return '.mp3'
     else:
         return False

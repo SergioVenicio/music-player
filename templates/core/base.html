@@ -8,7 +8,7 @@
   {% block meta %}{% endblock %}
   <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-  <link rel="stylesheet" href="{% static 'core/css/icons.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/fontawesome-all.min.css' %}">
   {% block css %}{% endblock %}
   <title>{% block title %}Music Player{% endblock %}</title>
 </head>
@@ -20,9 +20,5 @@
 <script src="{% static 'core/js/jquery.min.js' %}"></script>
 <script src="{% static 'core/js/popper.min.js' %}"></script>
 <script src="{% static 'core/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'core/js/feather.min.js' %}"></script>
 {% block js %}{% endblock %}
- <script>
-   feather.replace();
- </script>
 </html>

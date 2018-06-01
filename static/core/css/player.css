@@ -1,11 +1,27 @@
+#playlist {
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
 .controls {
-    border: thin solid black;
-    line-height: 0.5em;
-    border-radius: 0.2em;
-    padding-left: 0.5em;
+    line-height: 0.5rem;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: thin solid #dee6f2;
+    border-top: 0;
 }
 .controls span {
     text-align: left;
+}
+
+.control-volume {
+  float: right;
+  width: 5.5em;
+}
+
+.music-description {
+  display: inline;
 }
 
 /* The slider itself */
@@ -19,6 +35,7 @@
     transition: opacity .2s;
     border-radius: 0.1em;
     background: transparent;
+    width: 5em;
 }
 
 /* Mouse-over effects */

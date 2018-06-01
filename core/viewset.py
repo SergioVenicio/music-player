@@ -2,7 +2,6 @@ import json
 from core import serializers
 from rest_framework import viewsets
 from django.http import JsonResponse
-from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from core.utils import get_file_type, decode_file
 from core.models import Genero, Banda, Album, Musica
@@ -66,8 +65,6 @@ class MusicaViewSet(viewsets.ModelViewSet):
         except Musica.DoesNotExist:
             existe = False
 
-        print(existe)
-        print(tipo)
         if not existe and tipo:
             arquivo = ContentFile(
                 decode_file(arquivo), (nome + tipo)

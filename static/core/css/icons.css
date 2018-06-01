@@ -1,11 +1,10 @@
-.feather {
-  width: 16px;
-  height: 16px;
-  margin-left: 0.5em;
+.prev {
+  padding-right: 0.5rem;
 }
-
-.controls .feather {
-    width: 18px;
-    height: 18px;
-    margin-right: 0.5em;
+.next {
+  padding-left: 0.5rem;
+}
+.volume, .mute {
+    position: absolute;
+    right: 6rem;
 }

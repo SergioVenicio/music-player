@@ -3,10 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 static/bootswatch/
-media/capas/*.jpg
-media/capas/*.jpeg
-media/capas/*.png
-media/musics/*.mp3
+media/capas/*
+media/musics/*
 core/migrations/*
 db.sqlite
 .vscode

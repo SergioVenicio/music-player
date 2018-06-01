@@ -3,7 +3,7 @@ var volume = 1;
 var _player = document.getElementById("audio");
 var playlist = [];
 
-function player(music) {
+function player(music=0) {
   if(music < 0) {
     music = 0;
   }
@@ -12,6 +12,7 @@ function player(music) {
     _player.src = playlist[music].src;
     _player.load();
     _player.play();
+    _player.loaded = true;
     $(".pause").show();
     $(".play").hide();
   } else {
@@ -83,7 +84,11 @@ $(document).ready(function() {
         } else {
           $(".pause").show();
           $(".play").hide();
-            _player.play();
+          if(_player.loaded) {
+              _player.play();
+          } else {
+            changeSong(mus);
+          }
         }
       }
   });

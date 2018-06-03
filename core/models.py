@@ -183,8 +183,6 @@ def change_tipo(sender, instance, **kwargs):
 
     if arquivo_tipo == ('mp3' or '.mp3'):
         arquivo_tipo = 'audio/mpeg'
-    elif arquivo_tipo == 'wav':
-        arquivo_tipo = 'audio/wav'
     else:
         raise ValueError('Tipo de arquivo não permitido!')
 

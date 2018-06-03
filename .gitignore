@@ -9,6 +9,8 @@ core/migrations/*
 db.sqlite
 .vscode
 
+.pytest_cache/
+
 # C extensions
 *.so
 

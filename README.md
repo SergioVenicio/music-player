@@ -1,4 +1,5 @@
 # Music Player
+This project is a open source web music player with python / django.
 
 # INSTALL
 ``` console
@@ -9,11 +10,8 @@ flake8
 ```
 
 # Usage
-> ./manager makemigrations
-
-> ./manager migrate
-
-> ./manager runserver
-
-# Description
-This project is a open source web music player with python / django.
+``` console
+./manager makemigrations
+./manager migrate
+./manager runserver
+```

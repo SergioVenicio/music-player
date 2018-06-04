@@ -51,6 +51,7 @@ $(document).ready(function() {
     $(".pause").hide();
 
     _player.volume = 1;
+    $("#vol-control").val(100);
     _player.controls = true;
 
   $("#vol-control").on({

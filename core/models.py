@@ -104,6 +104,9 @@ class Genero(models.Model):
         Modelo de genero musical
     """
     descricao = models.CharField(max_length=250)
+    imagen = models.ImageField(
+        ('Genero'), upload_to='images/generos', blank=True
+    )
 
     def __str__(self):
         return self.descricao
@@ -111,12 +114,18 @@ class Genero(models.Model):
     def __repr__(self):
         return f'Genero({self.descricao})'
 
+    class Meta:
+        ordering = ('descricao', 'id',)
+
 
 class Banda(models.Model):
     """
         Modelo de bandas
     """
     nome = models.CharField(max_length=250)
+    imagen = models.ImageField(
+        ('Banda'), upload_to='images/bandas', blank=True
+    )
     genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -124,6 +133,9 @@ class Banda(models.Model):
 
     def __repr__(self):
         return f'Banda({self.nome}, {self.genero})'
+
+    class Meta:
+        ordering = ('nome', 'genero',)
 
 
 class Album(models.Model):
@@ -133,7 +145,7 @@ class Album(models.Model):
     nome = models.CharField(max_length=250)
     banda = models.ForeignKey(Banda, on_delete=models.CASCADE)
     data_lancamento = models.PositiveIntegerField()
-    capa = models.ImageField(('Capa'), upload_to='capas')
+    capa = models.ImageField(('Capa'), upload_to='images/capas')
 
     def __str__(self):
         return self.nome
@@ -142,6 +154,9 @@ class Album(models.Model):
         return f'Album(\
             {self.nome}, {self.banda}, {self.data_lancamento}, {self.capa}\
         )'
+
+    class Meta:
+        ordering = ('nome', 'banda', 'data_lancamento',)
 
 
 def upload_musica(instance, filename):

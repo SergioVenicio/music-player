@@ -1,12 +1,12 @@
 import base64
+from core import models
 from music_player import settings
-from core.models import Musica, Album
 from django.core.paginator import Paginator, EmptyPage
 
-
+"""
 def get_albuns(album_id=None, per_page=None, page=1, pagination=False):
     if album_id is None:
-        albuns = Album.objects.all()
+        albuns = models.Album.objects.all()
         if pagination:
             if not per_page:
                 per_page = settings.PERPAGE
@@ -19,14 +19,77 @@ def get_albuns(album_id=None, per_page=None, page=1, pagination=False):
         else:
             return albuns
 
-    return Album.objects.get(pk=album_id)
+    return models.Album.objects.get(pk=album_id)
+"""
+
+
+def get_generos(genero_id=None, per_page=None, page=1, pagination=False):
+    if genero_id is None:
+        generos = models.Genero.objects.all()
+        if pagination:
+            if not per_page:
+
+                per_page = settings.PERPAGE
+            paginator = Paginator(generos, per_page)
+            try:
+                return paginator.page(page)
+            except EmptyPage:
+                return paginator.page(paginator.num_pages)
+        else:
+            return generos
+    else:
+        return models.Genero.objects.get(pk=genero_id)
+
+
+def get_bandas(banda_id=None, genero_id=None, per_page=None,
+               page=1, pagination=False):
+    if banda_id is None:
+        bandas = models.Banda.objects.all()
+        if genero_id is not None:
+            bandas = bandas.filter(genero_id=genero_id)
+
+        if pagination:
+            if not per_page:
+
+                per_page = settings.PERPAGE
+            paginator = Paginator(bandas, per_page)
+            try:
+                return paginator.page(page)
+            except EmptyPage:
+                return paginator.page(paginator.num_pages)
+        else:
+            return bandas
+    else:
+        return models.Banda.objects.get(pk=banda_id)
+
+
+def get_albuns(album_id=None, banda_id=None, per_page=None,
+               page=1, pagination=False):
+    if album_id is None:
+        albuns = models.Album.objects.all()
+        if banda_id is not None:
+            albuns = albuns.filter(banda_id=banda_id)
+
+        if pagination:
+            if not per_page:
+
+                per_page = settings.PERPAGE
+            paginator = Paginator(albuns, per_page)
+            try:
+                return paginator.page(page)
+            except EmptyPage:
+                return paginator.page(paginator.num_pages)
+        else:
+            return albuns
+    else:
+        return models.Album.objects.get(pk=album_id)
 
 
 def get_all_musics(album_id=None):
     if album_id is None:
-        return Musica.objects.all()
+        return models.Musica.objects.all()
 
-    return Musica.objects.filter(album_id=album_id)
+    return models.Musica.objects.filter(album_id=album_id)
 
 
 def get_file_type(base64_data):

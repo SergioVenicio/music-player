@@ -8,19 +8,19 @@
 <div class="mt-5"></div>
 <div class="container-fluid">
     <div class="container">
-      {% if generos %}
+      {% if bandas %}
         <div class="row">
-          {% for genero in generos %}
+          {% for banda in bandas %}
               <div class="col-md-4 mb-5">
                   <div class="card">
-                    {% if genero.imagen %}
-                      <img class="card-img-top" src="{{ genero.imagen.url }}">
+                    {% if banda.imagen %}
+                      <img class="card-img-top" src="{{ banda.imagen.url }}">
                     {% else %}
                       <img class="card-img-top" style="background-color: #000" src="/media/images/ico.png" alt="Imagen não cadastrada">
                     {% endif %}
                     <div class="card-body">
-                      <h5 class="card-title">{{ genero.descricao }}</h5>
-                      <a href="{% url 'bandas' genero.id %}" class="btn btn-warning">
+                      <h5 class="card-title">{{ banda.nome }}</h5>
+                      <a href="{% url 'albuns' banda.id %}" class="btn btn-warning">
                           Abrir
                           <i class="fas fa-paper-plane"></i>
                       </a>
@@ -33,7 +33,7 @@
       {% else %}
               <div class="row">
                 <div class="col-12 text-center">
-                  <h4>Nenhum genero encontrado</h4>
+                  <h4>Nenhuma banda encontrada</h4>
                   <div class="btn-wrapper mt-5"></div>
                   <a href="/" class="btn btn-danger">
                     Voltar

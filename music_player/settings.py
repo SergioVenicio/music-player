@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240000000
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -137,4 +135,4 @@ MEDIA_URL = '/media/'
 CORS_ORIGIN_ALLOW_ALL = True
 
 
-PERPAGE = 3
+PERPAGE = 10

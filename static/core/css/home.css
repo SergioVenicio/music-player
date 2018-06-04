@@ -1,0 +1,6 @@
+.card {
+    width: 18rem;
+}
+.card > img {
+    max-height: 13.5rem;
+}

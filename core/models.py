@@ -193,6 +193,7 @@ def change_tipo(sender, instance, **kwargs):
 def get_duration(sender, instance, **kwargs):
     file = eyed3.load(instance.arquivo.path)
     file.initTag()
+    file.tag._se = None
     file.tag.album = str(instance.album)
     file.tag.artist = str(instance.album.banda.nome)
     file.tag.genre = str(instance.album.banda.genero)

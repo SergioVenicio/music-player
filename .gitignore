@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 static/bootswatch/
-media/capas/*
+media/images/capas/*
+media/images/bandas/*
+media/images/generos/*
 media/musics/*
 core/migrations/*
 db.sqlite3

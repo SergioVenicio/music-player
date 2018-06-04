@@ -1,10 +1,20 @@
 import base64
+from music_player import settings
 from core.models import Musica, Album
+from django.core.paginator import Paginator, EmptyPage
 
 
-def get_albuns(album_id=None):
+def get_albuns(album_id=None, per_page=None, page=1):
     if album_id is None:
-        return Album.objects.all()
+        albums = Album.objects.all()
+        if not per_page:
+            per_page = settings.PERPAGE
+
+        paginator = Paginator(albums, per_page)
+        try:
+            return paginator.page(page)
+        except EmptyPage:
+            return paginator.page(paginator.num_pages)
 
     return Album.objects.get(pk=album_id)
 

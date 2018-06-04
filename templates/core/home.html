@@ -8,23 +8,50 @@
 <div class="mt-5"></div>
 <div class="container-fluid">
     <div class="container">
+      {% if albuns %}
         <div class="row">
-            {% for album in albuns %}
-            <div class="col-md-4 mb-5">
-                <div class="card">
-                  <img class="card-img-top" src="{{ album.capa.url }}">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ album.nome }}</h5>
-                    <p class="card-text">{{ album.banda.nome }}</p>
-                    <a href="{% url 'musicas' album.id %}" class="btn btn-warning">
-                        Ouvir
-                        <i class="fas fa-headphones"></i>
-                    </a>
+          {% for album in albuns %}
+              <div class="col-md-4 mb-5">
+                  <div class="card">
+                    <img class="card-img-top" src="{{ album.capa.url }}">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ album.nome }}</h5>
+                      <p class="card-text">{{ album.banda.nome }}</p>
+                      <a href="{% url 'musicas' album.id %}" class="btn btn-warning">
+                          Ouvir
+                          <i class="fas fa-headphones"></i>
+                      </a>
+                    </div>
                   </div>
-                </div>
-            </div>
-            {% endfor %}
+              </div>
+          {% endfor %}
         </div>
+        <form method="GET">
+          <div class="form-row justify-content-center align-items-center">
+            <div class="col-md-2">
+              <input type="text" class="form-control" name="page" value="{{ page }}" placeholder="Página">
+            </div>
+            <div class="col-md-2">
+              <input type="text" class="form-control" name="per_page" value="{{ per_page }}" placeholder="Itens por página">
+            </div>
+            <div class="col-md-1">
+              <button class="btn btn-primary">IR</button>
+            </div>
+            Página: {{ page }} / {{ total_pages }}
+          </div>
+        </form>
+      {% else %}
+              <div class="row">
+                <div class="col-12 text-center">
+                  <h4>Nenhum album encontrado</h4>
+                  <div class="btn-wrapper mt-5"></div>
+                  <a href="/" class="btn btn-danger">
+                    Voltar
+                    <i class="fas fa-home"></i>
+                  </a>
+                </div>
+              </div>
+      {% endif %}
     </div>
 </div>
 {% endblock %}

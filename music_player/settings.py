@@ -135,3 +135,6 @@ MEDIA_URL = '/media/'
 
 # Corsheaders
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+PERPAGE = 3

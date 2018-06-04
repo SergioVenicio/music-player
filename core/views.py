@@ -10,8 +10,19 @@ from . import forms
 
 def home(request):
     """ Retorna todos os albuns cadastrados no sistema """
+
+    page = request.GET.get('page', 1)
+    if not page:
+        page = 1
+
+    per_page = request.GET.get('per_page', None)
+    albuns = get_albuns(per_page=per_page, page=page)
+
     context = {
-        'albuns': get_albuns()
+        'albuns': albuns,
+        'page': albuns.number,
+        'per_page': per_page,
+        'total_pages': albuns.paginator.num_pages
     }
     return render(request, 'core/home.html', context)
 

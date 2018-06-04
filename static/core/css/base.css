@@ -1,3 +1,9 @@
 #bg {
     display: none;
 }
+.navbar-brand {
+  padding-left: 0.5rem; 
+}
+.navbar {
+  padding: 0!important;
+}

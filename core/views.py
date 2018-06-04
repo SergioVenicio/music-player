@@ -2,10 +2,11 @@
     Views básicas do projeto, music-player
 """
 
-from django.shortcuts import render
-from django.core.exceptions import PermissionDenied
-from .utils import get_all_musics, get_albuns
 from . import forms
+from music_player import settings
+from django.shortcuts import render
+from .utils import get_all_musics, get_albuns
+from django.core.exceptions import PermissionDenied
 
 
 def home(request):
@@ -16,6 +17,8 @@ def home(request):
         page = 1
 
     per_page = request.GET.get('per_page', None)
+    if per_page is None or per_page == '':
+        per_page = settings.PERPAGE
     albuns = get_albuns(per_page=per_page, page=page, pagination=True)
 
     context = {

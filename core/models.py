@@ -133,7 +133,7 @@ class Album(models.Model):
     nome = models.CharField(max_length=250)
     banda = models.ForeignKey(Banda, on_delete=models.CASCADE)
     data_lancamento = models.PositiveIntegerField()
-    capa = models.ImageField(('Capa'), upload_to='capas', blank=True)
+    capa = models.ImageField(('Capa'), upload_to='capas')
 
     def __str__(self):
         return self.nome

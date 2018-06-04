@@ -4,17 +4,20 @@ from core.models import Musica, Album
 from django.core.paginator import Paginator, EmptyPage
 
 
-def get_albuns(album_id=None, per_page=None, page=1):
+def get_albuns(album_id=None, per_page=None, page=1, pagination=False):
     if album_id is None:
-        albums = Album.objects.all()
-        if not per_page:
-            per_page = settings.PERPAGE
+        albuns = Album.objects.all()
+        if pagination:
+            if not per_page:
+                per_page = settings.PERPAGE
 
-        paginator = Paginator(albums, per_page)
-        try:
-            return paginator.page(page)
-        except EmptyPage:
-            return paginator.page(paginator.num_pages)
+            paginator = Paginator(albuns, per_page)
+            try:
+                return paginator.page(page)
+            except EmptyPage:
+                return paginator.page(paginator.num_pages)
+        else:
+            return albuns
 
     return Album.objects.get(pk=album_id)
 

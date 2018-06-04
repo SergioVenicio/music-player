@@ -16,7 +16,7 @@ def home(request):
         page = 1
 
     per_page = request.GET.get('per_page', None)
-    albuns = get_albuns(per_page=per_page, page=page)
+    albuns = get_albuns(per_page=per_page, page=page, pagination=True)
 
     context = {
         'albuns': albuns,

@@ -11,8 +11,8 @@ media/musics/*
 
 .pytest_cache/
 
+*music_player/core/migrations/*
 
-*/migrations/*
 db.sqlite3
 
 # C extensions

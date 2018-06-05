@@ -7,11 +7,13 @@ media/images/capas/*
 media/images/bandas/*
 media/images/generos/*
 media/musics/*
-music-player/music_player/core/migrations/*
-db.sqlite3
 .vscode
 
 .pytest_cache/
+
+
+music-player/music_player/core/migrations/*
+db.sqlite3
 
 # C extensions
 *.so

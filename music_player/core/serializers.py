@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Genero, Banda, Album, Musica
+from music_player.core.models import Genero, Banda, Album, Musica
 
 
 class GeneroSerializer(serializers.ModelSerializer):

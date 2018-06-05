@@ -1,10 +1,10 @@
 import json
-from core import serializers
 from rest_framework import viewsets
 from django.http import JsonResponse
+from music_player.core import serializers
 from django.core.files.base import ContentFile
-from core.utils import get_file_type, decode_file
-from core.models import Genero, Banda, Album, Musica
+from music_player.core.utils import get_file_type, decode_file
+from music_player.core.models import Genero, Banda, Album, Musica
 
 
 class GeneroViewSet(viewsets.ModelViewSet):

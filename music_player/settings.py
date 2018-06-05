@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'core',
+    'music_player.core',
 ]
 
 MIDDLEWARE = [
@@ -135,4 +135,4 @@ MEDIA_URL = '/media/'
 CORS_ORIGIN_ALLOW_ALL = True
 
 
-PERPAGE = 10
+PERPAGE = 3

@@ -1,8 +1,8 @@
-from core import views, viewset
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
+from music_player.core import views, viewset
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter(trailing_slash=False)
@@ -19,8 +19,6 @@ app_name = "music-player"
 urlpatterns = [
     path('', views.home, name='home'),
     path('musicas/<int:album_id>/', views.musicas, name="musicas"),
-    path('bandas/<int:genero_id>/', views.bandas, name="bandas"),
-    path('albuns/<int:banda_id>/', views.albuns, name="albuns"),
     path('musicas/add/', views.add_musicas, name="add_musicas"),
     path('admin/', admin.site.urls),
     path('api_v1/', include(router.urls)),

@@ -1,5 +1,5 @@
+from music_player.core import models
 from django.contrib import admin
-from core import models
 
 
 admin.site.register(models.Genero)

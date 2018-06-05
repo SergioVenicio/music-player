@@ -1,5 +1,5 @@
 import pytest
-from core.models import Genero
+from music_player.core.models import Genero
 
 
 @pytest.mark.django_db(transaction=True)

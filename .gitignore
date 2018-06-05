@@ -7,7 +7,7 @@ media/images/capas/*
 media/images/bandas/*
 media/images/generos/*
 media/musics/*
-music-player/core/migrations/*
+music-player/music_player/core/migrations/*
 db.sqlite3
 .vscode
 

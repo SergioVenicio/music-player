@@ -12,7 +12,7 @@ from music_player.settings import BASE_DIR
 from music_player.settings import MEDIA_ROOT
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save, post_save, post_delete
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 class UserManager(BaseUserManager):
@@ -21,10 +21,12 @@ class UserManager(BaseUserManager):
     """
     use_in_migration = True
 
-    def create_user(self, email, password):
+    def create_user(self, email, nome, sobrenome, password):
         """
             Cria um novo usuário
             :param email: Email do usuário
+            :param nome: Nome do usuário
+            :param sobrenome: Sobrenome do usuário
             :param password: Senha do usuário
             :return: Uma instancia de usuário
         """
@@ -38,39 +40,40 @@ class UserManager(BaseUserManager):
             raise ValueError('A senha deve ter pelo menos 6 caracteres!')
 
         usuario = self.model(
-            email=self.normalize_email(email)
+            email=self.normalize_email(email),
+            nome=nome, sobrenome=sobrenome
         )
-        usuario.is_staff = False
         usuario.set_password(password)
         usuario.save()
         return usuario
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, nome, sobrenome, password):
         """
             Cria um  usuário administrador
             :param email: Email do usuário
             :param password: Senha do usuário
             :return: Uma instancia de usuário administrador
         """
-        usuario = self.create_user(email, password)
+        usuario = self.create_user(email, nome, sobrenome, password)
         usuario.is_admin = True
-        usuario.is_staff = True
         usuario.save()
         return usuario
 
 
-class Usuario(AbstractBaseUser):
+class Usuario(AbstractBaseUser, PermissionsMixin):
     """
         Modelo de usuários
     """
     email = models.EmailField(unique=True)
+    nome = models.CharField(max_length=50)
+    sobrenome = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['nome', 'sobrenome']
 
     @property
     def is_superuser(self):
@@ -97,6 +100,9 @@ class Usuario(AbstractBaseUser):
             Permissões do usuário em módulos
         """
         return self.is_admin
+
+    class Meta:
+        ordering = ('email', 'nome', 'sobrenome',)
 
 
 class Genero(models.Model):

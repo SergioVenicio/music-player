@@ -9,3 +9,4 @@ Pillow==5.1.0
 python-magic==0.4.15
 pytz==2018.4
 six==1.11.0
+gunicorn==19.8.1

@@ -12,7 +12,7 @@ media/musics/*
 .pytest_cache/
 
 
-migrations/*
+*/migrations/*
 db.sqlite3
 
 # C extensions

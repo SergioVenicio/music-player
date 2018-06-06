@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% block head %}
+  {% load static %}
+{% endblock %}
+{% block body %}
+{% if form.errors %}
+  <div class="row">
+    <div class="col-md-4 offset-4 mt-1">
+      {% for field in form %}
+        {% for error in field.errors %}
+          <div class="alert alert-danger bg-danger text-center">
+            <p class="text-white">{{ error }}</p>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+<div class="container-fluid">
+    <form method="POST">
+      {% csrf_token %}
+      <div class="col-md-4 offset-4 mt-2">
+      <div class="card text-center">
+        <div class="card-header bg-primary">
+          <img src="/media/images/ico.png" width="150rem">
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              {% for field in form %}
+                <div class="form-group">
+                  {{ field }}
+                </div>
+                {% if not forloop.last %}
+                  <hr>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col text-center">
+              <div class="row">
+                <div class="col">
+                  <button type="submit" class="btn btn-success">
+                    <i class="fas fa-user-plus"></i>
+                  </button>
+                  <a href="{% url 'login' %}" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+  </div>
+{% endblock %}

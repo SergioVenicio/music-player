@@ -14,7 +14,9 @@
   <link rel="icon" type="image/png" href="/media/images/ico.png" />
 </head>
 <body>
-{% include 'core/navbar.html' %}
+{% block navbar %}
+  {% include 'core/navbar.html' %}
+{% endblock %}
 {% block body %}
 {% endblock %}
 </body>

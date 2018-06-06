@@ -16,6 +16,10 @@ $(document).ready( function (){
         $("#file").val(reader.result);
       }
       reader.readAsDataURL(arquivo);
+      var pos = arquivo.name.search('\.(ogg|wav|mp3)$');
+      var r_name = RegExp('(_|/)', 'g')
+      var nome = arquivo.name.substring(0, pos).replace(r_name, ' ');
+      $("#id_nome").val(nome);
     }
   })
 

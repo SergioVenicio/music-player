@@ -11,6 +11,8 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'core.Usuario'
 
+LOGIN_REDIRECT_URL = 'home'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

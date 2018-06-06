@@ -4,6 +4,7 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from music_player.core import views, viewset
 from rest_framework.routers import DefaultRouter
+from django.contrib.auth import views as auth_views
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r'genero', viewset.GeneroViewSet, base_name='genero')
@@ -16,6 +17,17 @@ router.register(
 )
 
 app_name = "music-player"
+USER_URLS = [
+    path('login', auth_views.login, name='login'),
+    path('sign_up', views.sign_up, name='sign_up'),
+    path(
+        'logout',
+        auth_views.LogoutView.as_view(
+            template_name='registration/logout.html'
+        ),
+        name='logout'
+    ),
+]
 urlpatterns = [
     path('', views.home, name='home'),
     path('musicas/<int:album_id>/', views.musicas, name="musicas"),
@@ -24,4 +36,4 @@ urlpatterns = [
     path('musicas/add/', views.add_musicas, name="add_musicas"),
     path('admin/', admin.site.urls),
     path('api_v1/', include(router.urls)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + USER_URLS + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

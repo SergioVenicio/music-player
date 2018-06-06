@@ -2,6 +2,7 @@ from . import models
 from django import forms
 from .utils import get_albuns
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm
 
 
 class UsuarioAdmin(UserAdmin):
@@ -14,6 +15,45 @@ class UsuarioAdmin(UserAdmin):
     search_fields = ('email', 'nome', 'sobrenome',)
     ordering = ('email', 'nome',)
     filter_horizontal = ('groups', 'user_permissions',)
+
+
+class UsuarioForm(UserCreationForm):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={'class': 'form-control', 'placeholder': 'Email'}
+        )
+    )
+    nome = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Nome'}
+        )
+    )
+    sobrenome = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Sobrenome'}
+        )
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Senha'
+            }
+        )
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Confirme sua senha'
+            }
+        )
+    )
+
+    class Meta:
+        model = models.Usuario
+        fields = ('email', 'nome', 'sobrenome', 'password1', 'password2')
 
 
 class MusicaForm(forms.ModelForm):

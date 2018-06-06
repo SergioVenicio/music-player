@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+{% endblock %}
+{% block body %}
+<div class="mt-5"></div>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col text-center mt-5">
+        <h1 class="text-center text-primary">Logout realizado com sucesso!</h1>
+        <a href="/" class="btn btn-success mt-5">
+          Voltar
+          <i class="fas fa-home"></i>
+        </a>
+      </div>
+    </div>
+</div>
+{% endblock %}

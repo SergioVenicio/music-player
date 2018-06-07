@@ -1,4 +1,6 @@
 $(document).ready( function (){
+  $("#id_album").selectpicker();
+
   var csrftoken = getCookie('csrftoken');
   $.ajaxSetup({
       beforeSend: function(xhr, settings) {

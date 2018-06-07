@@ -32,3 +32,11 @@
   transition: all 0.5s;
   background-color: rgba(30, 33, 35, 0.5);
 }
+#id_album, .bs-placeholder {
+  color: #000!important;
+}
+.form-control > .dropdown-toggle {
+  background-color: #f7f7f9;
+  border: thin solid #ced4da;
+  color: #000;
+}

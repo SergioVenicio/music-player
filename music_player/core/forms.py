@@ -76,8 +76,11 @@ class MusicaForm(forms.ModelForm):
     album = forms.ModelChoiceField(
         queryset=get_albuns(),
         widget=forms.Select(
-            attrs={'class': 'form-control', 'placeholder': 'Album'}
-        )
+            attrs={
+                'class': 'form-control selectpicker', 'placeholder': 'Album',
+                'data-live-search': 'true', 'data-style': 'btn-primary',
+                'title': 'Escolha um album'
+            })
     )
 
     ordem = forms.IntegerField(

@@ -13,7 +13,7 @@ from .utils import get_all_musics, get_albuns, get_generos, get_bandas
 
 def sign_up(request):
     if request.method == 'POST':
-        form = forms.UsuarioForm(request.POST)
+        form = forms.UsuarioForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             email = form.cleaned_data.get('email')

@@ -50,10 +50,17 @@ class UsuarioForm(UserCreationForm):
             }
         )
     )
+    avatar = forms.FileField(
+        widget=forms.FileInput(
+            attrs={'placeholder': 'Avatar'}
+        )
+    )
 
     class Meta:
         model = models.Usuario
-        fields = ('email', 'nome', 'sobrenome', 'password1', 'password2')
+        fields = (
+            'email', 'nome', 'sobrenome', 'password1', 'password2', 'avatar'
+        )
 
 
 class MusicaForm(forms.ModelForm):

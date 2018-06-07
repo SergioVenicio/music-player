@@ -12,7 +12,8 @@ from music_player.settings import BASE_DIR
 from music_player.settings import MEDIA_ROOT
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save, post_save, post_delete
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,\
+                                       PermissionsMixin
 
 
 class UserManager(BaseUserManager):
@@ -21,7 +22,7 @@ class UserManager(BaseUserManager):
     """
     use_in_migration = True
 
-    def create_user(self, email, nome, sobrenome, password):
+    def create_user(self, email, nome, sobrenome, password, avatar=None):
         """
             Cria um novo usuário
             :param email: Email do usuário
@@ -41,23 +42,29 @@ class UserManager(BaseUserManager):
 
         usuario = self.model(
             email=self.normalize_email(email),
-            nome=nome, sobrenome=sobrenome
+            nome=nome, sobrenome=sobrenome, avatar=avatar
         )
         usuario.set_password(password)
         usuario.save()
         return usuario
 
-    def create_superuser(self, email, nome, sobrenome, password):
+    def create_superuser(self, email, nome, sobrenome, password, avatar=None):
         """
             Cria um  usuário administrador
             :param email: Email do usuário
             :param password: Senha do usuário
             :return: Uma instancia de usuário administrador
         """
-        usuario = self.create_user(email, nome, sobrenome, password)
+        usuario = self.create_user(email, nome, sobrenome, password, avatar)
         usuario.is_admin = True
         usuario.save()
         return usuario
+
+
+def upload_avatar(instance, filename):
+    nome = instance.nome
+    email = instance.email
+    return f"usuarios/{nome}_{email}"
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
@@ -67,6 +74,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     nome = models.CharField(max_length=50)
     sobrenome = models.CharField(max_length=50)
+    avatar = models.ImageField(
+        ('Avatar'), upload_to=upload_avatar, blank=True
+    )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

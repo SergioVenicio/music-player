@@ -263,5 +263,5 @@ def apaga_capa(sender, instance, **kwargs):
     """
         Apaga uma capa do hd quando o album for apagada do banco de dados
     """
-    arquivo = os.path.join(BASE_DIR, 'static', str(instance.capa))
+    arquivo = os.path.join(BASE_DIR, 'media', str(instance.capa))
     os.remove(arquivo)

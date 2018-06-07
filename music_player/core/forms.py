@@ -8,7 +8,10 @@ from django.contrib.auth.forms import UserCreationForm
 class UsuarioAdmin(UserAdmin):
     model = models.Usuario
     fieldsets = (
-        (None, {'fields': ('email', 'nome', 'sobrenome')}),
+        (None,
+         {
+            'fields': ('email', 'nome', 'sobrenome', 'avatar', 'password')
+         }),
     )
     list_display = ('email', 'nome', 'sobrenome', 'is_staff')
     list_filter = ('email', 'nome', 'sobrenome',)

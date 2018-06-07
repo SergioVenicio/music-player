@@ -19,3 +19,16 @@
   color:transparent;
   cursor: pointer;
 }
+.avatar {
+    vertical-align: middle;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.usuario-image {
+  border-radius: 5%;
+}
+.usuario-image:hover {
+  transition: all 0.5s;
+  background-color: rgba(30, 33, 35, 0.5);
+}

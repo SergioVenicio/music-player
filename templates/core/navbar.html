@@ -23,5 +23,21 @@
         </div>
       </li>
     </ul>
+    {% if request.user.is_authenticated %}
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item dropdown usuario-image">
+          <a class="nav-link dropdown-toggle" href="#" id="menu_usuario" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="{{ request.user.avatar.url }}" alt="{{ request.user.nome }}" class="avatar">
+            {{ request.user.nome }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="menu_usuario">
+            <a class="dropdown-item" href="{% url 'logout' %}">
+              Logout
+              <i class="fas fa-sign-out-alt text-danger"></i>
+            </a>
+          </div>
+        </li>
+      </ul>
+    {% endif %}
   </div>
 </nav>

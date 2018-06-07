@@ -64,7 +64,7 @@ class UserManager(BaseUserManager):
 def upload_avatar(instance, filename):
     nome = instance.nome
     email = instance.email
-    return f"usuarios/{nome}_{email}"
+    return f"images/usuarios/{nome}_{email}"
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):

@@ -9,7 +9,7 @@
       {% for field in form %}
         {% for error in field.errors %}
           <div class="alert alert-danger bg-danger text-center">
-            <p class="text-white">{{ error }}</p>
+            <p class="text-white">{{ field.name}}: {{ error }}</p>
           </div>
         {% endfor %}
       {% endfor %}
@@ -17,7 +17,7 @@
   </div>
 {% endif %}
 <div class="container-fluid">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="col-md-4 offset-4 mt-2">
       <div class="card text-center">
@@ -29,7 +29,18 @@
             <div class="col">
               {% for field in form %}
                 <div class="form-group">
-                  {{ field }}
+                  {% if field.name == 'avatar' %}
+                    <div style="position:relative;">
+                      <a class='btn btn-primary text-white'>
+                          Avatar
+                          {{ field }}
+                      </a>
+                      &nbsp;
+                      <span class='badge badge-danger' id="file-info"></span>
+                    </div>
+                  {% else %}
+                    {{ field }}
+                  {% endif %}
                 </div>
                 {% if not forloop.last %}
                   <hr>
@@ -58,4 +69,18 @@
     </div>
     </form>
   </div>
+{% endblock %}
+{% block js %}
+<script>
+  $(document).ready( function (){
+    if($("#id_avatar").val()) {
+      $('#file-info').html($("#id_avatar").val());
+    }
+    $("#id_avatar").on({
+      'change': function () {
+        $('#file-info').html($(this).val());
+      }
+    });
+  });
+</script>
 {% endblock %}

@@ -7,3 +7,15 @@
 .navbar {
   padding: 0!important;
 }
+#id_avatar {
+  position:absolute;
+  z-index:2;
+  top:0;
+  left:0;
+  filter: alpha(opacity=0);
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  opacity:0;
+  background-color:transparent;
+  color:transparent;
+  cursor: pointer;
+}

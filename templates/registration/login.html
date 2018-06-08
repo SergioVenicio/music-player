@@ -4,16 +4,6 @@
 {% endblock %}
 {% block body %}
   <div class="container-fluid">
-    {% if form.errors %}
-      <div class="row">
-        <div class="col-md-4 offset-4 mt-1">
-          <div class="alert alert-danger bg-danger text-center">
-            <p class="text-white">Login ou senha inválidos.</p>
-          </div>
-        </div>
-      </div>
-    {% endif %}
-
     <form method="POST">
       {% csrf_token %}
       <div class="col-md-4 offset-4 mt-2">
@@ -59,4 +49,31 @@
     </div>
     </form>
   </div>
+{% if form.errors %}
+  <div id="login-error-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Erro ao realizar login</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <p class="text-danger text-center">Login ou senha inválidos.</p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span class="fas fa-times"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 {% endblock %}

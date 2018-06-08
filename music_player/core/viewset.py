@@ -13,7 +13,37 @@ class GeneroViewSet(viewsets.ModelViewSet):
     """
     queryset = Genero.objects.all()
     serializer_class = serializers.GeneroSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
+
+    def create(self, request, *args, **kwargs):
+        descricao = request.data['descricao']
+        imagen = request.data['imagen']
+        tipo = get_file_type(imagen)
+
+        if tipo:
+            if tipo == '.jpg':
+                imagen = imagen[23:]
+            elif tipo == '.png':
+                imagen = imagen[22:]
+
+            imagen = ContentFile(
+                decode_file(imagen), (descricao + tipo)
+            )
+            genero = Genero(descricao=descricao, imagen=imagen)
+            genero.save()
+            response = json.dumps({
+                'genero': {
+                    'id': genero.id,
+                    'descricao': genero.descricao,
+                    'imagen': genero.imagen.path
+                }
+            })
+            return JsonResponse(response, safe=False, status=201)
+        else:
+            erro = 'Tipo de arquivo inválido'
+            return JsonResponse(
+                json.dumps({'erros': erro}), safe=False, status=400
+            )
 
 
 class BandaViewSet(viewsets.ModelViewSet):
@@ -59,7 +89,7 @@ class MusicaViewSet(viewsets.ModelViewSet):
         album = request.data['album']
         ordem = request.data['ordem']
         arquivo = request.data['arquivo']
-        tipo = get_file_type(arquivo)
+        tipo = get_file_type(arquivo, musica=True)
         try:
             existe = Musica.objects.get(ordem=ordem, album_id=album)
         except Musica.DoesNotExist:

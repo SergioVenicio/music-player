@@ -11,17 +11,30 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="menu_musicas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Músicas
-        </a>
-        <div class="dropdown-menu" aria-labelledby="menu_musicas">
-          <a class="dropdown-item" href="{% url 'add_musicas' %}">
-            Adicionar
-            <i class="fas fa-plus-circle"></i>
+      {% if request.user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="menu_generos" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Generos
           </a>
-        </div>
-      </li>
+          <div class="dropdown-menu" aria-labelledby="menu_generos">
+            <a class="dropdown-item" href="{% url 'add_generos' %}">
+              Adicionar
+              <i class="fas fa-plus-circle"></i>
+            </a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="menu_musicas" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Músicas
+          </a>
+          <div class="dropdown-menu" aria-labelledby="menu_musicas">
+            <a class="dropdown-item" href="{% url 'add_musicas' %}">
+              Adicionar
+              <i class="fas fa-plus-circle"></i>
+            </a>
+          </div>
+        </li>
+      {% endif %}
     </ul>
     {% if request.user.is_authenticated %}
       <ul class="nav navbar-nav navbar-right">

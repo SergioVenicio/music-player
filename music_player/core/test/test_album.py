@@ -1,7 +1,10 @@
 import pytest
 import base64
 from datetime import datetime
+from django.test import Client
+from rest_framework import status
 from music_player.core import models
+from django.urls import reverse, resolve
 from django.core.files.base import ContentFile
 from music_player.core.utils import decode_file
 
@@ -31,3 +34,11 @@ def test_criacao_genero():
     assert album.banda.id == banda.id
     assert album.data_lancamento == ano
     assert album.capa is not None
+
+
+@pytest.mark.django_db(transaction=True)
+def test_get_view_album():
+    client = Client()
+    url = reverse(resolve('/api_v1/album').url_name)
+    response = client.get(url)
+    assert status.is_success(response.status_code)

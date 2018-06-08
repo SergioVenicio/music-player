@@ -34,6 +34,15 @@ def test_get_view_genero():
 def test_post_view_genero():
     client = APIClient()
     url = reverse(resolve('/api_v1/genero').url_name)
+    data = {'descricao': 'teste'}
+    response = client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_genero_imagem():
+    client = APIClient()
+    url = reverse(resolve('/api_v1/genero').url_name)
     path = 'music_player/core/test'
     capa = open(path + '/imagem_test.png', 'rb').read()
     b64_capa = 'data:image/png;base64,' + str(base64.b64encode(capa))

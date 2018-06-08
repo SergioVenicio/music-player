@@ -2,7 +2,7 @@ Django==2.0.6
 django-cors-headers==2.2.0
 django-webpack-loader==0.6.0
 djangorestframework==3.8.2
-eyeD3==0.8.6
+git+https://github.com/SergioVenicio21/eyeD3.git
 mutagen==1.40.0
 pathlib==1.0.1
 Pillow==5.1.0

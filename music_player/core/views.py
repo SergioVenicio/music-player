@@ -116,3 +116,15 @@ def add_musicas(request):
         return render(request, 'core/add_music.html', context=context)
     else:
         raise PermissionDenied()
+
+
+@login_required(login_url='/login')
+def add_generos(request):
+    if request.method == 'GET':
+        form = forms.GeneroForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'core/add_generos.html', context)
+    else:
+        raise PermissionDenied()

@@ -265,3 +265,12 @@ def apaga_capa(sender, instance, **kwargs):
     """
     arquivo = os.path.join(BASE_DIR, 'media', str(instance.capa))
     os.remove(arquivo)
+
+
+@receiver(post_delete, sender=Genero)
+def apaga_img_genero(sender, instance, **kwargs):
+    """
+        Apaga a imagen de um genero quando ele for deletado do banco de dados
+    """
+    arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagen))
+    os.remove(arquivo)

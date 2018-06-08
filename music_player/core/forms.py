@@ -100,3 +100,24 @@ class MusicaForm(forms.ModelForm):
     class Meta:
         model = models.Musica
         exclude = ('arquivo_tipo', 'duracao',)
+
+
+class GeneroForm(forms.ModelForm):
+    descricao = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'placeholder': 'Descrição'
+            }
+        )
+    )
+    imagen = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control-file', 'placeholder': 'Imagen'
+            }
+        )
+    )
+
+    class Meta:
+        fields = ('descricao', 'imagen',)
+        model = models.Genero

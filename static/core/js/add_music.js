@@ -15,8 +15,8 @@ $(document).ready( function (){
       var nome = arquivo.name.substring(0, pos).replace(r_name, ' ');
       var nome = nome.split(r_ordem);
       if(nome.length > 1) {
-        var ordem = parseInt(nome[1].replace('-', '').replace(/\s/g, ""));
-        $("#id_nome").val(nome[2].replace(/\s/g, ""));
+        var ordem = parseInt(nome[1].replace('-', '').trim());
+        $("#id_nome").val(nome[2].trim());
         $("#id_ordem").val(ordem);
       } else {
         $("#id_nome").val(arquivo.name);

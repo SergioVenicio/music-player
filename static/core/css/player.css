@@ -19,7 +19,8 @@
   margin-bottom: 0.2rem;
 }
 
-.play:hover, .mute:hover, .volume:hover, .prev:hover, .next:hover {
+.play:hover, .mute:hover, .volume:hover,
+.prev:hover, .next:hover, .pause:hover {
   transition: all 0.3s;
   color: #000;
 }

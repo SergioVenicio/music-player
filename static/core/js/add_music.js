@@ -10,11 +10,19 @@ $(document).ready( function (){
       }
       reader.readAsDataURL(arquivo);
       var pos = arquivo.name.search('\.(ogg|wav|mp3)$');
-      var r_name = RegExp('(_|/)', 'g')
+      var r_name = RegExp('(_|/)', 'g');
+      var r_ordem = RegExp('^([0-9]+ -|[0-9]+-|[0-9]+.)', 'g');
       var nome = arquivo.name.substring(0, pos).replace(r_name, ' ');
-      $("#id_nome").val(nome);
+      var nome = nome.split(r_ordem);
+      if(nome.length > 1) {
+        var ordem = parseInt(nome[1].replace('-', '').replace(/\s/g, ""));
+        $("#id_nome").val(nome[2].replace(/\s/g, ""));
+        $("#id_ordem").val(ordem);
+      } else {
+        $("#id_nome").val(arquivo.name);
+      }
     }
-  })
+  });
 
   $("#btn-save").on({
     'click': function () {

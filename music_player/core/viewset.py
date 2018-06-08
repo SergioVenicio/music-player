@@ -17,33 +17,44 @@ class GeneroViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         descricao = request.data['descricao']
-        imagen = request.data['imagen']
-        tipo = get_file_type(imagen)
 
-        if tipo:
-            if tipo == '.jpg':
-                imagen = imagen[23:]
-            elif tipo == '.png':
-                imagen = imagen[22:]
-
-            imagen = ContentFile(
-                decode_file(imagen), (descricao + tipo)
-            )
-            genero = Genero(descricao=descricao, imagen=imagen)
+        try:
+            imagen = request.data['imagen']
+            tipo = get_file_type(imagen)
+        except KeyError:
+            genero = Genero(descricao=descricao)
             genero.save()
             response = json.dumps({
                 'genero': {
                     'id': genero.id,
-                    'descricao': genero.descricao,
-                    'imagen': genero.imagen.path
+                    'descricao': genero.descricao
                 }
             })
             return JsonResponse(response, safe=False, status=201)
         else:
-            erro = 'Tipo de arquivo inválido'
-            return JsonResponse(
-                json.dumps({'erros': erro}), safe=False, status=400
-            )
+            if tipo:
+                if tipo == '.jpg':
+                    imagen = imagen[23:]
+                elif tipo == '.png':
+                    imagen = imagen[22:]
+                imagen = ContentFile(
+                    decode_file(imagen), (descricao + tipo)
+                )
+                genero = Genero(descricao=descricao, imagen=imagen)
+                genero.save()
+                response = json.dumps({
+                    'genero': {
+                        'id': genero.id,
+                        'descricao': genero.descricao,
+                        'imagen': genero.imagen.path
+                    }
+                })
+                return JsonResponse(response, safe=False, status=201)
+            else:
+                erro = 'Tipo de arquivo inválido'
+                return JsonResponse(
+                    json.dumps({'erros': erro}), safe=False, status=400
+                )
 
 
 class BandaViewSet(viewsets.ModelViewSet):

@@ -7,6 +7,23 @@
   cursor: pointer;
 }
 
+.prev, .next {
+  padding-right: 0.5rem;
+}
+.volume, .mute {
+    position: absolute;
+    right: 6rem;
+    margin-top: 0.1em;
+}
+.mute {
+  margin-bottom: 0.2rem;
+}
+
+.play:hover, .mute:hover, .volume:hover, .prev:hover, .next:hover {
+  transition: all 0.3s;
+  color: #000;
+}
+
 .controls {
     line-height: 0.5rem;
     padding-left: 0.5rem;
@@ -15,8 +32,9 @@
     border: thin solid #dee6f2;
     border-top: 0;
 }
-.controls span {
+.controls span, .volume, .mute {
     text-align: left;
+    cursor: pointer;
 }
 
 .control-volume {
@@ -33,7 +51,7 @@
     appearance: none;
     height: 18px;
     outline: none;
-    opacity: 0.9;
+    opacity: 0.8;
     -webkit-transition: .2s;
     transition: opacity .2s;
     border-radius: 0.1em;
@@ -48,8 +66,8 @@
 #vol-control::-webkit-slider-thumb {
     -webkit-appearance: none;
     border: 1px solid #000000;
-    height: 12.5px;
-    width: 12.5px;
+    height: 13px;
+    width: 13px;
     border-radius: 2px;
     background: #FFF;
     cursor: pointer;
@@ -78,16 +96,18 @@
 
 #vol-control::-webkit-slider-runnable-track {
     width: 100%;
-    height: 8.4px;
+    height: 7.5px;
     cursor: pointer;
-    background: #343a40;
+    background: #000;
     border-radius: 1.3px;
+    border: 0.2px solid #010101;
+    margin-bottom: 0.05rem;
 }
 #vol-control::-moz-range-track {
   width: 100%;
   height: 4px;
   cursor: pointer;
-  background: #343a40;
+  background: #000;
   border-radius: 1.3px;
   border: 0.2px solid #010101;
 }

@@ -227,7 +227,7 @@ def get_duration(sender, instance, **kwargs):
         file.initTag()
     except AttributeError:
         print('Não foi possivel escrever os metadados')
-    except UnboundLocalError:
+    except Exception:
         print('Corrija o arquivo tag.py da lig eyed')
         print('Adicione um else na linha 510')
         print(

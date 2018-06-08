@@ -227,6 +227,15 @@ def get_duration(sender, instance, **kwargs):
         file.initTag()
     except AttributeError:
         print('Não foi possivel escrever os metadados')
+    except Exception:
+        print('Corrija o arquivo tag.py da lig eyed')
+        print('Adicione um else na linha 510')
+        print(
+            '''
+                else:
+                    tn, tt = None, None
+            '''
+        )
     else:
         file.tag._se = None
         file.tag.album = str(instance.album)

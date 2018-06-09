@@ -6,47 +6,49 @@
   <div class="container-fluid">
     <form method="POST">
       {% csrf_token %}
-      <div class="col-md-4 offset-4 mt-2">
-      <div class="card text-center">
-        <div class="card-header bg-primary">
-          <img src="/media/images/icon.png" width="150rem">
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-              {% for field in form %}
-                {% if forloop.first %}
-                  <div class="form-group">
-                    <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="Email">
-                  </div>
-                  <hr>
-                {% else %}
-                  <div class="form-group">
-                    <input type="password" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="Senha">
-                  </div>
-                {% endif %}
-              {% endfor %}
+      <div class="row justify-content-center ">
+        <div class="col-md-4 mt-2">
+          <div class="card text-center">
+          <div class="card-header bg-primary">
+            <img src="/media/images/icon.png" width="150rem">
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                {% for field in form %}
+                  {% if forloop.first %}
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="Email">
+                    </div>
+                    <hr>
+                  {% else %}
+                    <div class="form-group">
+                      <input type="password" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="Senha">
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card-footer">
-          <div class="row">
-            <div class="col text-center">
-              <div class="row">
-                <div class="col">
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i>
-                  </button>
-                  <a href="{% url 'sign_up' %}" class="btn btn-success">
-                    <i class="fas fa-user-plus"></i>
-                  </a>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col text-center">
+                <div class="row">
+                  <div class="col">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fas fa-sign-in-alt"></i>
+                    </button>
+                    <a href="{% url 'sign_up' %}" class="btn btn-success">
+                      <i class="fas fa-user-plus"></i>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        </div>
       </div>
-    </div>
     </form>
   </div>
 {% if form.errors %}

@@ -54,6 +54,7 @@ class UsuarioForm(UserCreationForm):
         )
     )
     avatar = forms.FileField(
+        required=False,
         widget=forms.FileInput(
             attrs={'placeholder': 'Avatar'}
         )

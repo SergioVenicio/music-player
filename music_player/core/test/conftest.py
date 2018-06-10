@@ -44,7 +44,7 @@ def genero():
 @pytest.fixture
 def banda(genero, capa):
     banda = models.Banda(
-        nome='teste', imagen=capa, genero=genero
+        nome='teste', imagem=capa, genero=genero
     )
     banda.save()
     return banda

@@ -8,7 +8,7 @@ from django.urls import reverse, resolve
 def test_criacao_banda(banda):
     assert isinstance(banda.id, int)
     assert 'teste' == banda.nome
-    assert banda.imagen is not None
+    assert banda.imagem is not None
 
 
 @pytest.mark.django_db(transaction=True)

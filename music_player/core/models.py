@@ -120,7 +120,7 @@ class Genero(models.Model):
         Modelo de genero musical
     """
     descricao = models.CharField(max_length=250)
-    imagen = models.ImageField(
+    imagem = models.ImageField(
         ('Genero'), upload_to='images/generos', blank=True
     )
 
@@ -139,7 +139,7 @@ class Banda(models.Model):
         Modelo de bandas
     """
     nome = models.CharField(max_length=250)
-    imagen = models.ImageField(
+    imagem = models.ImageField(
         ('Banda'), upload_to='images/bandas', blank=True
     )
     genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
@@ -268,14 +268,16 @@ def apaga_capa(sender, instance, **kwargs):
     """
         Apaga uma capa do hd quando o album for apagada do banco de dados
     """
-    arquivo = os.path.join(BASE_DIR, 'media', str(instance.capa))
-    os.remove(arquivo)
+    if instance.capa:
+        arquivo = os.path.join(BASE_DIR, 'media', str(instance.capa))
+        os.remove(arquivo)
 
 
 @receiver(post_delete, sender=Genero)
 def apaga_img_genero(sender, instance, **kwargs):
     """
-        Apaga a imagen de um genero quando ele for deletado do banco de dados
+        Apaga a imagem de um genero quando ele for deletado do banco de dados
     """
-    arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagen))
-    os.remove(arquivo)
+    if instance.imagem:
+        arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagem))
+        os.remove(arquivo)

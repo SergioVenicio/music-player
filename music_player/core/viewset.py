@@ -19,8 +19,8 @@ class GeneroViewSet(viewsets.ModelViewSet):
         descricao = request.data['descricao']
 
         try:
-            imagen = request.data['imagen']
-            tipo = get_file_type(imagen)
+            imagem = request.data['imagem']
+            tipo = get_file_type(imagem)
         except KeyError:
             genero = Genero(descricao=descricao)
             genero.save()
@@ -34,19 +34,19 @@ class GeneroViewSet(viewsets.ModelViewSet):
         else:
             if tipo:
                 if tipo == '.jpg':
-                    imagen = imagen[23:]
+                    imagem = imagem[23:]
                 elif tipo == '.png':
-                    imagen = imagen[22:]
-                imagen = ContentFile(
-                    decode_file(imagen), (descricao + tipo)
+                    imagem = imagem[22:]
+                imagem = ContentFile(
+                    decode_file(imagem), (descricao + tipo)
                 )
-                genero = Genero(descricao=descricao, imagen=imagen)
+                genero = Genero(descricao=descricao, imagem=imagem)
                 genero.save()
                 response = json.dumps({
                     'genero': {
                         'id': genero.id,
                         'descricao': genero.descricao,
-                        'imagen': genero.imagen.path
+                        'imagem': genero.imagem.path
                     }
                 })
                 return JsonResponse(response, safe=False, status=201)

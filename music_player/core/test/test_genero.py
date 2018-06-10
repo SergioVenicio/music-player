@@ -13,7 +13,7 @@ def test_criacao_genero(genero):
 
 @pytest.mark.django_db(transaction=True)
 def test_apaga_genero(genero):
-    assert bool(genero.delete()) == True
+    assert bool(genero.delete())
 
 
 @pytest.mark.django_db(transaction=True)

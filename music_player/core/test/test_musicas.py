@@ -11,11 +11,6 @@ def test_criacao_musica(musica):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_apaga_musica(musica):
-    assert bool(musica.delete()) == True
-
-
-@pytest.mark.django_db(transaction=True)
 def test_get_view_musica(client):
     url = reverse(resolve('/api_v1/musicas').url_name)
     response = client.get(url)

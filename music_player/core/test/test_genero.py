@@ -12,6 +12,11 @@ def test_criacao_genero(genero):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_apaga_genero(genero):
+    assert bool(genero.delete()) == True
+
+
+@pytest.mark.django_db(transaction=True)
 def test_get_view_genero():
     client = Client()
     url = reverse(resolve('/api_v1/genero').url_name)
@@ -30,6 +35,6 @@ def test_post_view_genero(api_client):
 @pytest.mark.django_db(transaction=True)
 def test_post_view_genero_imagem(b64_capa, api_client):
     url = reverse(resolve('/api_v1/genero').url_name)
-    data = {'descricao': 'teste', 'imagem': b64_capa}
+    data = {'descricao': 'teste', 'imagen': b64_capa}
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED

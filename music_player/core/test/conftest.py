@@ -35,8 +35,8 @@ def arquivo(path):
 
 
 @pytest.fixture
-def genero():
-    genero = models.Genero(descricao='teste')
+def genero(capa):
+    genero = models.Genero(descricao='teste', imagem=capa)
     genero.save()
     return genero
 

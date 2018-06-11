@@ -1,6 +1,7 @@
 import json
 from rest_framework import viewsets
 from django.http import JsonResponse
+from django.db import IntegrityError
 from music_player.core import serializers
 from django.core.files.base import ContentFile
 from music_player.core.utils import get_file_type, decode_file
@@ -64,7 +65,70 @@ class BandaViewSet(viewsets.ModelViewSet):
 
     queryset = Banda.objects.all()
     serializer_class = serializers.BandaSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
+
+    def create(self, request, *args, **kwargs):
+        erros = []
+        nome = request.data['nome']
+        genero_id = request.data['genero_id']
+
+        try:
+            imagem = request.data['imagem']
+            tipo = get_file_type(imagem)
+            if not imagem:
+                raise KeyError
+        except KeyError:
+            if genero_id:
+                banda = Banda(nome=nome, genero_id=genero_id)
+                try:
+                    banda.save()
+                except IntegrityError:
+                    erros.append('Já existe uma banda com esse nome')
+                else:
+                    response = json.dumps({
+                        'genero': {
+                            'id': banda.id,
+                            'nome': banda.nome,
+                            'genero_id': genero_id
+                        }
+                    })
+                    return JsonResponse(response, safe=False, status=201)
+            else:
+                erros.append('O campo genero é obrigátorio')
+        else:
+            if tipo:
+                if tipo == '.jpg':
+                    imagem = imagem[23:]
+                elif tipo == '.png':
+                    imagem = imagem[22:]
+                imagem = ContentFile(
+                    decode_file(imagem), (nome + tipo)
+                )
+                if genero_id:
+                    banda = Banda(
+                        nome=nome, genero_id=genero_id, imagem=imagem
+                    )
+                    try:
+                        banda.save()
+                    except IntegrityError:
+                        erros.append('Já existe uma banda com esse nome')
+                    else:
+                        response = json.dumps({
+                            'genero': {
+                                'id': banda.id,
+                                'nome': banda.nome,
+                                'imagem': banda.imagem.path
+                            }
+                        })
+                        return JsonResponse(response, safe=False, status=201)
+                else:
+                    erros.append('O campo genero é obrigátorio')
+            else:
+                erros.append('Tipo de arquivo inválido')
+
+        return JsonResponse(
+            json.dumps({'erros': erros}), safe=False, status=400
+        )
 
 
 class AlbumViewSet(viewsets.ModelViewSet):

@@ -1,6 +1,6 @@
 from . import models
 from django import forms
-from .utils import get_albuns
+from .utils import get_albuns, get_generos
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 
@@ -80,6 +80,59 @@ class UsuarioEditAvatar(forms.ModelForm):
         fields = ('avatar',)
 
 
+class GeneroForm(forms.ModelForm):
+    descricao = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'placeholder': 'Descrição'
+            }
+        )
+    )
+    imagen = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control-file', 'placeholder': 'Imagen'
+            }
+        )
+    )
+
+    class Meta:
+        fields = ('descricao', 'imagen',)
+        model = models.Genero
+
+
+class BandaForm(forms.ModelForm):
+    nome = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'placeholder': 'Nome'
+            }
+        )
+    )
+
+    genero = forms.ModelChoiceField(
+        queryset=get_generos(),
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control selectpicker', 'placeholder': 'Genero',
+                'data-live-search': 'true', 'data-style': 'btn-primary',
+                'title': 'Escolha um genero'
+            })
+    )
+
+    imagem = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control-file', 'placeholder': 'Imagem'
+            }
+        )
+    )
+
+    class Meta:
+        fields = ('nome', 'genero', 'imagem',)
+        model = models.Banda
+
+
 class MusicaForm(forms.ModelForm):
     nome = forms.CharField(
         widget=forms.TextInput(
@@ -114,24 +167,3 @@ class MusicaForm(forms.ModelForm):
     class Meta:
         model = models.Musica
         exclude = ('arquivo_tipo', 'duracao',)
-
-
-class GeneroForm(forms.ModelForm):
-    descricao = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control', 'placeholder': 'Descrição'
-            }
-        )
-    )
-    imagen = forms.ImageField(
-        widget=forms.FileInput(
-            attrs={
-                'class': 'form-control-file', 'placeholder': 'Imagen'
-            }
-        )
-    )
-
-    class Meta:
-        fields = ('descricao', 'imagen',)
-        model = models.Genero

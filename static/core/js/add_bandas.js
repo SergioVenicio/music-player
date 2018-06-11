@@ -1,51 +1,51 @@
 $(document).ready( function (){
-  $("#id_imagen").on({
+  $("#id_imagem").on({
     'change': function () {
-      var imagen = document.getElementById('id_imagen').files[0];
+      var imagem = document.getElementById('id_imagem').files[0];
       var reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
       }
-      reader.readAsDataURL(imagen);
+      reader.readAsDataURL(imagem);
     }
   });
   $("#btn-save").on({
     'click': function () {
-      var descricao = $("#id_descricao").val();
+      var nome = $("#id_nome").val();
       var base_imagen = $("#file").val();
-      var genero = {
-        'descricao': descricao,
-        'imagen': base_imagen
+      var genero = $("#id_genero").val();
+      var banda = {
+        'nome': nome, 'imagem': base_imagen, 'genero_id': genero
       }
       $.ajax({
-        url: '/api_v1/genero',
+        url: '/api_v1/banda',
         type: 'POST',
         dataType: 'json',
-        data: genero ,
+        data: banda ,
         statusCode: {
           201: function(data) {
             data = JSON.parse(data);
             if(data.genero) {
               $('#btn-close').removeClass('btn-danger');
               $('#btn-close').addClass('btn-success');
-              $("#modal-text").text('Genero cadastrado com sucesso!');
+              $("#modal-text").text('Banda cadastrado com sucesso!');
             } else {
               $('#btn-close').removeClass('btn-success');
               $('#btn-close').addClass('btn-danger');
               $('#modal-text').text(data.erros.join(', '));
             }
-            $('#add_generos').modal();
+            $('#add_bandas').modal();
           },
           400: function(data) {
             data = JSON.parse(data.responseJSON);
             $('#btn-close').addClass('btn-danger');
             $('#modal-text').text(data.erros.join(', '));
-            $('#add_generos').modal();
+            $('#add_bandas').modal();
           },
           404: function () {
             $('#btn-close').addClass('btn-warning');
             $('#modal-text').text('Erro ao acessar a api');
-            $('#add_generos').modal();
+            $('#add_bandas').modal();
           }
         }
       });

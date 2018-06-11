@@ -138,11 +138,11 @@ class Banda(models.Model):
     """
         Modelo de bandas
     """
-    nome = models.CharField(max_length=250)
+    nome = models.CharField(max_length=250, unique=True)
+    genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
     imagem = models.ImageField(
         ('Banda'), upload_to='images/bandas', blank=True
     )
-    genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nome

@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% block title %}Adicionar Generos{% endblock %}
+{% block title %}Adicionar Bandas{% endblock %}
 {% load static %}
 {% block css %}
   <link rel="stylesheet" href="{% static 'core/css/bootstrap-select.min.css' %}">
@@ -9,7 +9,7 @@
   <div class="mt-5"></div>
   <div class="row justify-content-center">
     <div class="col-6">
-      <form id="form_genero">
+      <form id="form_banda">
         {% for field in form %}
           <div class="form-group">
             <label for="{{ field.name }}">{{ field.name }}</label>
@@ -27,11 +27,11 @@
   </div>
 </div>
 
-<div id="add_generos" class="modal fade" tabindex="-1" role="dialog">
+<div id="add_bandas" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Adicionar genero</h5>
+        <h5 class="modal-title">Adicionar banda</h5>
       </div>
       <div class="modal-body">
         <p id="modal-text" class="text-center"></p>
@@ -49,5 +49,5 @@
 {% block js %}
   <script src="{% static 'core/js/bootstrap-select.min.js' %}"></script>
   <script src="{% static 'core/js/defaults-pt_BR.min.js' %}"></script>
-  <script src="{% static 'core/js/add_generos.js' %}"></script>
+  <script src="{% static 'core/js/add_bandas.js' %}"></script>
 {% endblock %}

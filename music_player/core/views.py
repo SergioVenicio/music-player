@@ -92,6 +92,13 @@ def bandas(request, genero_id):
 
 
 @login_required(login_url='/login')
+def add_bandas(request):
+    form = forms.BandaForm()
+    context = {'form': form}
+    return render(request, 'core/add_bandas.html', context)
+
+
+@login_required(login_url='/login')
 def albuns(request, banda_id):
     page = request.GET.get('page', 1)
     if not page:

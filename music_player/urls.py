@@ -31,10 +31,11 @@ USER_URLS = [
 ]
 urlpatterns = [
     path('', views.home, name='home'),
-    path('musicas/<int:album_id>/', views.musicas, name="musicas"),
-    path('musicas/add/', views.add_musicas, name="add_musicas"),
-    path('bandas/<int:genero_id>/', views.bandas, name="bandas"),
-    path('albuns/<int:banda_id>/', views.albuns, name="albuns"),
+    path('musicas/add', views.add_musicas, name="add_musicas"),
+    path('musicas/<int:album_id>', views.musicas, name="musicas"),
+    path('bandas/add', views.add_bandas, name="add_bandas"),
+    path('bandas/<int:genero_id>', views.bandas, name="bandas"),
+    path('albuns/<int:banda_id>', views.albuns, name="albuns"),
     path('generos/add', views.add_generos, name="add_generos"),
     path('admin/', admin.site.urls),
     path('api_v1/', include(router.urls)),

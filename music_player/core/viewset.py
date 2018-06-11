@@ -17,6 +17,7 @@ class GeneroViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def create(self, request, *args, **kwargs):
+        erros = []
         descricao = request.data['descricao']
 
         try:
@@ -24,14 +25,18 @@ class GeneroViewSet(viewsets.ModelViewSet):
             tipo = get_file_type(imagem)
         except KeyError:
             genero = Genero(descricao=descricao)
-            genero.save()
-            response = json.dumps({
-                'genero': {
-                    'id': genero.id,
-                    'descricao': genero.descricao
-                }
-            })
-            return JsonResponse(response, safe=False, status=201)
+            try:
+                genero.save()
+            except IntegrityError:
+                erros.append('Já existe um genero com essa descrição')
+            else:
+                response = json.dumps({
+                    'genero': {
+                        'id': genero.id,
+                        'descricao': genero.descricao
+                    }
+                })
+                return JsonResponse(response, safe=False, status=201)
         else:
             if tipo:
                 if tipo == '.jpg':
@@ -42,20 +47,25 @@ class GeneroViewSet(viewsets.ModelViewSet):
                     decode_file(imagem), (descricao + tipo)
                 )
                 genero = Genero(descricao=descricao, imagem=imagem)
-                genero.save()
-                response = json.dumps({
-                    'genero': {
-                        'id': genero.id,
-                        'descricao': genero.descricao,
-                        'imagem': genero.imagem.path
-                    }
-                })
-                return JsonResponse(response, safe=False, status=201)
+                try:
+                    genero.save()
+                except IntegrityError:
+                    erros.append('Já existe um genero com essa descrição')
+                else:
+                    response = json.dumps({
+                        'genero': {
+                            'id': genero.id,
+                            'descricao': genero.descricao,
+                            'imagem': genero.imagem.path
+                        }
+                    })
+                    return JsonResponse(response, safe=False, status=201)
             else:
-                erro = 'Tipo de arquivo inválido'
-                return JsonResponse(
-                    json.dumps({'erros': erro}), safe=False, status=400
-                )
+                erros.append('Tipo de arquivo inválido')
+
+        return JsonResponse(
+            json.dumps({'erros': erros}), safe=False, status=400
+        )
 
 
 class BandaViewSet(viewsets.ModelViewSet):

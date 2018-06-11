@@ -119,7 +119,7 @@ class Genero(models.Model):
     """
         Modelo de genero musical
     """
-    descricao = models.CharField(max_length=250)
+    descricao = models.CharField(max_length=250, unique=True)
     imagem = models.ImageField(
         ('Genero'), upload_to='images/generos', blank=True
     )

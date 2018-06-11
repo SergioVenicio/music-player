@@ -25,10 +25,11 @@ class UserManager(BaseUserManager):
     def create_user(self, email, nome, sobrenome, password, avatar=None):
         """
             Cria um novo usuário
-            :param email: Email do usuário
-            :param nome: Nome do usuário
-            :param sobrenome: Sobrenome do usuário
-            :param password: Senha do usuário
+            :param email: String com email do usuário
+            :param nome: String com o nome do usuário
+            :param sobrenome: String com o sobrenome do usuário
+            :param password: String com a senha do usuário
+            :param avatar: Imagem do avatar do usuário
             :return: Uma instancia de usuário
         """
         if not email:
@@ -51,8 +52,11 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, nome, sobrenome, password, avatar=None):
         """
             Cria um  usuário administrador
-            :param email: Email do usuário
-            :param password: Senha do usuário
+            :param email: String com email do usuário
+            :param nome: String com o nome do usuário
+            :param sobrenome: String com o sobrenome do usuário
+            :param password: String com a senha do usuário
+            :param avatar: Imagem do avatar do usuário
             :return: Uma instancia de usuário administrador
         """
         usuario = self.create_user(email, nome, sobrenome, password, avatar)
@@ -264,15 +268,10 @@ def apaga_musica(sender, instance, **kwargs):
     """
     try:
         os.remove(
-            os.path.join(
-                MEDIA_ROOT,
-                instance.arquivo.path
-            )
+            os.path.join(MEDIA_ROOT, instance.arquivo.path)
         )
     except FileNotFoundError:
-        print('Arquivo não encontrado: {}'.format(
-            instance.arquivo.path
-        ))
+        print(f'Arquivo não encontrado: {instance.arquivo.path}')
 
 
 @receiver(post_delete, sender=Album)

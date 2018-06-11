@@ -27,6 +27,7 @@ USER_URLS = [
         ),
         name='logout'
     ),
+    path('avatar/', views.user_avatar, name='avatar'),
 ]
 urlpatterns = [
     path('', views.home, name='home'),

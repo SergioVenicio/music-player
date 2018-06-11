@@ -46,6 +46,10 @@
             {{ request.user.nome }}
           </a>
           <div class="dropdown-menu" aria-labelledby="menu_usuario">
+            <a href="{% url 'avatar' %}" class="dropdown-item">
+              Editar avatar
+              <i class="fas fa-user-edit"></i>
+            </a>
             <a class="dropdown-item" href="{% url 'logout' %}">
               Logout
               <i class="fas fa-sign-out-alt text-danger"></i>

@@ -25,6 +25,10 @@
     width: 2.5rem;
     height: 2.5rem;
 }
+#avatar_previous {
+  border-radius: 1.5%;
+  width: 100%;
+}
 .usuario-image {
   border-radius: 5%;
 }
@@ -39,4 +43,10 @@
   background-color: #f7f7f9;
   border: thin solid #ced4da;
   color: #000;
+}
+.previous_clear {
+  cursor: pointer;
+  position: absolute;
+  top: 0.5rem;
+  right: 1.5rem;
 }

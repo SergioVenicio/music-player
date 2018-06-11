@@ -1,0 +1,113 @@
+{% extends 'core/base.html' %}
+{% block head %}
+  {% load static %}
+{% endblock %}
+{% block body %}
+  <div class="container-fluid">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row justify-content-center">
+        <div class="col col-sm-6 col-md-6 col-lg-5 mt-2">
+          <div class="card text-center">
+          <div class="card-header bg-primary">
+            <img src="/media/images/icon.png" width="150rem">
+          </div>
+          <div class="card-body">
+            <div class="row justify-content-center">
+              <div class="col">
+                <div class="previous text-center">
+                  {%  if avatar %}
+                    <div class="previous_clear">
+                      <i class="fas fa-times-circle text-danger"></i>
+                    </div>
+                    <img id="avatar_previous" src="/media/{{ avatar }}">
+                    <hr>
+                  {% else %}
+                    <img id="avatar_previous">
+                    <hr>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                {% for field in form %}
+                  <div class="form-group">
+                    {% if field.name == 'avatar' %}
+                      <div style="position:relative;">
+                        <a class='btn btn-primary text-white'>
+                            Avatar
+                            {{ field }}
+                        </a>
+                        &nbsp;
+                        <span class='badge badge-danger' id="file-info"></span>
+                      </div>
+                    {% else %}
+                      {{ field }}
+                    {% endif %}
+                  </div>
+                  {% if not forloop.last %}
+                    <hr>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col text-center">
+                <div class="row">
+                  <div class="col">
+                    <button type="submit" id="btn-save" class="btn btn-primary">
+                      <i class="fas fa-2x fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% if form.errors %}
+  <div id="avatar-error-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Erro ao editar avatar</h5>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              {% for field in form %}
+                {% if field.errors %}
+                  {% for error in field.errors %}
+                    <p class="text-danger text-center">
+                      {{ field.name }}: {{ error }}
+                    </p>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                <span class="fas fa-times"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
+{% block js %}
+<script src="{% static 'core/js/avatar.js' %}"></script>
+{% endblock %}

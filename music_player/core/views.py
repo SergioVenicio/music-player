@@ -28,6 +28,27 @@ def sign_up(request):
 
 
 @login_required(login_url='/login')
+def user_avatar(request):
+    usuario = request.user
+    if request.method == 'GET':
+        form = forms.UsuarioEditAvatar(instance=usuario)
+    else:
+        form = forms.UsuarioEditAvatar(
+            request.POST, request.FILES, instance=usuario
+        )
+        if form.is_valid():
+            form.save()
+            print(usuario.avatar)
+            print(request.FILES.get('avatar'))
+
+    context = {
+        'form': form,
+        'avatar': usuario.avatar
+    }
+    return render(request, 'registration/avatar.html', context)
+
+
+@login_required(login_url='/login')
 def home(request):
     """ Retorna todos os albuns cadastrados no sistema """
 

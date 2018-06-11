@@ -67,6 +67,19 @@ class UsuarioForm(UserCreationForm):
         )
 
 
+class UsuarioEditAvatar(forms.ModelForm):
+    avatar = forms.FileField(
+        required=False,
+        widget=forms.FileInput(
+            attrs={'placeholder': 'Avatar'}
+        )
+    )
+
+    class Meta:
+        model = models.Usuario
+        fields = ('avatar',)
+
+
 class MusicaForm(forms.ModelForm):
     nome = forms.CharField(
         widget=forms.TextInput(

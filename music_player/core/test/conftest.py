@@ -1,7 +1,9 @@
+import os
 import pytest
 import base64
 from datetime import datetime
 from django.test import Client
+from music_player import settings
 from music_player.core import models
 from rest_framework.test import APIClient
 from django.core.files.base import ContentFile
@@ -38,7 +40,14 @@ def arquivo(path):
 def genero(capa):
     genero = models.Genero(descricao='teste', imagem=capa)
     genero.save()
-    return genero
+    yield genero
+    img_dir = os.path.join(
+        settings.BASE_DIR, settings.MEDIA_ROOT, genero.imagem.path
+    )
+    try:
+        os.remove(img_dir)
+    except FileNotFoundError:
+        pass
 
 
 @pytest.fixture
@@ -47,7 +56,11 @@ def banda(genero, capa):
         nome='teste', imagem=capa, genero=genero
     )
     banda.save()
-    return banda
+    yield banda
+    img_dir = os.path.join(
+        settings.BASE_DIR, settings.MEDIA_ROOT, banda.imagem.path
+    )
+    os.remove(img_dir)
 
 
 @pytest.fixture
@@ -62,7 +75,11 @@ def album(banda, capa, ano):
         data_lancamento=ano, capa=capa
     )
     album.save()
-    return album
+    yield album
+    img_dir = os.path.join(
+        settings.BASE_DIR, settings.MEDIA_ROOT, album.capa.path
+    )
+    os.remove(img_dir)
 
 
 @pytest.fixture
@@ -71,7 +88,11 @@ def musica(album, arquivo):
         nome='teste', album=album, ordem=1, arquivo=arquivo
     )
     musica.save()
-    return musica
+    yield musica
+    music_dir = os.path.join(
+        settings.BASE_DIR, settings.MEDIA_ROOT, musica.arquivo.path
+    )
+    os.remove(music_dir)
 
 
 @pytest.fixture

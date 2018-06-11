@@ -38,8 +38,6 @@ def user_avatar(request):
         )
         if form.is_valid():
             form.save()
-            print(usuario.avatar)
-            print(request.FILES.get('avatar'))
 
     context = {
         'form': form,

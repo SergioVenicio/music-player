@@ -245,6 +245,12 @@ class MusicaViewSet(viewsets.ModelViewSet):
         nome = request.data.get('nome', None)
         album = request.data.get('album', None)
         ordem = request.data.get('ordem', None)
+        if not ordem:
+            erros.append('O campo ordem é obrigatório')
+
+        if not album:
+            erros.append('O campo ordem é obrigatório')
+
         arquivo = request.data.get('arquivo', None)
         if arquivo:
             tipo = get_file_type(arquivo, musica=True)
@@ -252,25 +258,32 @@ class MusicaViewSet(viewsets.ModelViewSet):
                 existe = Musica.objects.get(ordem=ordem, album_id=album)
             except Musica.DoesNotExist:
                 existe = False
+            except ValueError:
+                existe = False
 
             if not existe and tipo:
                 arquivo = ContentFile(
                     decode_file(arquivo), (nome + tipo)
                 )
-                musica = Musica(
-                    nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
-                )
-                musica.save()
-                response = json.dumps({
-                    'musica': {
-                        'id': musica.id,
-                        'nome': musica.nome,
-                        'ordem': musica.ordem,
-                        'tipo': musica.arquivo_tipo,
-                        'arquivo': musica.arquivo.path
-                    }
-                })
-                return JsonResponse(response, safe=False, status=201)
+
+                try:
+                    musica = Musica(
+                        nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
+                    )
+                    musica.save()
+                except Exception:
+                    pass
+                else:
+                    response = json.dumps({
+                        'musica': {
+                            'id': musica.id,
+                            'nome': musica.nome,
+                            'ordem': musica.ordem,
+                            'tipo': musica.arquivo_tipo,
+                            'arquivo': musica.arquivo.path
+                        }
+                    })
+                    return JsonResponse(response, safe=False, status=201)
             else:
                 if existe:
                     erros.append('Já existe uma música com essa ordem')

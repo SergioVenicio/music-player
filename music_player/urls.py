@@ -36,6 +36,7 @@ urlpatterns = [
     path('bandas/add', views.add_bandas, name="add_bandas"),
     path('bandas/<int:genero_id>', views.bandas, name="bandas"),
     path('albuns/<int:banda_id>', views.albuns, name="albuns"),
+    path('albuns/add', views.add_albuns, name="add_albuns"),
     path('generos/add', views.add_generos, name="add_generos"),
     path('admin/', admin.site.urls),
     path('api_v1/', include(router.urls)),

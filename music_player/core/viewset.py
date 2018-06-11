@@ -148,7 +148,82 @@ class AlbumViewSet(viewsets.ModelViewSet):
 
     queryset = Album.objects.all()
     serializer_class = serializers.AlbumSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
+
+    def create(self, request, *args, **kwargs):
+        erros = []
+        nome = request.data['nome']
+        banda_id = request.data['banda_id']
+        data_lancamento = request.data['data_lancamento']
+
+        try:
+            imagem = request.data['capa']
+            tipo = get_file_type(imagem)
+            if not imagem or imagem == '':
+                raise KeyError
+        except KeyError:
+            if nome and banda_id:
+                album = Album(
+                    nome=nome, banda_id=banda_id,
+                    data_lancamento=data_lancamento
+                )
+                try:
+                    album.save()
+                except IntegrityError:
+                    erros.append('Já existe um album com esse nome')
+                else:
+                    response = json.dumps({
+                        'album': {
+                            'id': album.id,
+                            'nome': album.nome,
+                            'banda_id': album.banda.id,
+                            'data_lancamento': album.data_lancamento
+                        }
+                    })
+                    return JsonResponse(response, safe=False, status=201)
+            else:
+                if not nome:
+                    erros.append('O campo nome é obrigátorio')
+                if not banda_id:
+                    erros.append('O campo banda é obrigátorio')
+        else:
+            if tipo:
+                if tipo == '.jpg':
+                    imagem = imagem[23:]
+                elif tipo == '.png':
+                    imagem = imagem[22:]
+                imagem = ContentFile(
+                    decode_file(imagem), (nome + tipo)
+                )
+                if banda_id:
+                    print('Aqui')
+                    album = Album(
+                        nome=nome, banda_id=banda_id,
+                        data_lancamento=data_lancamento, capa=imagem
+                    )
+                    try:
+                        album.save()
+                    except IntegrityError:
+                        erros.append('Já existe um album com esse nome')
+                    else:
+                        response = json.dumps({
+                            'album': {
+                                'id': album.id,
+                                'nome': album.nome,
+                                'banda_id': album.banda.id,
+                                'data_lancamento': album.data_lancamento,
+                                'capa': album.capa.path
+                            }
+                        })
+                        return JsonResponse(response, safe=False, status=201)
+                else:
+                    erros.append('O campo banda é obrigátorio')
+            else:
+                erros.append('Tipo de arquivo inválido')
+
+        return JsonResponse(
+            json.dumps({'erros': erros}), safe=False, status=400
+        )
 
 
 class MusicaViewSet(viewsets.ModelViewSet):

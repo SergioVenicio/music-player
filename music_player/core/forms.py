@@ -1,8 +1,8 @@
 from . import models
 from django import forms
-from .utils import get_albuns, get_generos
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
+from .utils import get_albuns, get_generos, get_bandas
 
 
 class UsuarioAdmin(UserAdmin):
@@ -131,6 +131,46 @@ class BandaForm(forms.ModelForm):
     class Meta:
         fields = ('nome', 'genero', 'imagem',)
         model = models.Banda
+
+
+class AlbumForm(forms.ModelForm):
+    nome = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control', 'placeholder': 'Nome'
+            }
+        )
+    )
+
+    banda = forms.ModelChoiceField(
+        queryset=get_bandas(),
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control selectpicker', 'placeholder': 'Banda',
+                'data-live-search': 'true', 'data-style': 'btn-primary',
+                'title': 'Escolha uma banda'
+            })
+    )
+
+    data_lancamento = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control', 'placeholder': 'Data de lançamento'
+            }
+        )
+    )
+
+    capa = forms.ImageField(
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control-file', 'placeholder': 'Capa'
+            }
+        )
+    )
+
+    class Meta:
+        fields = ('nome', 'banda', 'data_lancamento', 'capa',)
+        model = models.Album
 
 
 class MusicaForm(forms.ModelForm):

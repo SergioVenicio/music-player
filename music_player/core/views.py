@@ -122,6 +122,13 @@ def albuns(request, banda_id):
 
 
 @login_required(login_url='/login')
+def add_albuns(request):
+    form = forms.AlbumForm()
+    context = {'form': form}
+    return render(request, 'core/add_albuns.html', context)
+
+
+@login_required(login_url='/login')
 def musicas(request, album_id):
     """ Retorna as músicas cadastradas no sistema com base no album """
     context = {

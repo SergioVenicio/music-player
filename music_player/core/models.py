@@ -158,9 +158,11 @@ class Album(models.Model):
     """
         Modelo de albuns
     """
-    nome = models.CharField(max_length=250)
-    banda = models.ForeignKey(Banda, on_delete=models.CASCADE)
-    data_lancamento = models.PositiveIntegerField()
+    nome = models.CharField(max_length=250, blank=False, null=False)
+    banda = models.ForeignKey(
+        Banda, blank=False, null=False, on_delete=models.CASCADE
+    )
+    data_lancamento = models.PositiveIntegerField(blank=False, null=False)
     capa = models.ImageField(('Capa'), upload_to='images/capas')
 
     def __str__(self):

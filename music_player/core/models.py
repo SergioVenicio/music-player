@@ -245,6 +245,16 @@ def get_duration(sender, instance, **kwargs):
     Musica.objects.filter(pk=instance.id).update(duracao=duracao)
 
 
+@receiver(post_delete, sender=Usuario)
+def apaga_avatar_usuario(sender, instance, **kwargs):
+    """
+        Apaga o avatar de um usuário
+    """
+    if instance.avatar:
+        arquivo = os.path.join(BASE_DIR, 'media', str(instance.avatar))
+        os.remove(arquivo)
+
+
 @receiver(post_delete, sender=Musica)
 def apaga_musica(sender, instance, **kwargs):
     """
@@ -270,6 +280,16 @@ def apaga_capa(sender, instance, **kwargs):
     """
     if instance.capa:
         arquivo = os.path.join(BASE_DIR, 'media', str(instance.capa))
+        os.remove(arquivo)
+
+
+@receiver(post_delete, sender=Banda)
+def apaga_img_banda(sender, instance, **kwargs):
+    """
+        Apaga a imagem de uma banda quando ela for deletada do banco de dados
+    """
+    if instance.imagem:
+        arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagem))
         os.remove(arquivo)
 
 

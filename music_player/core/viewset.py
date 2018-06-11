@@ -79,33 +79,12 @@ class BandaViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         erros = []
-        nome = request.data['nome']
-        genero_id = request.data['genero_id']
+        nome = request.data.get('nome', None)
+        genero_id = request.data.get('genero_id', None)
+        imagem = request.data.get('imagem', None)
 
-        try:
-            imagem = request.data['imagem']
+        if imagem:
             tipo = get_file_type(imagem)
-            if not imagem:
-                raise KeyError
-        except KeyError:
-            if genero_id:
-                banda = Banda(nome=nome, genero_id=genero_id)
-                try:
-                    banda.save()
-                except IntegrityError:
-                    erros.append('Já existe uma banda com esse nome')
-                else:
-                    response = json.dumps({
-                        'genero': {
-                            'id': banda.id,
-                            'nome': banda.nome,
-                            'genero_id': genero_id
-                        }
-                    })
-                    return JsonResponse(response, safe=False, status=201)
-            else:
-                erros.append('O campo genero é obrigátorio')
-        else:
             if tipo:
                 if tipo == '.jpg':
                     imagem = imagem[23:]
@@ -135,6 +114,24 @@ class BandaViewSet(viewsets.ModelViewSet):
                     erros.append('O campo genero é obrigátorio')
             else:
                 erros.append('Tipo de arquivo inválido')
+        else:
+            if genero_id:
+                banda = Banda(nome=nome, genero_id=genero_id)
+                try:
+                    banda.save()
+                except IntegrityError:
+                    erros.append('Já existe uma banda com esse nome')
+                else:
+                    response = json.dumps({
+                        'genero': {
+                            'id': banda.id,
+                            'nome': banda.nome,
+                            'genero_id': genero_id
+                        }
+                    })
+                    return JsonResponse(response, safe=False, status=201)
+            else:
+                erros.append('O campo genero é obrigátorio')
 
         return JsonResponse(
             json.dumps({'erros': erros}), safe=False, status=400
@@ -152,16 +149,49 @@ class AlbumViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         erros = []
-        nome = request.data['nome']
-        banda_id = request.data['banda_id']
-        data_lancamento = request.data['data_lancamento']
+        nome = request.data.get('nome', None)
+        banda_id = request.data.get('banda_id', None)
+        data_lancamento = request.data.get('data_lancamento', None)
+        imagem = request.data.get('capa', None)
 
-        try:
-            imagem = request.data['capa']
+        if not data_lancamento:
+            erros.append('O campo data de lançamento é obrigatório')
+
+        if imagem:
             tipo = get_file_type(imagem)
-            if not imagem or imagem == '':
-                raise KeyError
-        except KeyError:
+            if tipo:
+                if tipo == '.jpg':
+                    imagem = imagem[23:]
+                elif tipo == '.png':
+                    imagem = imagem[22:]
+                imagem = ContentFile(
+                    decode_file(imagem), (nome + tipo)
+                )
+                if banda_id:
+                    album = Album(
+                        nome=nome, banda_id=banda_id,
+                        data_lancamento=data_lancamento, capa=imagem
+                    )
+                    try:
+                        album.save()
+                    except IntegrityError:
+                        erros.append('Já existe um album com esse nome')
+                    else:
+                        response = json.dumps({
+                            'album': {
+                                'id': album.id,
+                                'nome': album.nome,
+                                'banda_id': album.banda.id,
+                                'data_lancamento': album.data_lancamento,
+                                'capa': album.capa.path
+                            }
+                        })
+                        return JsonResponse(response, safe=False, status=201)
+                else:
+                    erros.append('O campo banda é obrigátorio')
+            else:
+                erros.append('Tipo de arquivo inválido')
+        else:
             if nome and banda_id:
                 album = Album(
                     nome=nome, banda_id=banda_id,
@@ -186,40 +216,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
                     erros.append('O campo nome é obrigátorio')
                 if not banda_id:
                     erros.append('O campo banda é obrigátorio')
-        else:
-            if tipo:
-                if tipo == '.jpg':
-                    imagem = imagem[23:]
-                elif tipo == '.png':
-                    imagem = imagem[22:]
-                imagem = ContentFile(
-                    decode_file(imagem), (nome + tipo)
-                )
-                if banda_id:
-                    print('Aqui')
-                    album = Album(
-                        nome=nome, banda_id=banda_id,
-                        data_lancamento=data_lancamento, capa=imagem
-                    )
-                    try:
-                        album.save()
-                    except IntegrityError:
-                        erros.append('Já existe um album com esse nome')
-                    else:
-                        response = json.dumps({
-                            'album': {
-                                'id': album.id,
-                                'nome': album.nome,
-                                'banda_id': album.banda.id,
-                                'data_lancamento': album.data_lancamento,
-                                'capa': album.capa.path
-                            }
-                        })
-                        return JsonResponse(response, safe=False, status=201)
-                else:
-                    erros.append('O campo banda é obrigátorio')
-            else:
-                erros.append('Tipo de arquivo inválido')
 
         return JsonResponse(
             json.dumps({'erros': erros}), safe=False, status=400
@@ -245,40 +241,42 @@ class MusicaViewSet(viewsets.ModelViewSet):
         return musicas
 
     def create(self, request, *args, **kwargs):
-        nome = request.data['nome']
-        album = request.data['album']
-        ordem = request.data['ordem']
-        arquivo = request.data['arquivo']
-        tipo = get_file_type(arquivo, musica=True)
-        try:
-            existe = Musica.objects.get(ordem=ordem, album_id=album)
-        except Musica.DoesNotExist:
-            existe = False
+        erros = []
+        nome = request.data.get('nome', None)
+        album = request.data.get('album', None)
+        ordem = request.data.get('ordem', None)
+        arquivo = request.data.get('arquivo', None)
+        if arquivo:
+            tipo = get_file_type(arquivo, musica=True)
+            try:
+                existe = Musica.objects.get(ordem=ordem, album_id=album)
+            except Musica.DoesNotExist:
+                existe = False
 
-        if not existe and tipo:
-            arquivo = ContentFile(
-                decode_file(arquivo), (nome + tipo)
-            )
-            musica = Musica(
-                nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
-            )
-            musica.save()
-            response = json.dumps({
-                'musica': {
-                    'id': musica.id,
-                    'nome': musica.nome,
-                    'ordem': musica.ordem,
-                    'tipo': musica.arquivo_tipo,
-                    'arquivo': musica.arquivo.path
-                }
-            })
-            return JsonResponse(response, safe=False, status=201)
+            if not existe and tipo:
+                arquivo = ContentFile(
+                    decode_file(arquivo), (nome + tipo)
+                )
+                musica = Musica(
+                    nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
+                )
+                musica.save()
+                response = json.dumps({
+                    'musica': {
+                        'id': musica.id,
+                        'nome': musica.nome,
+                        'ordem': musica.ordem,
+                        'tipo': musica.arquivo_tipo,
+                        'arquivo': musica.arquivo.path
+                    }
+                })
+                return JsonResponse(response, safe=False, status=201)
+            else:
+                if existe:
+                    erros.append('Já existe uma música com essa ordem')
+                if not tipo:
+                    erros.append('Tipo de arquivo inválido')
         else:
-            erros = []
-            if existe:
-                erros.append('Já existe uma música com essa ordem')
-            if not tipo:
-                erros.append('Tipo de arquivo inválido')
-
-            response = json.dumps({'erros': erros})
-            return JsonResponse(response, safe=False, status=400)
+            erros.append('O arquivo de música é obrigatório')
+        response = json.dumps({'erros': erros})
+        return JsonResponse(response, safe=False, status=400)

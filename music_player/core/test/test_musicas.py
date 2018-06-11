@@ -22,3 +22,13 @@ def test_get_view_musica_id(musica, client):
     url = reverse(resolve('/api_v1/musicas').url_name)
     response = client.get(url + f'/{musica.id}')
     assert status.is_success(response.status_code)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_musica(api_client, album, b64_arquivo):
+    url = reverse(resolve('/api_v1/musicas').url_name)
+    data = {
+        'nome': 'teste', 'album': album.id, 'ordem': 1, 'arquivo': b64_arquivo
+    }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_201_CREATED

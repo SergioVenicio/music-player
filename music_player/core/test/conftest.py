@@ -37,6 +37,14 @@ def arquivo(path):
 
 
 @pytest.fixture
+def b64_arquivo(path):
+    arquivo = open(path + '/musica_test.mp3', 'rb').read()
+    header = 'data:audio/mpeg;base64,'
+    b64_arquivo = str(base64.b64encode(arquivo))
+    return header + b64_arquivo[1:]
+
+
+@pytest.fixture
 def genero(capa):
     genero = models.Genero(descricao='teste', imagem=capa)
     genero.save()

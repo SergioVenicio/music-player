@@ -1,5 +1,4 @@
 import pytest
-from django.test import Client
 from rest_framework import status
 from django.urls import reverse, resolve
 
@@ -17,10 +16,16 @@ def test_apaga_genero(genero):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_genero():
-    client = Client()
+def test_get_view_genero(client):
     url = reverse(resolve('/api_v1/genero').url_name)
     response = client.get(url)
+    assert status.is_success(response.status_code)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_get_view_genero_id(client, genero):
+    url = reverse(resolve('/api_v1/genero').url_name)
+    response = client.get(url + f'/{genero.id}')
     assert status.is_success(response.status_code)
 
 

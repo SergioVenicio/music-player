@@ -32,6 +32,7 @@ $(document).ready( function (){
     click: function () {
       $("#avatar_previous").attr('src', old_avatar);
       $(".avatar").attr('src', old_avatar);
+      $("#id_avatar").val("");
       $('#file-info').text("");
     }
   });

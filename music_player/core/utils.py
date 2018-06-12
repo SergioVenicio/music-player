@@ -85,6 +85,7 @@ def get_file_type(base64_data, musica=False, imagen=True):
         else:
             return False
     elif imagen:
+        print(base64_data[11:15])
         if data_type == 'data:image':
             if base64_data[11:14] == 'png':
                 return '.png'

@@ -31,7 +31,8 @@ def b64_capa(path):
 @pytest.fixture
 def b64_capa_jpg(path):
     capa = open(path + '/imagem_test.png', 'rb').read()
-    b64_capa = 'data:image/jpeg;base64,' + str(base64.b64encode(capa))
+    b64_capa = 'data:image/jpeg;base64,' + str(base64.b64encode(capa))[1:]
+    print(b64_capa[11:15])
     return b64_capa
 
 

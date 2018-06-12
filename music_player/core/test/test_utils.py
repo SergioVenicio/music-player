@@ -21,6 +21,13 @@ def test_get_generos_pagination(genero):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_get_generos_pagination_empty():
+    db_genero = utils.get_generos(pagination=True)
+
+    assert db_genero.number == 1
+
+
+@pytest.mark.django_db(transaction=True)
 def test_get_banda(banda):
     db_banda = utils.get_bandas()
     assert banda in db_banda

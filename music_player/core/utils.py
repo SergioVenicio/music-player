@@ -1,4 +1,5 @@
 import base64
+import hashlib
 from music_player import settings
 from music_player.core import models
 from django.core.paginator import Paginator, EmptyPage
@@ -95,3 +96,7 @@ def get_file_type(base64_data, musica=False, imagen=True):
 
 def decode_file(base64_data):
     return base64.b64decode(base64_data)
+
+
+def get_etag(request, id):
+    return hashlib.sha1(f"{id}".encode('utf-8')).hexdigest()

@@ -3,12 +3,13 @@
 """
 
 from . import forms
+from . import utils
 from music_player import settings
 from django.shortcuts import render, redirect
+from django.views.decorators.http import etag
 from django.contrib.auth import login, authenticate
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-from .utils import get_all_musics, get_albuns, get_generos, get_bandas
 
 
 def sign_up(request):
@@ -57,7 +58,7 @@ def home(request):
     per_page = request.GET.get('per_page', None)
     if per_page is None or per_page == '':
         per_page = settings.PERPAGE
-    generos = get_generos(per_page=per_page, page=page, pagination=True)
+    generos = utils.get_generos(per_page=per_page, page=page, pagination=True)
 
     context = {
         'generos': generos,
@@ -68,8 +69,9 @@ def home(request):
     return render(request, 'core/home.html', context)
 
 
+@etag(utils.get_etag)
 @login_required(login_url='/login')
-def bandas(request, genero_id):
+def bandas(request, id):
     page = request.GET.get('page', 1)
     if not page:
         page = 1
@@ -78,8 +80,8 @@ def bandas(request, genero_id):
     if per_page is None or per_page == '':
         per_page = settings.PERPAGE
 
-    bandas = get_bandas(
-        genero_id=genero_id, per_page=per_page, page=page, pagination=True
+    bandas = utils.get_bandas(
+        genero_id=id, per_page=per_page, page=page, pagination=True
     )
 
     context = {
@@ -98,8 +100,9 @@ def add_bandas(request):
     return render(request, 'core/add_bandas.html', context)
 
 
+@etag(utils.get_etag)
 @login_required(login_url='/login')
-def albuns(request, banda_id):
+def albuns(request, id):
     page = request.GET.get('page', 1)
     if not page:
         page = 1
@@ -108,8 +111,8 @@ def albuns(request, banda_id):
     if per_page is None or per_page == '':
         per_page = settings.PERPAGE
 
-    albuns = get_albuns(
-        banda_id=banda_id, per_page=per_page, page=page, pagination=True
+    albuns = utils.get_albuns(
+        banda_id=id, per_page=per_page, page=page, pagination=True
     )
 
     context = {
@@ -128,12 +131,13 @@ def add_albuns(request):
     return render(request, 'core/add_albuns.html', context)
 
 
+@etag(utils.get_etag)
 @login_required(login_url='/login')
-def musicas(request, album_id):
+def musicas(request, id):
     """ Retorna as músicas cadastradas no sistema com base no album """
     context = {
-        'musics': get_all_musics(album_id=album_id),
-        'album': get_albuns(album_id=album_id)
+        'musics': utils.get_all_musics(album_id=id),
+        'album': utils.get_albuns(album_id=id)
     }
     return render(request, 'core/musicas.html', context)
 

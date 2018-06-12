@@ -19,10 +19,10 @@ USER_URLS = [
 urlpatterns = [
     path('', views.home, name='home'),
     path('musicas/add', views.add_musicas, name="add_musicas"),
-    path('musicas/<int:album_id>', views.musicas, name="musicas"),
+    path('musicas/<int:id>', views.musicas, name="musicas"),
     path('bandas/add', views.add_bandas, name="add_bandas"),
-    path('bandas/<int:genero_id>', views.bandas, name="bandas"),
-    path('albuns/<int:banda_id>', views.albuns, name="albuns"),
+    path('bandas/<int:id>', views.bandas, name="bandas"),
+    path('albuns/<int:id>', views.albuns, name="albuns"),
     path('albuns/add', views.add_albuns, name="add_albuns"),
     path('generos/add', views.add_generos, name="add_generos"),
 ] + USER_URLS

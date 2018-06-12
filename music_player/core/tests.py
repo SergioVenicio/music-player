@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 
 
 class TestBandas(APITestCase):
-    url = reverse(resolve('/api_v1/banda').url_name)
+    url = reverse(resolve('/api/v1/banda').url_name)
 
     def test_list_bandas(self):
         response = self.client.get(self.url, format='json')
@@ -12,7 +12,7 @@ class TestBandas(APITestCase):
 
 
 class TestGeneros(APITestCase):
-    url = reverse(resolve('/api_v1/genero').url_name)
+    url = reverse(resolve('/api/v1/genero').url_name)
 
     def test_list_generos(self):
         response = self.client.get(self.url, format='json')
@@ -20,7 +20,7 @@ class TestGeneros(APITestCase):
 
 
 class TestAlbum(APITestCase):
-    url = reverse(resolve('/api_v1/album').url_name)
+    url = reverse(resolve('/api/v1/album').url_name)
 
     def test_list_albuns(self):
         response = self.client.get(self.url, format='json')
@@ -28,7 +28,7 @@ class TestAlbum(APITestCase):
 
 
 class TestMusicas(APITestCase):
-    url = reverse(resolve('/api_v1/musicas').url_name)
+    url = reverse(resolve('/api/v1/musicas').url_name)
 
     def test_list_albuns(self):
         response = self.client.get(self.url, format='json')

@@ -51,6 +51,12 @@ def test_get_banda_pagination(banda):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_get_banda_pagination_empty(banda):
+    db_banda = utils.get_bandas(page=10, pagination=True)
+    assert db_banda.number == 1
+
+
+@pytest.mark.django_db(transaction=True)
 def test_get_album(album):
     db_album = utils.get_albuns()
     assert album in db_album
@@ -71,6 +77,12 @@ def test_get_album_banda_id(album, banda):
 @pytest.mark.django_db(transaction=True)
 def test_get_album_pagination(album):
     db_album = utils.get_albuns(pagination=True)
+    assert db_album.number == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_get_album_pagination_empty(album):
+    db_album = utils.get_albuns(page=10, pagination=True)
     assert db_album.number == 1
 
 
@@ -97,8 +109,18 @@ def test_get_file_type_mp3_error(b64_arquivo_wav):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_get_file_type_mp3_with_pgn(b64_capa):
+    assert utils.get_file_type(b64_capa, musica=True) is False
+
+
+@pytest.mark.django_db(transaction=True)
 def test_get_file_type_png(b64_capa):
     assert utils.get_file_type(b64_capa) == '.png'
+
+
+@pytest.mark.django_db(transaction=True)
+def test_get_file_type_png_with_mp3(b64_arquivo):
+    assert utils.get_file_type(b64_arquivo) is False
 
 
 @pytest.mark.django_db(transaction=True)

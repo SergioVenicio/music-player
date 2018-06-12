@@ -1,8 +1,8 @@
 import json
+from .import serializers
 from rest_framework import viewsets
 from django.http import JsonResponse
 from django.db import IntegrityError
-from music_player.core import serializers
 from django.core.files.base import ContentFile
 from music_player.core.utils import get_file_type, decode_file
 from music_player.core.models import Genero, Banda, Album, Musica

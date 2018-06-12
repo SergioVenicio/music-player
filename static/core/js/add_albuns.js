@@ -20,7 +20,7 @@ $(document).ready( function (){
         'data_lancamento': data_lancamento, 'capa': base_imagen
       }
       $.ajax({
-        url: '/api_v1/album',
+        url: '/api/v1/album',
         type: 'POST',
         dataType: 'json',
         data: album ,

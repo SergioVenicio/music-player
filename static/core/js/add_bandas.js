@@ -18,7 +18,7 @@ $(document).ready( function (){
         'nome': nome, 'imagem': base_imagen, 'genero_id': genero
       }
       $.ajax({
-        url: '/api_v1/banda',
+        url: '/api/v1/banda',
         type: 'POST',
         dataType: 'json',
         data: banda ,

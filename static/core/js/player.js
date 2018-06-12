@@ -30,7 +30,7 @@ $(document).ready(function() {
     var player = '';
 
     $.ajax({
-      'url': '/api_v1/musicas/album/' + album_id,
+      'url': '/api/v1/musicas/album/' + album_id,
       'type': 'GET',
       success: function (data) {
         for(var i = 0; i < data.length; i++) {

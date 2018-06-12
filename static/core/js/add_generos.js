@@ -18,7 +18,7 @@ $(document).ready( function (){
         'imagen': base_imagen
       }
       $.ajax({
-        url: '/api_v1/genero',
+        url: '/api/v1/genero',
         type: 'POST',
         dataType: 'json',
         data: genero ,

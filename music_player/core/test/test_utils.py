@@ -21,9 +21,8 @@ def test_get_generos_pagination(genero):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_generos_pagination_empty():
-    db_genero = utils.get_generos(pagination=True)
-
+def test_get_generos_pagination_empty(genero):
+    db_genero = utils.get_generos(page=10, pagination=True)
     assert db_genero.number == 1
 
 
@@ -93,8 +92,23 @@ def test_get_file_type_mp3(b64_arquivo):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_get_file_type_mp3_error(b64_arquivo_wav):
+    assert utils.get_file_type(b64_arquivo_wav, musica=True) is False
+
+
+@pytest.mark.django_db(transaction=True)
 def test_get_file_type_png(b64_capa):
     assert utils.get_file_type(b64_capa) == '.png'
+
+
+@pytest.mark.django_db(transaction=True)
+def test_get_file_type_jpg(b64_capa_jpg):
+    assert utils.get_file_type(b64_capa_jpg) == '.jpg'
+
+
+@pytest.mark.django_db(transaction=True)
+def test_get_file_type_error(b64_capa_error):
+    assert utils.get_file_type(b64_capa_error) is False
 
 
 @pytest.mark.django_db(transaction=True)

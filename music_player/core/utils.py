@@ -80,6 +80,8 @@ def get_file_type(base64_data, musica=False, imagen=True):
         if data_type == 'data:audio':
             if base64_data[11:15] == 'mpeg':
                 return '.mp3'
+            else:
+                return False
         else:
             return False
     elif imagen:
@@ -90,8 +92,10 @@ def get_file_type(base64_data, musica=False, imagen=True):
                 return '.jpg'
             else:
                 return False
-    else:
-        return False
+        else:
+            return False
+
+    return False
 
 
 def decode_file(base64_data):

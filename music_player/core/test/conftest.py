@@ -29,6 +29,20 @@ def b64_capa(path):
 
 
 @pytest.fixture
+def b64_capa_jpg(path):
+    capa = open(path + '/imagem_test.png', 'rb').read()
+    b64_capa = 'data:image/jpeg;base64,' + str(base64.b64encode(capa))
+    return b64_capa
+
+
+@pytest.fixture
+def b64_capa_error(path):
+    capa = open(path + '/imagem_test.png', 'rb').read()
+    b64_capa = 'data:image/error;base64,' + str(base64.b64encode(capa))
+    return b64_capa
+
+
+@pytest.fixture
 def arquivo(path):
     arquivo = open(path + '/musica_test.mp3', 'rb').read()
     b64_arquivo = base64.b64encode(arquivo)
@@ -39,6 +53,14 @@ def arquivo(path):
 def b64_arquivo(path):
     arquivo = open(path + '/musica_test.mp3', 'rb').read()
     header = 'data:audio/mpeg;base64,'
+    b64_arquivo = str(base64.b64encode(arquivo))
+    return header + b64_arquivo[1:]
+
+
+@pytest.fixture
+def b64_arquivo_wav(path):
+    arquivo = open(path + '/musica_test.mp3', 'rb').read()
+    header = 'data:audio/wav;base64,'
     b64_arquivo = str(base64.b64encode(arquivo))
     return header + b64_arquivo[1:]
 

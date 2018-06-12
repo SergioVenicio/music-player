@@ -2,7 +2,6 @@ import os
 import pytest
 import base64
 from datetime import datetime
-from django.test import Client
 from music_player import settings
 from music_player.core import models
 from rest_framework.test import APIClient
@@ -101,11 +100,6 @@ def musica(album, arquivo):
         settings.BASE_DIR, settings.MEDIA_ROOT, musica.arquivo.path
     )
     os.remove(music_dir)
-
-
-@pytest.fixture
-def client():
-    return Client()
 
 
 @pytest.fixture

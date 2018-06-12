@@ -124,6 +124,13 @@ def test_get_file_type_png_with_mp3(b64_arquivo):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_get_file_type_without_options(b64_arquivo):
+    assert utils.get_file_type(
+        b64_arquivo, musica=False, imagen=False
+    ) is False
+
+
+@pytest.mark.django_db(transaction=True)
 def test_get_file_type_jpg(b64_capa_jpg):
     assert utils.get_file_type(b64_capa_jpg) == '.jpg'
 

@@ -5,6 +5,7 @@ var playlist = [];
 
 function player(music=0) {
   if(music < 0) {
+    mus = 0;
     music = 0;
   }
   if(music < playlist.length) {

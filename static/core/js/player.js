@@ -2,13 +2,23 @@ var mus = 0;
 var volume = 1;
 var _player = document.getElementById("audio");
 var playlist = [];
+var musica_ativa = '';
+var repeat = false;
 
 function player(music=0) {
+  var musicas = $("li");
   if(music < 0) {
     mus = 0;
     music = 0;
   }
   if(music < playlist.length) {
+    $(musica_ativa).removeClass('music-active');
+    for(i = 0; i <= musicas.length; i++) {
+      if($(musicas[i]).attr('data-pos') == music) {
+        musica_ativa = $(musicas[i]);
+        $(musica_ativa).addClass('music-active');
+      }
+    }
     $(".music-description").text(playlist[music].desc);
     _player.src = playlist[music].src;
     _player.load();
@@ -17,7 +27,13 @@ function player(music=0) {
     $(".pause").show();
     $(".play").hide();
   } else {
-    $(".music-description").text('A playlist acabou');
+    if(repeat) {
+        mus = 0;
+        music = 0;
+        player();
+    } else {
+      $(".music-description").text('A playlist acabou');
+    }
   }
 }
 
@@ -93,6 +109,18 @@ $(document).ready(function() {
           }
         }
       }
+  });
+
+  $(".repeat").on({
+    click: function () {
+      if($(this).hasClass('repeat-active')) {
+        $(this).removeClass('repeat-active');
+        repeat = false;
+      } else {
+        $(this).addClass('repeat-active');
+        repeat = true;
+      }
+    }
   });
 
   $(".next").on({

@@ -131,7 +131,7 @@ def add_albuns(request):
     return render(request, 'core/add_albuns.html', context)
 
 
-@etag(utils.get_etag)
+# @etag(utils.get_etag)
 @login_required(login_url='/login')
 def musicas(request, id):
     """ Retorna as músicas cadastradas no sistema com base no album """

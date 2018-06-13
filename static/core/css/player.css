@@ -20,8 +20,12 @@
 }
 
 .play:hover, .mute:hover, .volume:hover,
-.prev:hover, .next:hover, .pause:hover {
+.prev:hover, .next:hover, .pause:hover, .repeat:hover {
   transition: all 0.3s;
+  color: #000;
+}
+
+.repeat-active {
   color: #000;
 }
 
@@ -45,6 +49,11 @@
 
 .music-description {
   display: inline;
+}
+
+.music-active {
+  background-color: #343a40;
+  opacity: 0.8;
 }
 
 #vol-control {

@@ -3,7 +3,25 @@ var volume = 1;
 var _player = document.getElementById("audio");
 var playlist = [];
 var musica_ativa = '';
+var musicas_tocadas = [];
+var end_playlist = false;
 var repeat = false;
+var random = false;
+
+
+function get_random_music(random_int) {
+  if(musicas_tocadas.length < playlist.length) {
+    if(!musicas_tocadas.includes(random_int)) {
+      musicas_tocadas.push(random_int);
+      changeSong(random_int);
+    } else {
+      var random_music = Math.floor(Math.random() * playlist.length);
+      get_random_music(random_music);
+    }
+  } else {
+    player(playlist.length+1);
+  }
+}
 
 function player(music=0) {
   var musicas = $("li");
@@ -30,6 +48,7 @@ function player(music=0) {
     if(repeat) {
         mus = 0;
         music = 0;
+        musicas_tocadas = [];
         player();
     } else {
       $(".music-description").text('A playlist acabou');
@@ -105,7 +124,11 @@ $(document).ready(function() {
           if(_player.loaded) {
               _player.play();
           } else {
-            changeSong(mus);
+            if(!random) {
+              changeSong(mus);
+            } else {
+              get_random_music(Math.floor(Math.random() * playlist.length));
+            }
           }
         }
       }
@@ -113,33 +136,57 @@ $(document).ready(function() {
 
   $(".repeat").on({
     click: function () {
-      if($(this).hasClass('repeat-active')) {
-        $(this).removeClass('repeat-active');
+      if($(this).hasClass('control-active')) {
+        $(this).removeClass('control-active');
         repeat = false;
       } else {
-        $(this).addClass('repeat-active');
+        $(this).addClass('control-active');
         repeat = true;
+      }
+    }
+  });
+
+  $(".random").on({
+    click: function () {
+      if($(this).hasClass('control-active')) {
+        $(this).removeClass('control-active');
+        random = false;
+      } else {
+        $(this).addClass('control-active');
+        random = true;
       }
     }
   });
 
   $(".next").on({
     click: function() {
-      mus = mus + 1;
-      changeSong(mus);
+      if(!random) {
+        mus = mus + 1;
+        changeSong(mus);
+      } else {
+        get_random_music(Math.floor(Math.random() * playlist.length));
+      }
     }
   })
   $(".prev").on({
     click: function () {
-      mus = mus - 1;
-      changeSong(mus);
+      if(!random) {
+        mus = mus - 1;
+        changeSong(mus);
+      } else {
+        get_random_music(Math.floor(Math.random() * playlist.length));
+      }
     }
   });
 
   $("#audio").on({
     'ended': function () {
-      mus = mus + 1;
-      changeSong(mus);
+      if(!random) {
+        mus = mus + 1;
+        changeSong(mus);
+      } else {
+        get_random_music(Math.floor(Math.random() * playlist.length));
+      }
     }
   });
 

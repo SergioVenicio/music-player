@@ -10,6 +10,7 @@ from django.dispatch import receiver
 from mutagen.wavpack import WavPackInfo
 from music_player.settings import BASE_DIR
 from music_player.settings import MEDIA_ROOT
+from rest_framework.authtoken.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,\
@@ -302,3 +303,9 @@ def apaga_img_genero(sender, instance, **kwargs):
     if instance.imagem:
         arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagem))
         os.remove(arquivo)
+
+
+@receiver(post_save, sender=Usuario)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

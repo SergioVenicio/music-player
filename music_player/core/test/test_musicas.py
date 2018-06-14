@@ -11,16 +11,16 @@ def test_criacao_musica(musica):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_musica(client):
+def test_get_view_musica(api_client):
     url = reverse(resolve('/api/v1/musicas').url_name)
-    response = client.get(url)
+    response = api_client.get(url)
     assert status.is_success(response.status_code)
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_musica_id(musica, client):
+def test_get_view_musica_id(musica, api_client):
     url = reverse(resolve('/api/v1/musicas').url_name)
-    response = client.get(url + f'/{musica.id}')
+    response = api_client.get(url + f'/{musica.id}')
     assert status.is_success(response.status_code)
 
 

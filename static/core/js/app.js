@@ -27,4 +27,5 @@ $.ajaxSetup({
     }
 });
 
+
 $('#login-error-modal').modal();

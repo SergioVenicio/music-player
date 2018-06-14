@@ -16,16 +16,16 @@ def test_apaga_genero(genero):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_genero(client):
+def test_get_view_genero(api_client):
     url = reverse(resolve('/api/v1/genero').url_name)
-    response = client.get(url)
+    response = api_client.get(url)
     assert status.is_success(response.status_code)
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_genero_id(client, genero):
+def test_get_view_genero_id(api_client, genero):
     url = reverse(resolve('/api/v1/genero').url_name)
-    response = client.get(url + f'/{genero.id}')
+    response = api_client.get(url + f'/{genero.id}')
     assert status.is_success(response.status_code)
 
 

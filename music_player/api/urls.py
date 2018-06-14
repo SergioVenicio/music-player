@@ -1,4 +1,5 @@
 from music_player.api import viewset
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 
@@ -11,3 +12,9 @@ router.register(
     r'musicas/album/(?P<album_id>.+)', viewset.MusicaViewSet,
     base_name='musica_filter'
 )
+
+
+urlpatterns = [
+    path('', include(router.urls)),
+    path('auth/', include('rest_auth.urls')),
+]

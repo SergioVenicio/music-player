@@ -12,18 +12,16 @@ def test_criacao_banda(banda):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_banda():
-    client = Client()
+def test_get_view_banda(api_client):
     url = reverse(resolve('/api/v1/banda').url_name)
-    response = client.get(url)
+    response = api_client.get(url)
     assert status.is_success(response.status_code)
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_banda_id(banda):
-    client = Client()
+def test_get_view_banda_id(banda, api_client):
     url = reverse(resolve('/api/v1/banda').url_name)
-    response = client.get(url + f'/{banda.id}')
+    response = api_client.get(url + f'/{banda.id}')
     assert status.is_success(response.status_code)
 
 

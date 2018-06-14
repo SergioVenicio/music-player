@@ -10,6 +10,15 @@ from music_player.core.utils import decode_file
 
 
 @pytest.fixture
+def usuario(request):
+    usuario = models.Usuario(
+        nome='teste', sobrenome='testando', email='teste@teste.com',
+        password='password'
+    )
+    return usuario
+
+
+@pytest.fixture
 def path():
     return 'music_player/core/test'
 
@@ -126,5 +135,7 @@ def musica(album, arquivo):
 
 
 @pytest.fixture
-def api_client():
-    return APIClient()
+def api_client(usuario):
+    api_client = APIClient()
+    api_client.force_authenticate(user=usuario)
+    return api_client

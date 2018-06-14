@@ -12,22 +12,23 @@ def test_criacao_album(album, ano):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_album(client):
+def test_get_view_album(api_client, usuario):
     url = reverse(resolve('/api/v1/album').url_name)
-    response = client.get(url)
+    response = api_client.get(url)
     assert status.is_success(response.status_code)
 
 
 @pytest.mark.django_db(transaction=True)
-def test_get_view_album_id(client, album):
+def test_get_view_album_id(api_client, album):
     url = reverse(resolve('/api/v1/album').url_name)
-    response = client.get(url + f'/{album.id}')
+    response = api_client.get(url + f'/{album.id}')
     assert status.is_success(response.status_code)
 
 
 @pytest.mark.django_db(transaction=True)
-def test_post_view_album(api_client, banda, ano):
+def test_post_view_album(api_client, banda, ano, usuario):
     url = reverse(resolve('/api/v1/album').url_name)
     data = {'nome': 'teste', 'banda_id': banda.id, 'data_lancamento': ano}
+    api_client.force_authenticate(user=usuario)
     response = api_client.post(url, data, format='json')
     assert status.is_success(response.status_code)

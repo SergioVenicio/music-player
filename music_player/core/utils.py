@@ -103,4 +103,7 @@ def decode_file(base64_data):
 
 
 def get_etag(request, id):
-    return hashlib.sha1(f"{id}".encode('utf-8')).hexdigest()
+    user = request.user
+    return hashlib.sha1(
+        f"user_id: {user.id}, {id}".encode('utf-8')
+    ).hexdigest()

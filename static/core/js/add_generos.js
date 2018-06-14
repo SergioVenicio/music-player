@@ -15,7 +15,7 @@ $(document).ready( function (){
       var base_imagen = $("#file").val();
       var genero = {
         'descricao': descricao,
-        'imagen': base_imagen
+        'imagem': base_imagen
       }
       $.ajax({
         url: '/api/v1/genero',

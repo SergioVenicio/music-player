@@ -146,5 +146,6 @@ def test_decode_file(b64_arquivo):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_etag(request):
+def test_etag(request, usuario):
+    request.user = usuario
     assert utils.get_etag(request, 1)

@@ -1,5 +1,4 @@
 import pytest
-from django.test import Client
 from rest_framework import status
 from django.urls import reverse, resolve
 

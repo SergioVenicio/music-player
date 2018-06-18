@@ -38,13 +38,13 @@ class UserManager(BaseUserManager):
 
         if not password:
             raise ValueError('A senha é obrigatória!')
-
-        if len(password) < 6:
+        elif len(password) < 6:
             raise ValueError('A senha deve ter pelo menos 6 caracteres!')
 
-        usuario = self.model(
+        usuario = Usuario(
             email=self.normalize_email(email),
-            nome=nome, sobrenome=sobrenome, avatar=avatar
+            nome=nome, sobrenome=sobrenome,
+            avatar=avatar
         )
         usuario.set_password(password)
         usuario.save()
@@ -60,7 +60,9 @@ class UserManager(BaseUserManager):
             :param avatar: Imagem do avatar do usuário
             :return: Uma instancia de usuário administrador
         """
-        usuario = self.create_user(email, nome, sobrenome, password, avatar)
+        usuario = self.create_user(
+            email, nome, sobrenome, password, avatar=avatar
+        )
         usuario.is_admin = True
         usuario.save()
         return usuario

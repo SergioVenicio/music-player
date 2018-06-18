@@ -10,6 +10,8 @@ def test_user(capa):
     )
     assert s_user is not None
     assert not s_user.is_admin
+    assert not s_user.is_superuser
+    assert not s_user.is_staff
     assert s_user.nome == 'teste'
     assert s_user.sobrenome == 'testando'
     assert s_user.email == 'teste@teste.com'
@@ -25,10 +27,13 @@ def test_superuser(capa):
     )
     assert s_user is not None
     assert s_user.is_admin
+    assert s_user.is_staff
+    assert s_user.is_superuser
     assert s_user.nome == 'teste'
     assert s_user.sobrenome == 'testando'
     assert s_user.email == 'teste@teste.com'
     assert s_user.password != 'password'
+    assert s_user.is_superuser
     assert s_user.delete()
 
 

@@ -1,6 +1,7 @@
 import os
 import pytest
 import base64
+from shutil import rmtree
 from datetime import datetime
 from music_player import settings
 from music_player.core import models
@@ -15,6 +16,7 @@ def usuario(request):
         nome='teste', sobrenome='testando', email='teste@teste.com',
         password='password'
     )
+    usuario.save()
     return usuario
 
 
@@ -99,7 +101,10 @@ def banda(genero, capa):
     img_dir = os.path.join(
         settings.BASE_DIR, settings.MEDIA_ROOT, banda.imagem.path
     )
-    os.remove(img_dir)
+    try:
+        os.remove(img_dir)
+    except FileNotFoundError:
+        pass
 
 
 @pytest.fixture
@@ -118,7 +123,10 @@ def album(banda, capa, ano):
     img_dir = os.path.join(
         settings.BASE_DIR, settings.MEDIA_ROOT, album.capa.path
     )
-    os.remove(img_dir)
+    try:
+        os.remove(img_dir)
+    except FileNotFoundError:
+        pass
 
 
 @pytest.fixture
@@ -131,7 +139,17 @@ def musica(album, arquivo):
     music_dir = os.path.join(
         settings.BASE_DIR, settings.MEDIA_ROOT, musica.arquivo.path
     )
-    os.remove(music_dir)
+    teste_dir = os.path.join(
+        settings.BASE_DIR, settings.MEDIA_ROOT,
+        'musics', musica.album.banda.nome
+    )
+
+    try:
+        os.remove(music_dir)
+    except FileNotFoundError:
+        pass
+
+    rmtree(teste_dir)
 
 
 @pytest.fixture

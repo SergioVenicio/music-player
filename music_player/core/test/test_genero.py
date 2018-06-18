@@ -1,5 +1,4 @@
 import pytest
-from music_player.core import models
 from rest_framework import status
 from django.urls import reverse, resolve
 

@@ -1,7 +1,6 @@
 import pytest
 from music_player.core import models
 from django.core.files.base import ContentFile
-from music_player.core.utils import get_file_type
 
 
 @pytest.mark.django_db(transaction=True)

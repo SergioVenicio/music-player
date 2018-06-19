@@ -1,5 +1,5 @@
 import json
-from .import serializers
+from . import serializers
 from rest_framework import viewsets
 from django.http import JsonResponse
 from django.db import IntegrityError

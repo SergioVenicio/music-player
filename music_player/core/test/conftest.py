@@ -123,6 +123,7 @@ def album(banda, capa, ano):
     img_dir = os.path.join(
         settings.BASE_DIR, settings.MEDIA_ROOT, album.capa.path
     )
+
     try:
         os.remove(img_dir)
     except FileNotFoundError:

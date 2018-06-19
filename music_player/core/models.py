@@ -106,18 +106,6 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         """
         return self.is_admin
 
-    def has_perm(self, perm, obj=None):
-        """
-            Permissões do usuário
-        """
-        return self.is_admin
-
-    def has_module_perms(self, app_label):
-        """
-            Permissões do usuário em módulos
-        """
-        return self.is_admin
-
     class Meta:
         ordering = ('email', 'nome', 'sobrenome',)
 
@@ -155,7 +143,7 @@ class Banda(models.Model):
         return self.nome
 
     def __repr__(self):
-        return f'Banda({self.nome}, {self.genero})'
+        return f'Banda({self.nome})'
 
     class Meta:
         ordering = ('nome', 'genero',)
@@ -176,9 +164,7 @@ class Album(models.Model):
         return self.nome
 
     def __repr__(self):
-        return f'Album(\
-            {self.nome}, {self.banda}, {self.data_lancamento}, {self.capa}\
-        )'
+        return f'Album({self.nome})'
 
     class Meta:
         ordering = ('nome', 'banda', 'data_lancamento',)
@@ -204,9 +190,7 @@ class Musica(models.Model):
         return self.nome
 
     def __repr__(self):
-        return f'Musica(\
-            {self.nome}, {self.album}, {self.ordem}, {self.arquivo}\
-        )'
+        return f'Musica({self.nome})'
 
     class Meta:
         """ Ordenação utilizando o atributor ordem """

@@ -8,6 +8,7 @@ def test_criacao_musica(musica):
     assert isinstance(musica.id, int)
     assert 'teste' == musica.nome
     assert 'audio/mpeg' == musica.arquivo_tipo
+    assert musica.delete()
 
 
 @pytest.mark.django_db(transaction=True)

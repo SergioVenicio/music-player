@@ -9,6 +9,7 @@ def test_criacao_album(album, ano):
     assert 'teste' == album.nome
     assert album.data_lancamento == ano
     assert album.capa is not None
+    assert album.delete()
 
 
 @pytest.mark.django_db(transaction=True)

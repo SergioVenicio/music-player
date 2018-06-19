@@ -235,6 +235,7 @@ def get_duration(sender, instance, **kwargs):
         duracao = timedelta(
             seconds=WavPackInfo(instance.arquivo.path).info.length
         )
+
     Musica.objects.filter(pk=instance.id).update(duracao=duracao)
 
 

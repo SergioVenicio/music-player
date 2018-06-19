@@ -1,5 +1,7 @@
 import pytest
 from music_player.core import models
+from django.core.files.base import ContentFile
+from music_player.core.utils import get_file_type
 
 
 @pytest.mark.django_db(transaction=True)
@@ -92,12 +94,22 @@ def test_supeuser_pass_len_error(capa):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_musica_type_error(album, b64_arquivo_wav):
-    musica = models.Musica(
-        nome='teste', album=album, ordem=1,
-        arquivo=b64_arquivo_wav
-    )
+def test_musica_type_wav(album, b64_arquivo_wav):
     with pytest.raises(ValueError):
+        musica = models.Musica(
+            nome='teste', album=album, ordem=1,
+            arquivo=b64_arquivo_wav
+        )
+        musica.save()
+
+
+@pytest.mark.django_db(transaction=True)
+def test_musica_type_error(album, b64_arquivo_wav):
+    with pytest.raises(ValueError):
+        musica = models.Musica(
+            nome='teste', album=album, ordem=1,
+            arquivo=ContentFile(b64_arquivo_wav, 'teste.wav')
+        )
         musica.save()
 
 

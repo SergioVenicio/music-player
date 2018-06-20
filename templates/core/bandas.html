@@ -16,7 +16,7 @@
                     {% if banda.imagem %}
                       <img class="card-img-top" src="{{ MEDIA_URL }}{{ banda.imagem.url }}">
                     {% else %}
-                      <img class="card-img-top" style="background-color: #000" src="{{ MEDIA_URL }}/media/images/icon.png" alt="Imagen não cadastrada">
+                      <img class="card-img-top" style="background-color: #000" src="{% static 'logo/icon.png' %}" alt="Imagen não cadastrada">
                     {% endif %}
                     <div class="card-body">
                       <h5 class="card-title">{{ banda.nome }}</h5>

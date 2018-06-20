@@ -16,10 +16,10 @@
                     {% if genero.imagem %}
                       <img class="card-img-top" src="{{ genero.imagem.url }}">
                     {% else %}
-                      <img class="card-img-top" style="background-color: #000" src="{{MEDIA_URL}}/media/images/icon.png" alt="Imagen não cadastrada">
+                      <img class="card-img-top" style="background-color: #000" src="{% static 'logo/icon.png' %}" alt="Imagen não cadastrada">
                     {% endif %}
                     <div class="card-body">
-                      <h5 class="card-title">{{MEDIA_URL}}{{ genero.descricao }}</h5>
+                      <h5 class="card-title">{{ MEDIA_URL }}{{ genero.descricao }}</h5>
                       <a href="{% url 'bandas' genero.id %}" class="btn btn-warning">
                           Abrir
                           <i class="fas fa-paper-plane"></i>

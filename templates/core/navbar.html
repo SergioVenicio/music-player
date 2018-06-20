@@ -64,7 +64,7 @@
         <li class="nav-item dropdown usuario-image">
           <a class="nav-link dropdown-toggle" href="#" id="menu_usuario" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {% if request.user.avatar%}
-              <img src="{{ request.user.avatar.url }}" alt="{{ request.user.nome }}" class="avatar">
+              <img src="{{ MEDIA_URL }}{{ request.user.avatar.url }}" alt="{{ request.user.nome }}" class="avatar">
             {% endif %}
             {{ request.user.nome }}
           </a>

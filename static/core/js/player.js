@@ -9,6 +9,34 @@ var repeat = false;
 var random = false;
 
 
+function like(pos, usuario_id, musica_id) {
+  $.ajax({
+    url: '/api/v1/likes',
+    type: 'POST',
+    dataType: 'json',
+    data: {'usuario': usuario_id, 'musica': musica_id},
+    statusCode: {
+      201: function(data) {
+        data = JSON.parse(data);
+        if(data.like) {
+          $("#playlist li").each( function (i) {
+            if(i == pos) {
+              $(this).children('.like').css('color', 'red');
+              $(this).children('.like').addClass('liked');
+            }
+          });
+        } else {
+          $("#like_modal").modal();
+        }
+      },
+      400: function(data) {
+        data = JSON.parse(data.responseJSON);
+        $("#like_modal").modal();
+      }
+    }
+  });
+}
+
 function get_random_music(random_int) {
   if(musicas_tocadas.length < playlist.length) {
     if(!musicas_tocadas.includes(random_int)) {
@@ -24,17 +52,23 @@ function get_random_music(random_int) {
 }
 
 function player(music=0) {
-  var musicas = $("li");
+  var musicas = $("#playlist li");
   if(music < 0) {
     mus = 0;
     music = 0;
   }
   if(music < playlist.length) {
     $(musica_ativa).removeClass('music-active');
+    if(!$(musica_ativa).children('.like').hasClass('liked')) {
+      $(musica_ativa).children('.like').css('color', '#919aa1');
+    }
     for(i = 0; i <= musicas.length; i++) {
       if($(musicas[i]).attr('data-pos') == music) {
         musica_ativa = $(musicas[i]);
         $(musica_ativa).addClass('music-active');
+        if(!$(musicas[i]).children('.like').hasClass('liked')) {
+          $(musica_ativa).children('.like').css('color', '#F5F5F5');
+        }
       }
     }
     $(".music-description").text(playlist[music].desc);
@@ -74,11 +108,12 @@ $(document).ready(function() {
               'src': data[i].arquivo,
               'desc': data[i].nome
             });
+
             if(data[i].duracao)
             {
-              $("#playlist").append("<li onClick='changeSong(" + i + ")' class='list-group-item' data-pos='"+ i +"'>"+ data[i].nome + " <span class='badge badge-warning'>" + data[i].duracao.substr(3, 5) + "</li>");
+              $("#playlist").append("<li class='list-group-item' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ data[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ data[i].nome + " <span class='badge badge-warning'>" + data[i].duracao.substr(3, 5) + "</div></li>");
             } else {
-              $("#playlist").append("<li class='list-group-item' data-pos='" + i + "'>"+ data[i].nome + " <span class='badge badge-warning'>00:00</li>");
+              $("#playlist").append("<li class='list-group-item' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, data[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ data[i].nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
             }
         }
       }
@@ -168,6 +203,7 @@ $(document).ready(function() {
       }
     }
   })
+
   $(".prev").on({
     click: function () {
       if(!random) {

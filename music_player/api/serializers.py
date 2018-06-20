@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from music_player.core.models import Genero, Banda, Album, Musica
+from music_player.core.models import Genero, Banda, Album, Musica, Like, Usuario
 
 
 class GeneroSerializer(serializers.ModelSerializer):
@@ -50,5 +50,18 @@ class MusicaSerializerList(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Musica
         fields = (
-            'nome', 'album', 'ordem', 'arquivo', 'arquivo_tipo', 'duracao'
+            'id', 'nome', 'album', 'ordem', 'arquivo',
+            'arquivo_tipo', 'duracao'
         )
+
+
+class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ('id', 'email', 'nome', 'sobrenome', 'avatar')
+
+
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Like
+        fields = ('__all__')

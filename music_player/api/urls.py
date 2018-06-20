@@ -12,6 +12,8 @@ router.register(
     r'musicas/album/(?P<album_id>.+)', viewset.MusicaViewSet,
     base_name='musica_filter'
 )
+router.register(r'usuarios', viewset.UsuarioViewSet, base_name='usuario')
+router.register(r'likes', viewset.LikesViewSet, base_name='like')
 
 
 urlpatterns = [

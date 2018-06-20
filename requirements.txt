@@ -13,3 +13,4 @@ six==1.11.0
 python-decouple==3.1
 gunicorn==19.8.1
 django-s3-folder-storage==0.5
+Collectfast==0.6.2

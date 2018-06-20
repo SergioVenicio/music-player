@@ -202,6 +202,15 @@ class Like(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     musica = models.ForeignKey(Musica, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.usuario.id}, {self.musica.id}'
+
+    def __repr__(self):
+        return f'Like({self.usuario.id}, {self.musica.id})'
+
+    class Meta:
+        ordering = ('data', 'usuario', 'musica')
+
 
 @receiver(pre_save, sender=Musica)
 def change_tipo(sender, instance, **kwargs):

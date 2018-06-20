@@ -1,18 +1,18 @@
 import json
 from . import serializers
 from rest_framework import viewsets
+from music_player.core import models
 from django.http import JsonResponse
 from django.db import IntegrityError
 from django.core.files.base import ContentFile
 from music_player.core.utils import get_file_type, decode_file
-from music_player.core.models import Genero, Banda, Album, Musica
 
 
 class GeneroViewSet(viewsets.ModelViewSet):
     """
     Endpoint para os generos músicais
     """
-    queryset = Genero.objects.all()
+    queryset = models.Genero.objects.all()
     serializer_class = serializers.GeneroSerializer
     http_method_names = ['get', 'post']
 
@@ -24,7 +24,7 @@ class GeneroViewSet(viewsets.ModelViewSet):
             imagem = request.data['imagem']
             tipo = get_file_type(imagem)
         except KeyError:
-            genero = Genero(descricao=descricao)
+            genero = models.Genero(descricao=descricao)
             try:
                 genero.save()
             except IntegrityError:
@@ -46,7 +46,7 @@ class GeneroViewSet(viewsets.ModelViewSet):
                 imagem = ContentFile(
                     decode_file(imagem), (descricao + tipo)
                 )
-                genero = Genero(descricao=descricao, imagem=imagem)
+                genero = models.Genero(descricao=descricao, imagem=imagem)
                 try:
                     genero.save()
                 except IntegrityError:
@@ -73,7 +73,7 @@ class BandaViewSet(viewsets.ModelViewSet):
     Endpoint para as bandas
     """
 
-    queryset = Banda.objects.all()
+    queryset = models.Banda.objects.all()
     serializer_class = serializers.BandaSerializer
     http_method_names = ['get', 'post']
 
@@ -94,7 +94,7 @@ class BandaViewSet(viewsets.ModelViewSet):
                     decode_file(imagem), (nome + tipo)
                 )
                 if genero_id:
-                    banda = Banda(
+                    banda = models.Banda(
                         nome=nome, genero_id=genero_id, imagem=imagem
                     )
                     try:
@@ -116,7 +116,7 @@ class BandaViewSet(viewsets.ModelViewSet):
                 erros.append('Tipo de arquivo inválido')
         else:
             if genero_id:
-                banda = Banda(nome=nome, genero_id=genero_id)
+                banda = models.Banda(nome=nome, genero_id=genero_id)
                 try:
                     banda.save()
                 except IntegrityError:
@@ -143,7 +143,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     Endpoint para os albums.
     """
 
-    queryset = Album.objects.all()
+    queryset = models.Album.objects.all()
     serializer_class = serializers.AlbumSerializer
     http_method_names = ['get', 'post']
 
@@ -168,7 +168,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
                     decode_file(imagem), (nome + tipo)
                 )
                 if banda_id:
-                    album = Album(
+                    album = models.Album(
                         nome=nome, banda_id=banda_id,
                         data_lancamento=data_lancamento, capa=imagem
                     )
@@ -193,7 +193,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
                 erros.append('Tipo de arquivo inválido')
         else:
             if nome and banda_id:
-                album = Album(
+                album = models.Album(
                     nome=nome, banda_id=banda_id,
                     data_lancamento=data_lancamento
                 )
@@ -228,16 +228,18 @@ class MusicaViewSet(viewsets.ModelViewSet):
 
     """
 
-    queryset = Musica.objects.all()
+    queryset = models.Musica.objects.all()
     serializer_class = serializers.MusicaSerializer
     http_method_names = ['get', 'post']
 
     def get_queryset(self):
         self.serializer_class = serializers.MusicaSerializerList
         try:
-            musicas = Musica.objects.filter(album_id=self.kwargs['album_id'])
+            musicas = models.Musica.objects.filter(
+                album_id=self.kwargs['album_id']
+            )
         except KeyError:
-            musicas = Musica.objects.all()
+            musicas = models.Musica.objects.all()
         return musicas
 
     def create(self, request, *args, **kwargs):
@@ -255,8 +257,8 @@ class MusicaViewSet(viewsets.ModelViewSet):
         if arquivo:
             tipo = get_file_type(arquivo, musica=True)
             try:
-                existe = Musica.objects.get(ordem=ordem, album_id=album)
-            except Musica.DoesNotExist:
+                existe = models.Musica.objects.get(ordem=ordem, album_id=album)
+            except models.Musica.DoesNotExist:
                 existe = False
             except ValueError:
                 existe = False
@@ -267,7 +269,7 @@ class MusicaViewSet(viewsets.ModelViewSet):
                 )
 
                 try:
-                    musica = Musica(
+                    musica = models.Musica(
                         nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
                     )
                     musica.save()
@@ -293,3 +295,59 @@ class MusicaViewSet(viewsets.ModelViewSet):
             erros.append('O arquivo de música é obrigatório')
         response = json.dumps({'erros': erros})
         return JsonResponse(response, safe=False, status=400)
+
+
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset = models.Usuario.objects.all()
+    serializer_class = serializers.UsuarioSerializer
+    http_method_names = ['get']
+
+
+class LikesViewSet(viewsets.ModelViewSet):
+    queryset = models.Like.objects.all()
+    serializer_class = serializers.LikeSerializer
+    http_method_names = ['get', 'post']
+
+    def create(self, request, *args, **kwargs):
+        erros = []
+        usuario_id = request.data.get('usuario', None)
+        musica_id = request.data.get('musica', None)
+
+        if not usuario_id:
+            erros.append('O campo usuário é obrigatório')
+        if not musica_id:
+            erros.append('O campo música é obrigatório')
+
+        try:
+            existe = models.Like.objects.get(
+                usuario_id=usuario_id, musica_id=musica_id
+            )
+        except models.Like.DoesNotExist:
+            existe = False
+
+        if existe:
+            response = json.dumps({
+                'like': {
+                    'usuario': existe.usuario.id,
+                    'musica': existe.musica.id,
+                    'data': str(existe.data)
+                }
+            })
+            status = 201
+
+        if not erros and not existe:
+            like = models.Like(usuario_id=usuario_id, musica_id=musica_id)
+            like.save()
+            response = json.dumps({
+                'like': {
+                    'usuario': like.usuario.id,
+                    'musica': like.musica.id,
+                    'data': str(like.data)
+                }
+            })
+            status = 201
+        elif erros and not existe:
+            response = json.dumps({'erros': erros})
+            status = 400
+
+        return JsonResponse(response, safe=False, status=status)

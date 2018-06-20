@@ -1,10 +1,25 @@
 #playlist {
   max-height: 20rem;
   overflow-y: auto;
+  position: relative;
+  z-index: inherit;
 }
 
 #playlist li {
   cursor: pointer;
+  position: relative;
+  z-index: inherit;
+}
+
+.music-info {
+  display: block;
+  margin-left: 1rem;
+}
+
+.like {
+  display: block;
+  position: absolute;
+  left: 0.5rem;
 }
 
 .prev, .next {

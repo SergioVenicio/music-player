@@ -1,5 +1,6 @@
 DEBUG=True
 SECRET_KEY='chave secreta'
+ALLOWED_HOSTS='*'
 AWS_ACCESS_KEY_ID=='ID de acesso na aws'
 AWS_SECRET_ACCESS_KEY_ID='Chave de acesso na aws'
 AWS_STORAGE_BUCKET_NAME='Bucket name aws'

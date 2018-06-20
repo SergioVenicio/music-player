@@ -1,5 +1,5 @@
 import os
-from decouple import config, Csv
+from decouple import config
 from django.utils.crypto import get_random_string
 
 
@@ -9,7 +9,7 @@ SECRET_KEY = config('SECRET_KEY', get_random_string(50))
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', [], cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', ['*'])
 
 AUTH_USER_MODEL = 'core.Usuario'
 

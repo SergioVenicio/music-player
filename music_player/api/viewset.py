@@ -1,5 +1,6 @@
 import json
 from . import serializers
+from django.http import Http404
 from rest_framework import viewsets
 from music_player.core import models
 from django.http import JsonResponse
@@ -325,9 +326,15 @@ class LikesViewSet(viewsets.ModelViewSet):
             self.serializer_class = serializers.LikeSerializerUsuario
 
         if usuario_id:
-            likes = likes.filter(usuario_id=usuario_id)
+            try:
+                likes = likes.filter(usuario_id=usuario_id)
+            except ValueError:
+                raise Http404('Conteudo não encontrado')
         if musica_id:
-            likes = likes.filter(musica_id=musica_id)
+            try:
+                likes = likes.filter(musica_id=musica_id)
+            except ValueError:
+                raise Http404('Conteudo não encontrado')
 
         return likes
 

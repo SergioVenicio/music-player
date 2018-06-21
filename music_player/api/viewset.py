@@ -307,7 +307,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class LikesViewSet(viewsets.ModelViewSet):
     queryset = models.Like.objects.all()
     serializer_class = serializers.LikeSerializer
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'delete', 'head']
 
     def get_queryset(self):
         likes = models.Like.objects.all()
@@ -322,7 +322,9 @@ class LikesViewSet(viewsets.ModelViewSet):
         except KeyError:
             musica_id = None
 
-        if usuario_id is not None or musica_id is not None:
+        if usuario_id is not None and musica_id is None:
+            self.serializer_class = serializers.LikeSerializerMusica
+        elif usuario_id is not None or musica_id is not None:
             self.serializer_class = serializers.LikeSerializerUsuario
 
         if usuario_id:
@@ -330,6 +332,7 @@ class LikesViewSet(viewsets.ModelViewSet):
                 likes = likes.filter(usuario_id=usuario_id)
             except ValueError:
                 raise Http404('Conteudo não encontrado')
+
         if musica_id:
             try:
                 likes = likes.filter(musica_id=musica_id)

@@ -25,4 +25,5 @@ urlpatterns = [
     path('albuns/<int:id>', views.albuns, name="albuns"),
     path('albuns/add', views.add_albuns, name="add_albuns"),
     path('generos/add', views.add_generos, name="add_generos"),
+    path('favoritas', views.favoritas, name="favoritas"),
 ] + USER_URLS

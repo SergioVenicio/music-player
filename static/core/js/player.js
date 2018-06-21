@@ -21,7 +21,6 @@ function like(pos, usuario_id, musica_id) {
         if(data.like) {
           $("#playlist li").each( function (i) {
             if(i == pos) {
-              $(this).children('.like').css('color', 'red');
               $(this).children('.like').addClass('liked');
             }
           });
@@ -103,18 +102,34 @@ $(document).ready(function() {
       'url': '/api/v1/musicas/album/' + album_id,
       'type': 'GET',
       success: function (data) {
+        response_musicas = data;
         for(var i = 0; i < data.length; i++) {
             playlist.push({
-              'src': data[i].arquivo,
-              'desc': data[i].nome
+              'src': response_musicas[i].arquivo,
+              'desc': response_musicas[i].nome
             });
-
-            if(data[i].duracao)
+            if(response_musicas[i].duracao)
             {
-              $("#playlist").append("<li class='list-group-item' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ data[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ data[i].nome + " <span class='badge badge-warning'>" + data[i].duracao.substr(3, 5) + "</div></li>");
+              $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].nome + " <span class='badge badge-warning'>" + response_musicas[i].duracao.substr(3, 5) + "</div></li>");
             } else {
-              $("#playlist").append("<li class='list-group-item' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, data[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ data[i].nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
+              $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
             }
+
+            var _musicas = $("#playlist li");
+
+            $.ajax({
+              'url': '/api/v1/likes/usuario/' + usuario_id + '/' + data[i].id,
+              'type': 'GET',
+              success: function (data) {
+                if(data.length > 0) {
+                  for(let m = 0; m < _musicas.length; m++) {
+                    if($(_musicas[m]).attr('data-id') == data[0].musica) {
+                      $(_musicas[m]).children('.like').addClass('liked');
+                    }
+                  }
+                }
+              }
+            });
         }
       }
     });

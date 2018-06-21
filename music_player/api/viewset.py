@@ -308,6 +308,29 @@ class LikesViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.LikeSerializer
     http_method_names = ['get', 'post']
 
+    def get_queryset(self):
+        likes = models.Like.objects.all()
+
+        try:
+            usuario_id = self.kwargs['usuario_id']
+        except KeyError:
+            usuario_id = None
+
+        try:
+            musica_id = self.kwargs['musica_id']
+        except KeyError:
+            musica_id = None
+
+        if usuario_id is not None or musica_id is not None:
+            self.serializer_class = serializers.LikeSerializerUsuario
+
+        if usuario_id:
+            likes = likes.filter(usuario_id=usuario_id)
+        if musica_id:
+            likes = likes.filter(musica_id=musica_id)
+
+        return likes
+
     def create(self, request, *args, **kwargs):
         erros = []
         usuario_id = request.data.get('usuario', None)

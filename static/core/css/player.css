@@ -22,6 +22,10 @@
   left: 0.5rem;
 }
 
+.liked {
+  color: red;
+}
+
 .prev, .next {
   padding-right: 0.5rem;
 }

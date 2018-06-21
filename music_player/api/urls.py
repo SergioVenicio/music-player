@@ -14,7 +14,14 @@ router.register(
 )
 router.register(r'usuarios', viewset.UsuarioViewSet, base_name='usuario')
 router.register(r'likes', viewset.LikesViewSet, base_name='like')
-
+router.register(
+    r'likes/usuario/(?P<usuario_id>\w+)/(?P<musica_id>\w+)',
+    viewset.LikesViewSet, base_name='like_filter_music'
+)
+router.register(
+    r'likes/usuario/(?P<usuario_id>.+)',
+    viewset.LikesViewSet, base_name='like_filter'
+)
 
 urlpatterns = [
     path('', include(router.urls)),

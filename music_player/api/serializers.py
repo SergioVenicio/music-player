@@ -65,3 +65,12 @@ class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Like
         fields = ('__all__')
+
+
+class LikeSerializerUsuario(serializers.HyperlinkedModelSerializer):
+    usuario = serializers.ReadOnlyField(source='usuario.id')
+    musica = serializers.ReadOnlyField(source='musica.id')
+
+    class Meta:
+        model = models.Like
+        fields = ('__all__')

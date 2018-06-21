@@ -74,3 +74,10 @@ class LikeSerializerUsuario(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Like
         fields = ('__all__')
+
+
+class LikeSerializerMusica(serializers.ModelSerializer):
+    class Meta:
+        model = models.Like
+        fields = ('id', 'musica', 'data',)
+        depth = 1

@@ -11,13 +11,12 @@
         <div class="col-md-3">
           <div class="card">
             {% if album.capa %}
-              <img class="card-img-top" src="{{ album.capa.url }}">
+              <img class="card-img-top" src="{{ MEDIA_URL }}{{ request.user.avatar.url }}">
             {% else %}
               <img class="card-img-top" style="background-color: #000" src="{% static 'logo/icon.png' %}" alt="Imagen não cadastrada">
             {% endif %}
             <div class="card-body">
-              <h5 class="card-title">{{ album.nome }}</h5>
-              <p class="card-text">{{ album.banda.nome }}</p>
+              <h5 class="card-title">Músicas fávoritas</h5>
             </div>
           </div>
         </div>
@@ -55,30 +54,11 @@
   </div>
 </div>
 
-<div id="like_modal" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Erro ao cadastrar like</h5>
-      </div>
-      <div class="modal-body">
-        <p id="modal-text" class="text-center">Ocorreu um erro ao cadastrar seu like :/</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="btn-close" class="btn btn-danger text-center" data-dismiss="modal">
-          <i class="fas fa-check"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 {% endblock %}
 {% block js %}
 <script>
   let usuario_id = {{ request.user.id }};
-  let album_id = {{ album.id }};
 </script>
 <script src="{% static 'core/js/player.js' %}"></script>
-<script src="{% static 'core/js/musicas.js' %}"></script>
+<script src="{% static 'core/js/favoritas.js' %}"></script>
 {% endblock %}

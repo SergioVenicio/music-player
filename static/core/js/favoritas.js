@@ -1,16 +1,12 @@
-function unlike(pos, id) {
+function unlike(el) {
+  let id = $(el).parent().attr('like-id');
   $.ajax({
     url: '/api/v1/likes/' + id,
     type: 'DELETE',
-    dataType: 'json',
-    data: {'id': id},
     statusCode: {
       204: function() {
-        $("#playlist li").each( function (i) {
-          if(i == pos) {
-            $(this).remove();
-          }
-        });
+          $(el).parent().remove();
+          playlist.pop($(el).parent().attr('data-pos'));
       },
       400: function(data) {
         data = JSON.parse(data.responseJSON);
@@ -33,9 +29,9 @@ $(document).ready( function (){
           });
           if(musicas[i].musica.duracao)
           {
-            $("#playlist").append("<li class='list-group-item' data-id='"+ musicas[i].musica.id +"' data-pos='"+ i +"'><div class='like liked' onClick=unlike("+ i +","+ musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ musicas[i].musica.nome + " <span class='badge badge-warning'>" + musicas[i].musica.duracao.substr(3, 5) + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='"+ musicas[i].musica.id +"' data-pos='"+ i +"' like-id='" + data[i].id + "'><div class='like liked' onClick=unlike(this)><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ musicas[i].musica.nome + " <span class='badge badge-warning'>" + musicas[i].musica.duracao.substr(3, 5) + "</div></li>");
           } else {
-            $("#playlist").append("<li class='list-group-item' data-id='"+ musicas[i].musica.id +"' data-pos='"+ i +"'><div onClick='changeSong(" + i + ")' class='music-info'><div class='like liked' onClick=unlike("+ i +","+ musicas[i].id +")><i class='fas fa-heart'></i></div>"+ musicas[i].musica.nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='"+ musicas[i].musica.id +"' data-pos='"+ i +"' like-id='" + data[i].id + "'><div onClick='changeSong(" + i + ")' class='music-info'><div class='like liked' onClick=unlike("+ i +","+ musicas[i].id +")><i class='fas fa-heart'></i></div>"+ musicas[i].musica.nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
           }
       }
     }

@@ -1,3 +1,26 @@
+function unlike(pos, id) {
+  $.ajax({
+    url: '/api/v1/likes/' + id,
+    type: 'DELETE',
+    statusCode: {
+      204: function() {
+        $("#playlist li").each( function (i) {
+          if(i == pos) {
+            $(this).children('.like').removeClass('liked');
+            $(this).removeAttr('like-id');
+            $(this).children('.like').attr('onclick', "like(" + $(this).attr('data-pos') + ", " + usuario_id + ", " + $(this).attr('data-id') + ")");
+            console.log($(this));
+          }
+        });
+      },
+      400: function(data) {
+        data = JSON.parse(data.responseJSON);
+        $("#like_modal").modal();
+      }
+    }
+  });
+}
+
 function like(pos, usuario_id, musica_id) {
   $.ajax({
     url: '/api/v1/likes',
@@ -11,6 +34,8 @@ function like(pos, usuario_id, musica_id) {
           $("#playlist li").each( function (i) {
             if(i == pos) {
               $(this).children('.like').addClass('liked');
+              $(this).attr('like-id', data.like.id);
+              $(this).children('.like').attr('onclick', "unlike(" + $(this).attr('data-pos') + ", " + $(this).attr('like-id') + ")");
             }
           });
         } else {
@@ -53,6 +78,8 @@ $(document).ready( function (){
                 for(let m = 0; m < _musicas.length; m++) {
                   if($(_musicas[m]).attr('data-id') == data[0].musica) {
                     $(_musicas[m]).children('.like').addClass('liked');
+                    $(_musicas[m]).attr('like-id', data[0].id);
+                    $(_musicas[m]).children('.like').attr('onclick', "unlike(" + $(_musicas[m]).attr('data-pos') + ", " + data[0].id + ")");
                   }
                 }
               }

@@ -361,6 +361,7 @@ class LikesViewSet(viewsets.ModelViewSet):
         if existe:
             response = json.dumps({
                 'like': {
+                    'id': existe.id,
                     'usuario': existe.usuario.id,
                     'musica': existe.musica.id,
                     'data': str(existe.data)
@@ -373,6 +374,7 @@ class LikesViewSet(viewsets.ModelViewSet):
             like.save()
             response = json.dumps({
                 'like': {
+                    'id': like.id,
                     'usuario': like.usuario.id,
                     'musica': like.musica.id,
                     'data': str(like.data)

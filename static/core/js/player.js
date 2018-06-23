@@ -192,5 +192,46 @@ $(document).ready(function() {
       }
     }
   });
-
 });
+
+$(document).keypress(function (e) {
+  if(e.charCode === 32) {
+    if(_player.paused) {
+      if(!random) {
+        changeSong(mus);
+      } else {
+        get_random_music(Math.floor(Math.random() * playlist.length));
+      }
+    } else {
+      $(".play").show();
+      $(".pause").hide();
+      _player.pause();
+    }
+  } else if (e.keyCode === 39) {
+    if(!random) {
+      mus++;
+      changeSong(mus);
+    } else {
+      get_random_music(Math.floor(Math.random() * playlist.length));
+    }
+  } else if (e.keyCode === 37) {
+    if(!random) {
+      mus--;
+      changeSong(mus);
+    } else {
+      get_random_music(Math.floor(Math.random() * playlist.length));
+    }
+  } else if (e.keyCode == 38) {
+    if(_player.volume < 1) {
+      var vol = parseInt($("#vol-control").val()) + 3;
+      $("#vol-control").val(vol);
+      _player.volume = (vol/ 100);
+    }
+  } else if (e.keyCode == 40) {
+    if(_player.volume > 0) {
+      var vol = parseInt($("#vol-control").val()) - 3;
+      $("#vol-control").val(vol);
+      _player.volume = vol / 100;
+    }
+  }
+})

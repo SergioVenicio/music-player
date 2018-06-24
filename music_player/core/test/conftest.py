@@ -40,6 +40,13 @@ def b64_capa(path):
 
 
 @pytest.fixture
+def b64_capa_jpeg(path):
+    capa = open(path + '/imagem_test.png', 'rb').read()
+    b64_capa = 'data:image/jpeg;base64,' + str(base64.b64encode(capa))
+    return b64_capa
+
+
+@pytest.fixture
 def b64_capa_jpg(path):
     capa = open(path + '/imagem_test.png', 'rb').read()
     b64_capa = 'data:image/jpeg;base64,' + str(base64.b64encode(capa))[1:]
@@ -86,7 +93,8 @@ def genero(capa):
     )
     try:
         os.remove(img_dir)
-    except FileNotFoundError:
+    except FileNotFoundError as e:
+        print(e)
         pass
 
 
@@ -102,7 +110,8 @@ def banda(genero, capa):
     )
     try:
         os.remove(img_dir)
-    except FileNotFoundError:
+    except FileNotFoundError as e:
+        print(e)
         pass
 
 
@@ -148,8 +157,14 @@ def musica(album, arquivo):
         os.remove(music_dir)
     except FileNotFoundError:
         pass
-
     rmtree(teste_dir)
+
+
+@pytest.fixture
+def like(usuario, musica):
+    like = models.Like(usuario=usuario, musica=musica)
+    like.save()
+    yield like
 
 
 @pytest.fixture

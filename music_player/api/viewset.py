@@ -173,27 +173,23 @@ class AlbumViewSet(viewsets.ModelViewSet):
                         nome=nome, banda_id=banda_id,
                         data_lancamento=data_lancamento, capa=imagem
                     )
-                    try:
-                        album.save()
-                    except IntegrityError:
-                        erros.append('Já existe um album com esse nome')
-                    else:
-                        response = json.dumps({
-                            'album': {
-                                'id': album.id,
-                                'nome': album.nome,
-                                'banda_id': album.banda.id,
-                                'data_lancamento': album.data_lancamento,
-                                'capa': album.capa.path
-                            }
-                        })
-                        return JsonResponse(response, safe=False, status=201)
+                    album.save()
+                    response = json.dumps({
+                        'album': {
+                            'id': album.id,
+                            'nome': album.nome,
+                            'banda_id': album.banda.id,
+                            'data_lancamento': album.data_lancamento,
+                            'capa': album.capa.path
+                        }
+                    })
+                    return JsonResponse(response, safe=False, status=201)
                 else:
                     erros.append('O campo banda é obrigátorio')
             else:
                 erros.append('Tipo de arquivo inválido')
         else:
-            if nome and banda_id:
+            if nome and banda_id and data_lancamento:
                 album = models.Album(
                     nome=nome, banda_id=banda_id,
                     data_lancamento=data_lancamento
@@ -217,6 +213,8 @@ class AlbumViewSet(viewsets.ModelViewSet):
                     erros.append('O campo nome é obrigátorio')
                 if not banda_id:
                     erros.append('O campo banda é obrigátorio')
+                if not data_lancamento:
+                    erros.append('O campo data de lançamento é obrigátorio')
 
         return JsonResponse(
             json.dumps({'erros': erros}), safe=False, status=400
@@ -248,11 +246,12 @@ class MusicaViewSet(viewsets.ModelViewSet):
         nome = request.data.get('nome', None)
         album = request.data.get('album', None)
         ordem = request.data.get('ordem', None)
+
         if not ordem:
             erros.append('O campo ordem é obrigatório')
 
         if not album:
-            erros.append('O campo ordem é obrigatório')
+            erros.append('O campo album é obrigatório')
 
         arquivo = request.data.get('arquivo', None)
         if arquivo:
@@ -264,34 +263,32 @@ class MusicaViewSet(viewsets.ModelViewSet):
             except ValueError:
                 existe = False
 
-            if not existe and tipo:
+            if not existe and tipo and ordem:
                 arquivo = ContentFile(
                     decode_file(arquivo), (nome + tipo)
                 )
 
-                try:
-                    musica = models.Musica(
-                        nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
-                    )
-                    musica.save()
-                except Exception:
-                    pass
-                else:
-                    response = json.dumps({
-                        'musica': {
-                            'id': musica.id,
-                            'nome': musica.nome,
-                            'ordem': musica.ordem,
-                            'tipo': musica.arquivo_tipo,
-                            'arquivo': musica.arquivo.path
-                        }
-                    })
-                    return JsonResponse(response, safe=False, status=201)
+                musica = models.Musica(
+                    nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
+                )
+                musica.save()
+                response = json.dumps({
+                    'musica': {
+                        'id': musica.id,
+                        'nome': musica.nome,
+                        'ordem': musica.ordem,
+                        'tipo': musica.arquivo_tipo,
+                        'arquivo': musica.arquivo.path
+                    }
+                })
+                return JsonResponse(response, safe=False, status=201)
             else:
                 if existe:
                     erros.append('Já existe uma música com essa ordem')
                 if not tipo:
                     erros.append('Tipo de arquivo inválido')
+                if not ordem:
+                    erros.append('Ordem inválida')
         else:
             erros.append('O arquivo de música é obrigatório')
         response = json.dumps({'erros': erros})

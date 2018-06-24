@@ -181,7 +181,7 @@ class Musica(models.Model):
     """
     nome = models.CharField(max_length=250)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
-    ordem = models.PositiveIntegerField(null=True)
+    ordem = models.PositiveIntegerField()
     arquivo = models.FileField(_('File'), upload_to=upload_musica)
     arquivo_tipo = models.CharField(max_length=10, blank=True)
     duracao = models.DurationField(blank=True, null=True)

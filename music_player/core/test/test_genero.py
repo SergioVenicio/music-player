@@ -45,8 +45,34 @@ def test_post_view_genero(api_client):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_post_view_genero_desc_error(api_client):
+    url = reverse(resolve('/api/v1/genero').url_name)
+    data = {'descricao': 'teste'}
+    response = api_client.post(url, data, format='json')
+    data = {'descricao': 'teste'}
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db(transaction=True)
 def test_post_view_genero_imagem(b64_capa, api_client):
     url = reverse(resolve('/api/v1/genero').url_name)
-    data = {'descricao': 'teste', 'imagen': b64_capa}
+    data = {'descricao': 'teste', 'imagem': b64_capa}
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_genero_imagem_jpeg(b64_capa_jpeg, api_client):
+    url = reverse(resolve('/api/v1/genero').url_name)
+    data = {'descricao': 'teste', 'imagem': b64_capa_jpeg}
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_genero_imagem_error(b64_capa_error, api_client):
+    url = reverse(resolve('/api/v1/genero').url_name)
+    data = {'descricao': 'teste', 'imagem': b64_capa_error}
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

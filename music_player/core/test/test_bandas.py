@@ -42,8 +42,42 @@ def test_post_view_banda(api_client, genero):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_post_view_banda_nome_error(api_client, genero):
+    url = reverse(resolve('/api/v1/banda').url_name)
+    data = {'nome': 'teste', 'genero_id': genero.id}
+    api_client.post(url, data, format='json')
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_banda_genero_error(api_client):
+    url = reverse(resolve('/api/v1/banda').url_name)
+    data = {'nome': 'teste'}
+    api_client.post(url, data, format='json')
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db(transaction=True)
 def test_post_view_banda_img(api_client, genero, b64_capa):
     url = reverse(resolve('/api/v1/banda').url_name)
     data = {'nome': 'teste', 'genero_id': genero.id, 'imagem': b64_capa}
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_banda_img_jpeg(api_client, genero, b64_capa_jpg):
+    url = reverse(resolve('/api/v1/banda').url_name)
+    data = {'nome': 'teste', 'genero_id': genero.id, 'imagem': b64_capa_jpg}
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_banda_img_error(api_client, genero, b64_capa_error):
+    url = reverse(resolve('/api/v1/banda').url_name)
+    data = {'nome': 'teste', 'genero_id': genero.id, 'imagem': b64_capa_error}
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST

@@ -27,12 +27,6 @@ class AlbumSerializer(serializers.HyperlinkedModelSerializer):
 class MusicaSerializer(serializers.HyperlinkedModelSerializer):
     album = serializers.ReadOnlyField(source='album.nome')
 
-    def create(self, validated_data):
-        return models.Musica(**validated_data)
-
-    def validate(self, data):
-        return data
-
     class Meta:
         model = models.Musica
         fields = ('nome', 'album', 'ordem', 'arquivo',)
@@ -40,12 +34,6 @@ class MusicaSerializer(serializers.HyperlinkedModelSerializer):
 
 class MusicaSerializerList(serializers.HyperlinkedModelSerializer):
     album = serializers.ReadOnlyField(source='album.nome')
-
-    def create(self, validated_data):
-        return models.Musica(**validated_data)
-
-    def validate(self, data):
-        return data
 
     class Meta:
         model = models.Musica

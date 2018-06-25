@@ -1,5 +1,6 @@
 import pytest
 from rest_framework import status
+from music_player.core import models
 from django.urls import reverse, resolve
 
 
@@ -33,6 +34,9 @@ def test_post_view_musica(api_client, album, b64_arquivo):
     }
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
+    musicas = models.Musica.objects.all()
+    for musica in musicas:
+        musica.delete()
 
 
 @pytest.mark.django_db(transaction=True)

@@ -156,3 +156,13 @@ def test_repr_musica():
 @pytest.mark.django_db(transaction=True)
 def test_str_musica(musica):
     assert str(musica) == musica.nome
+
+
+@pytest.mark.django_db(transaction=True)
+def test_repr_like(like):
+    assert repr(like) == f'Like({like.usuario.id}, {like.musica.id})'
+
+
+@pytest.mark.django_db(transaction=True)
+def test_str_like(like):
+    assert str(like) == f'{like.usuario.id}, {like.musica.id}'

@@ -93,8 +93,7 @@ def genero(capa):
     )
     try:
         os.remove(img_dir)
-    except FileNotFoundError as e:
-        print(e)
+    except FileNotFoundError:
         pass
 
 
@@ -110,8 +109,7 @@ def banda(genero, capa):
     )
     try:
         os.remove(img_dir)
-    except FileNotFoundError as e:
-        print(e)
+    except FileNotFoundError:
         pass
 
 

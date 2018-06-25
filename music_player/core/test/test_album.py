@@ -1,5 +1,6 @@
 import pytest
 from rest_framework import status
+from music_player.core import models
 from django.urls import reverse, resolve
 
 
@@ -33,6 +34,9 @@ def test_post_view_album(api_client, banda, ano, usuario):
     api_client.force_authenticate(user=usuario)
     response = api_client.post(url, data, format='json')
     assert status.is_success(response.status_code)
+    albuns = models.Album.objects.all()
+    for album in albuns:
+        album.delete()
 
 
 @pytest.mark.django_db(transaction=True)
@@ -43,6 +47,9 @@ def test_post_view_album_nome_error(api_client, banda, ano, usuario):
     api_client.post(url, data, format='json')
     response = api_client.post(url, data, format='json')
     assert status.is_success(response.status_code)
+    albuns = models.Album.objects.all()
+    for album in albuns:
+        album.delete()
 
 
 @pytest.mark.django_db(transaction=True)
@@ -73,6 +80,9 @@ def test_post_view_album_capa(api_client, b64_capa, banda, ano, usuario):
     api_client.force_authenticate(user=usuario)
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
+    albuns = models.Album.objects.all()
+    for album in albuns:
+        album.delete()
 
 
 @pytest.mark.django_db(transaction=True)
@@ -86,6 +96,9 @@ def test_post_view_album_capa_jpg(api_client, b64_capa_jpg,
     api_client.force_authenticate(user=usuario)
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_201_CREATED
+    albuns = models.Album.objects.all()
+    for album in albuns:
+        album.delete()
 
 
 @pytest.mark.django_db(transaction=True)

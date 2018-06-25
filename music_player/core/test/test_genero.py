@@ -48,8 +48,16 @@ def test_post_view_genero(api_client):
 def test_post_view_genero_desc_error(api_client):
     url = reverse(resolve('/api/v1/genero').url_name)
     data = {'descricao': 'teste'}
+    api_client.post(url, data, format='json')
     response = api_client.post(url, data, format='json')
-    data = {'descricao': 'teste'}
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_genero_img_desc_error(api_client, b64_capa):
+    url = reverse(resolve('/api/v1/genero').url_name)
+    data = {'descricao': 'teste', 'imagem': b64_capa}
+    api_client.post(url, data, format='json')
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 

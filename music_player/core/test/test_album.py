@@ -36,6 +36,25 @@ def test_post_view_album(api_client, banda, ano, usuario):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_post_view_album_nome_error(api_client, banda, ano, usuario):
+    url = reverse(resolve('/api/v1/album').url_name)
+    data = {'nome': 'teste', 'banda_id': banda.id, 'data_lancamento': ano}
+    api_client.force_authenticate(user=usuario)
+    api_client.post(url, data, format='json')
+    response = api_client.post(url, data, format='json')
+    assert status.is_success(response.status_code)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_view_album_banda_error(api_client, ano, usuario):
+    url = reverse(resolve('/api/v1/album').url_name)
+    data = {'nome': 'teste', 'data_lancamento': ano}
+    api_client.force_authenticate(user=usuario)
+    response = api_client.post(url, data, format='json')
+    assert status.is_success(response.status_code)
+
+
+@pytest.mark.django_db(transaction=True)
 def test_post_view_album_lancamento_error(api_client, banda, ano, usuario):
     url = reverse(resolve('/api/v1/album').url_name)
     data = {'nome': 'teste', 'banda_id': banda.id}

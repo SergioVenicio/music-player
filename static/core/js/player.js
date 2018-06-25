@@ -212,7 +212,11 @@ $(document).keypress(function (e) {
       mus++;
       changeSong(mus);
     } else {
-      get_random_music(Math.floor(Math.random() * playlist.length));
+      if(_player.paused) {
+          _player.play();
+      } else {
+        get_random_music(Math.floor(Math.random() * playlist.length));
+      }
     }
   } else if (e.keyCode === 37) {
     if(!random) {

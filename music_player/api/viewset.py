@@ -194,20 +194,16 @@ class AlbumViewSet(viewsets.ModelViewSet):
                     nome=nome, banda_id=banda_id,
                     data_lancamento=data_lancamento
                 )
-                try:
-                    album.save()
-                except IntegrityError:
-                    erros.append('Já existe um album com esse nome')
-                else:
-                    response = json.dumps({
-                        'album': {
-                            'id': album.id,
-                            'nome': album.nome,
-                            'banda_id': album.banda.id,
-                            'data_lancamento': album.data_lancamento
-                        }
-                    })
-                    return JsonResponse(response, safe=False, status=201)
+                album.save()
+                response = json.dumps({
+                    'album': {
+                        'id': album.id,
+                        'nome': album.nome,
+                        'banda_id': album.banda.id,
+                        'data_lancamento': album.data_lancamento
+                    }
+                })
+                return JsonResponse(response, safe=False, status=201)
             else:
                 if not nome:
                     erros.append('O campo nome é obrigátorio')
@@ -259,8 +255,6 @@ class MusicaViewSet(viewsets.ModelViewSet):
             try:
                 existe = models.Musica.objects.get(ordem=ordem, album_id=album)
             except models.Musica.DoesNotExist:
-                existe = False
-            except ValueError:
                 existe = False
 
             if not existe and tipo and ordem:

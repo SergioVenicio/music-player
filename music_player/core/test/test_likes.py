@@ -85,7 +85,7 @@ def create_like(api_client, usuario, musica):
 
 
 @pytest.mark.django_db(transaction=True)
-def create_like_error(api_client):
+def test_create_like_error(api_client):
     url = reverse(resolve('/api/v1/likes').url_name)
     data = {}
     reponse = api_client.post(url, data, format='json')
@@ -93,7 +93,7 @@ def create_like_error(api_client):
 
 
 @pytest.mark.django_db(transaction=True)
-def create_like_existe(api_client, usuario, musica):
+def test_create_like_existe(api_client, usuario, musica):
     url = reverse(resolve('/api/v1/likes').url_name)
     data = {'usuario': usuario.id, 'musica': musica.id}
     reponse_1 = api_client.post(url, data, format='json')

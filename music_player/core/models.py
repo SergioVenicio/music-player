@@ -284,7 +284,10 @@ def apaga_capa(sender, instance, **kwargs):
     """
     if instance.capa:
         arquivo = os.path.join(BASE_DIR, 'media', str(instance.capa))
-        os.remove(arquivo)
+        try:
+            os.remove(arquivo)
+        except FileNotFoundError:
+            print(f'Arquivo não encontrado: {instance.capa.path}')
 
 
 @receiver(post_delete, sender=Banda)

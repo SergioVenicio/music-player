@@ -261,7 +261,10 @@ def apaga_avatar_usuario(sender, instance, **kwargs):
     """
     if instance.avatar:
         arquivo = os.path.join(BASE_DIR, 'media', str(instance.avatar))
-        os.remove(arquivo)
+        try:
+            os.remove(arquivo)
+        except FileNotFoundError:
+            print(f'Arquivo não encontrado: {instance.avatar.path}')
 
 
 @receiver(post_delete, sender=Musica)
@@ -297,7 +300,10 @@ def apaga_img_banda(sender, instance, **kwargs):
     """
     if instance.imagem:
         arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagem))
-        os.remove(arquivo)
+        try:
+            os.remove(arquivo)
+        except FileNotFoundError:
+            print(f'Arquivo não encontrado: {instance.imagem.path}')
 
 
 @receiver(post_delete, sender=Genero)
@@ -307,7 +313,10 @@ def apaga_img_genero(sender, instance, **kwargs):
     """
     if instance.imagem:
         arquivo = os.path.join(BASE_DIR, 'media', str(instance.imagem))
-        os.remove(arquivo)
+        try:
+            os.remove(arquivo)
+        except FileNotFoundError:
+            print(f'Arquivo não encontrado: {instance.imagem.path}')
 
 
 @receiver(post_save, sender=Usuario)

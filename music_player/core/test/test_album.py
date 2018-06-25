@@ -99,12 +99,3 @@ def test_post_view_album_capa_error(api_client, b64_capa_error,
     api_client.force_authenticate(user=usuario)
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-
-
-@pytest.mark.django_db(transaction=True)
-def test_post_view_album_banda_error(api_client, b64_capa, ano, usuario):
-    url = reverse(resolve('/api/v1/album').url_name)
-    data = {'nome': 'teste', 'data_lancamento': ano, 'capa': b64_capa}
-    api_client.force_authenticate(user=usuario)
-    response = api_client.post(url, data, format='json')
-    assert response.status_code == status.HTTP_400_BAD_REQUEST

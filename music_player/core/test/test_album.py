@@ -51,7 +51,7 @@ def test_post_view_album_banda_error(api_client, ano, usuario):
     data = {'nome': 'teste', 'data_lancamento': ano}
     api_client.force_authenticate(user=usuario)
     response = api_client.post(url, data, format='json')
-    assert status.is_success(response.status_code)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.django_db(transaction=True)

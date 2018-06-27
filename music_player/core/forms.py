@@ -88,16 +88,17 @@ class GeneroForm(forms.ModelForm):
             }
         )
     )
-    imagen = forms.ImageField(
+
+    imagem = forms.ImageField(
         widget=forms.FileInput(
             attrs={
-                'class': 'form-control-file', 'placeholder': 'Imagen'
+                'class': 'form-control-file', 'placeholder': 'Imagem'
             }
         )
     )
 
     class Meta:
-        fields = ('descricao', 'imagen',)
+        fields = ('descricao', 'imagem',)
         model = models.Genero
 
 

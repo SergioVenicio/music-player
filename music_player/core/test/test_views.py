@@ -59,7 +59,7 @@ def test_user_avatar_post(client, capa):
         }
     }
     client.force_login(user)
-    response = client.get(url, data=data)
+    response = client.post(url, data=data)
     assert response.status_code == status.HTTP_200_OK
 
 
@@ -241,5 +241,5 @@ def test_singup_post(client):
             'password2': 'password'
         }
     }
-    response = client.get(reverse(resolve('/sign_up').url_name), data=data)
+    response = client.post(reverse(resolve('/sign_up').url_name), data=data)
     assert response.status_code == status.HTTP_200_OK

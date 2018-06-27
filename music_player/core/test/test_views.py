@@ -45,6 +45,25 @@ def test_user_avatar_redirect(client):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_user_avatar_post(client, capa):
+    user = models.Usuario(
+        nome='teste', sobrenome='testando',
+        email='teste@testando.com.br',
+        password='password'
+    )
+    user.save()
+    url = '/avatar/'
+    data = {
+        'form': {
+            'avatar': capa
+        }
+    }
+    client.force_login(user)
+    response = client.get(url, data=data)
+    assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db(transaction=True)
 def test_bandas_get(client, banda):
         user = models.Usuario(
             nome='teste', sobrenome='testando',
@@ -207,5 +226,20 @@ def test_genero_get_redirect(client):
 
 @pytest.mark.django_db(transaction=True)
 def test_singup_get(client):
-    response = client.post(reverse(resolve('/sign_up').url_name))
+    response = client.get(reverse(resolve('/sign_up').url_name))
+    assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db(transaction=True)
+def test_singup_post(client):
+    data = {
+        'form': {
+            'email': 'teste@testando.com.br',
+            'nome': 'teste',
+            'sobrenome': 'testando',
+            'password1': 'password',
+            'password2': 'password'
+        }
+    }
+    response = client.get(reverse(resolve('/sign_up').url_name), data=data)
     assert response.status_code == status.HTTP_200_OK

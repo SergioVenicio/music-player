@@ -12,7 +12,7 @@ script:
   - pytest music_player --cov=music_player
   - python manage.py test
 before_script:
-  - psql -c "CREATE DATABASE music-player;" -U postgres
+  - psql -c "CREATE DATABASE testdb;" -U postgres
   - python manage.py collectstatic --noinput
 after_success:
   - codecov

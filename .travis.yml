@@ -10,7 +10,6 @@ install:
 script:
   - flake8
   - pytest music_player --nomigrations --cov=music_player
-  - python manage.py test
 before_script:
   - psql -c "CREATE DATABASE testdb;" -U postgres
 after_success:

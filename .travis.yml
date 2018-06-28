@@ -13,6 +13,5 @@ script:
   - python manage.py test
 before_script:
   - psql -c "CREATE DATABASE testdb;" -U postgres
-  - python manage.py collectstatic --noinput
 after_success:
   - codecov

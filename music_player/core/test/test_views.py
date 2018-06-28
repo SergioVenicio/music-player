@@ -4,7 +4,7 @@ from music_player.core import models
 from django.urls import reverse, resolve
 
 
-@pytest.mark.django_db(transaction=True)
+@pytest.mark.django_db
 def test_home(client):
     user = models.Usuario(
         nome='teste', sobrenome='testando',

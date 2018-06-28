@@ -1,12 +1,43 @@
-var mus = 0;
-var volume = 1;
+var _storage_album_id = localStorage.getItem("album_id");
+
+if(localStorage.getItem("mus") && _storage_album_id == album_id) {
+  var mus = parseInt(localStorage.getItem("mus"));
+} else {
+  var mus = 0;
+  var _storage_album_id = localStorage.setItem("album_id", album_id);
+}
+
+if(localStorage.getItem("volume")) {
+  var volume = localStorage.getItem("volume");
+} else {
+  var volume = 1;
+}
+
+if(localStorage.getItem("repeat") === "true") {
+  var repeat = localStorage.getItem("repeat");
+  $(".repeat").addClass('control-active');
+} else {
+  var repeat = false;
+}
+
+if(localStorage.getItem("random") === "true") {
+  var random = localStorage.getItem("random");
+  $(".random").addClass('control-active');
+} else {
+  var random = false;
+}
+
+localStorage.setItem("random", random);
+localStorage.setItem("repeat", repeat);
+localStorage.setItem("mus", mus);
+localStorage.setItem("volume", volume);
+
+
 var _player = document.getElementById("audio");
 var playlist = [];
 var musica_ativa = '';
 var musicas_tocadas = [];
 var end_playlist = false;
-var repeat = false;
-var random = false;
 
 
 function get_random_music(random_int) {
@@ -65,6 +96,7 @@ function player(music=0) {
 function changeSong(music) {
   mus = music;
   player(mus);
+  localStorage.setItem("mus", mus);
 }
 
 $(document).ready(function() {
@@ -73,13 +105,14 @@ $(document).ready(function() {
 
     $(".pause").hide();
 
-    _player.volume = 1;
-    $("#vol-control").val(100);
+    _player.volume = volume / 100;
+    $("#vol-control").val(volume);
     _player.controls = true;
 
   $("#vol-control").on({
       change: function () {
           _player.volume = $(this).val() / 100;
+          localStorage.setItem("volume", $(this).val());
       }
   });
 
@@ -88,6 +121,7 @@ $(document).ready(function() {
       $(this).hide()
       $(".mute").show();
       _player.volume = 0;
+      localStorage.setItem("volume", 0);
     }
   });
 
@@ -96,12 +130,13 @@ $(document).ready(function() {
       $(this).hide()
       $(".volume").show();
       _player.volume = volume;
+      localStorage.setItem("volume", volume);
     }
   });
 
   $(".pause-play").on({
       click: function () {
-          if(!_player.paused) {
+        if(!_player.paused) {
             $(".pause").hide();
             $(".play").show();
             _player.pause();
@@ -130,6 +165,7 @@ $(document).ready(function() {
         $(this).addClass('control-active');
         repeat = true;
       }
+      localStorage.setItem("repeat", repeat);
     }
   });
 
@@ -142,6 +178,7 @@ $(document).ready(function() {
         $(this).addClass('control-active');
         random = true;
       }
+      localStorage.setItem("random", random);
     }
   });
 
@@ -196,16 +233,22 @@ $(document).ready(function() {
 
 $(document).keypress(function (e) {
   if(e.charCode === 32) {
-    if(_player.paused) {
-      if(!random) {
-        changeSong(mus);
-      } else {
-        get_random_music(Math.floor(Math.random() * playlist.length));
-      }
+    if(!_player.paused) {
+        $(".pause").hide();
+        $(".play").show();
+        _player.pause();
     } else {
-      $(".play").show();
-      $(".pause").hide();
-      _player.pause();
+      $(".pause").show();
+      $(".play").hide();
+      if(_player.loaded) {
+          _player.play();
+      } else {
+        if(!random) {
+          changeSong(mus);
+        } else {
+          get_random_music(Math.floor(Math.random() * playlist.length));
+        }
+      }
     }
   } else if (e.keyCode === 39) {
     if(!random) {

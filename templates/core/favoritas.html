@@ -58,6 +58,7 @@
 {% block js %}
 <script>
   let usuario_id = {{ request.user.id }};
+  let album_id = {{ request.user.id }};
 </script>
 <script src="{% static 'core/js/player.js' %}"></script>
 <script src="{% static 'core/js/favoritas.js' %}"></script>

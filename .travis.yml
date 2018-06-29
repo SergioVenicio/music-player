@@ -1,11 +1,16 @@
 language: python
 python:
   - 3.6
+services:
+  postgresql
+addons:
+  postgresql: '9.5'
 install:
   - pip install -q -r requirements-dev.txt codecov
 script:
   - flake8
   - pytest music_player --nomigrations --cov=music_player
-  - python manage.py test
+before_script:
+  - psql -c "CREATE DATABASE testdb;" -U postgres
 after_success:
   - codecov

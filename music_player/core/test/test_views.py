@@ -233,13 +233,24 @@ def test_singup_get(client):
 @pytest.mark.django_db(transaction=True)
 def test_singup_post(client):
     data = {
-        'form': {
-            'email': 'teste@testando.com.br',
-            'nome': 'teste',
-            'sobrenome': 'testando',
-            'password1': 'password',
-            'password2': 'password'
-        }
+        'email': 'teste@testando.com.br',
+        'nome': 'teste',
+        'sobrenome': 'testando',
+        'password1': 'password_do_usuario_de_teste',
+        'password2': 'password_do_usuario_de_teste'
+    }
+    response = client.post(reverse(resolve('/sign_up').url_name), data=data)
+    assert response.status_code == status.HTTP_302_FOUND
+
+
+@pytest.mark.django_db(transaction=True)
+def test_singup_post_form_invalid(client):
+    data = {
+        'email': 'teste@testando.com.br',
+        'nome': 'teste',
+        'sobrenome': 'testando',
+        'password1': 'password',
+        'password2': 'password'
     }
     response = client.post(reverse(resolve('/sign_up').url_name), data=data)
     assert response.status_code == status.HTTP_200_OK

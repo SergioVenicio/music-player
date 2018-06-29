@@ -1,6 +1,5 @@
 import os
 from decouple import config
-from dj_database_url import parse
 from django.utils.crypto import get_random_string
 
 
@@ -63,10 +62,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'music_player.wsgi.application'
 
-default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-
 DATABASES = {
-    'default': config('DATABASE_URL', default=default_db_url, cast=parse)
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 

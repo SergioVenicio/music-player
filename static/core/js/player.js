@@ -10,7 +10,7 @@ if(localStorage.getItem("mus") && _storage_album_id == album_id) {
 if(localStorage.getItem("volume")) {
   var volume = localStorage.getItem("volume");
 } else {
-  var volume = 1;
+  var volume = 100;
 }
 
 if(localStorage.getItem("repeat") === "true") {

@@ -153,6 +153,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
         nome = request.data.get('nome', None)
         banda_id = request.data.get('banda_id', None)
         data_lancamento = request.data.get('data_lancamento', None)
+        print(data_lancamento)
         imagem = request.data.get('capa', None)
 
         if not data_lancamento:

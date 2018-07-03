@@ -13,7 +13,7 @@ $(document).ready( function (){
     'click': function () {
       var nome = $("#id_nome").val();
       var banda_id = $("#id_banda").val();
-      var data_lancamento = $("#id_banda").val();
+      var data_lancamento = $("#id_data_lancamento").val();
       var base_imagen = $("#file").val();
       var album = {
         'nome': nome, 'banda_id': banda_id,

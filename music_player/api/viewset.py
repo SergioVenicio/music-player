@@ -253,12 +253,17 @@ class MusicaViewSet(viewsets.ModelViewSet):
         arquivo = request.data.get('arquivo', None)
         if arquivo:
             tipo = get_file_type(arquivo, musica=True)
-            try:
-                existe = models.Musica.objects.get(ordem=ordem, album_id=album)
-            except models.Musica.DoesNotExist:
+            if not erros:
+                try:
+                    existe = models.Musica.objects.get(
+                        ordem=ordem, album_id=album
+                    )
+                except models.Musica.DoesNotExist:
+                    existe = False
+            else:
                 existe = False
 
-            if not existe and tipo and ordem:
+            if not existe and tipo and ordem and not erros:
                 arquivo = arquivo.replace('data:audio/mp3;base64,', '')
                 arquivo = arquivo.replace('data:audio/mpeg;base64,', '')
                 arquivo = ContentFile(decode_file(arquivo), (nome + tipo))

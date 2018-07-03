@@ -1,11 +1,11 @@
 import pytest
-from music_player.core import models
+from music_player.core import models, managers
 from django.core.files.base import ContentFile
 
 
 @pytest.mark.django_db(transaction=True)
 def test_user(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     s_user = s_user.create_user(
         'teste@teste.com', 'teste', 'testando', 'password', capa
     )
@@ -22,7 +22,7 @@ def test_user(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_superuser(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     s_user = s_user.create_superuser(
         'teste@teste.com', 'teste', 'testando', 'password', capa
     )
@@ -40,7 +40,7 @@ def test_superuser(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_user_without_email(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     with pytest.raises(ValueError):
         s_user = s_user.create_user(
             '', 'teste', 'testando', 'password', capa
@@ -49,7 +49,7 @@ def test_user_without_email(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_user_without_password(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     with pytest.raises(ValueError):
         s_user = s_user.create_user(
             'teste@teste.com', 'teste', 'testando', '', capa
@@ -58,7 +58,7 @@ def test_user_without_password(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_superuser_without_email(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     with pytest.raises(ValueError):
         s_user = s_user.create_superuser(
             '', 'teste', 'testando', 'password', capa
@@ -67,7 +67,7 @@ def test_superuser_without_email(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_superuser_without_password(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     with pytest.raises(ValueError):
         s_user = s_user.create_superuser(
             'teste@teste.com', 'teste', 'testando', '', capa
@@ -76,7 +76,7 @@ def test_superuser_without_password(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_user_pass_len_error(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     with pytest.raises(ValueError):
         s_user = s_user.create_user(
             'teste@teste.com', 'teste', 'testando', 'pass', capa
@@ -85,7 +85,7 @@ def test_user_pass_len_error(capa):
 
 @pytest.mark.django_db(transaction=True)
 def test_supeuser_pass_len_error(capa):
-    s_user = models.UserManager()
+    s_user = managers.UserManager()
     with pytest.raises(ValueError):
         s_user = s_user.create_superuser(
             'teste@teste.com', 'teste', 'testando', 'pass', capa

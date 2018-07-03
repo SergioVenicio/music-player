@@ -3,8 +3,8 @@ from . import serializers
 from django.http import Http404
 from rest_framework import viewsets
 from music_player.core import models
-from django.http import JsonResponse
 from django.db import IntegrityError
+from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from music_player.core.utils import get_file_type, decode_file
 
@@ -37,7 +37,7 @@ class GeneroViewSet(viewsets.ModelViewSet):
                         'descricao': genero.descricao
                     }
                 })
-                return JsonResponse(response, safe=False, status=201)
+                return Response(response, status=201)
         else:
             if tipo:
                 if tipo == '.jpg':
@@ -60,12 +60,12 @@ class GeneroViewSet(viewsets.ModelViewSet):
                             'imagem': genero.imagem.path
                         }
                     })
-                    return JsonResponse(response, safe=False, status=201)
+                    return Response(response, status=201)
             else:
                 erros.append('Tipo de arquivo inválido')
 
-        return JsonResponse(
-            json.dumps({'erros': erros}), safe=False, status=400
+        return Response(
+            json.dumps({'erros': erros}), status=400
         )
 
 
@@ -110,7 +110,7 @@ class BandaViewSet(viewsets.ModelViewSet):
                                 'imagem': banda.imagem.path
                             }
                         })
-                        return JsonResponse(response, safe=False, status=201)
+                        return Response(response, status=201)
                 else:
                     erros.append('O campo genero é obrigátorio')
             else:
@@ -130,12 +130,12 @@ class BandaViewSet(viewsets.ModelViewSet):
                             'genero_id': genero_id
                         }
                     })
-                    return JsonResponse(response, safe=False, status=201)
+                    return Response(response, status=201)
             else:
                 erros.append('O campo genero é obrigátorio')
 
-        return JsonResponse(
-            json.dumps({'erros': erros}), safe=False, status=400
+        return Response(
+            json.dumps({'erros': erros}), status=400
         )
 
 
@@ -144,7 +144,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     Endpoint para os albums.
     """
 
-    queryset = models.Album.objects.all()
+    queryset = models.Album.objects.all().order_by('data_lancamento')
     serializer_class = serializers.AlbumSerializer
     http_method_names = ['get', 'post']
 
@@ -183,7 +183,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
                             'capa': album.capa.path
                         }
                     })
-                    return JsonResponse(response, safe=False, status=201)
+                    return Response(response, status=201)
                 else:
                     erros.append('O campo banda é obrigátorio')
             else:
@@ -203,7 +203,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
                         'data_lancamento': album.data_lancamento
                     }
                 })
-                return JsonResponse(response, safe=False, status=201)
+                return Response(response, status=201)
             else:
                 if not nome:
                     erros.append('O campo nome é obrigátorio')
@@ -212,8 +212,8 @@ class AlbumViewSet(viewsets.ModelViewSet):
                 if not data_lancamento:
                     erros.append('O campo data de lançamento é obrigátorio')
 
-        return JsonResponse(
-            json.dumps({'erros': erros}), safe=False, status=400
+        return Response(
+            json.dumps({'erros': erros}), status=400
         )
 
 
@@ -258,9 +258,9 @@ class MusicaViewSet(viewsets.ModelViewSet):
                 existe = False
 
             if not existe and tipo and ordem:
-                arquivo = ContentFile(
-                    decode_file(arquivo), (nome + tipo)
-                )
+                arquivo = arquivo.replace('data:audio/mp3;base64,', '')
+                arquivo = arquivo.replace('data:audio/mpeg;base64,', '')
+                arquivo = ContentFile(decode_file(arquivo), (nome + tipo))
 
                 musica = models.Musica(
                     nome=nome, album_id=album, ordem=ordem, arquivo=arquivo
@@ -275,7 +275,7 @@ class MusicaViewSet(viewsets.ModelViewSet):
                         'arquivo': musica.arquivo.path
                     }
                 })
-                return JsonResponse(response, safe=False, status=201)
+                return Response(response, status=201)
             else:
                 if existe:
                     erros.append('Já existe uma música com essa ordem')
@@ -286,7 +286,7 @@ class MusicaViewSet(viewsets.ModelViewSet):
         else:
             erros.append('O arquivo de música é obrigatório')
         response = json.dumps({'erros': erros})
-        return JsonResponse(response, safe=False, status=400)
+        return Response(response, status=400)
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
@@ -376,4 +376,4 @@ class LikesViewSet(viewsets.ModelViewSet):
             response = json.dumps({'erros': erros})
             status = 400
 
-        return JsonResponse(response, safe=False, status=status)
+        return Response(response, status=status)

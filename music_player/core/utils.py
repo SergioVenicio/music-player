@@ -52,6 +52,8 @@ def get_albuns(album_id=None, banda_id=None, per_page=None,
         if banda_id is not None:
             albuns = albuns.filter(banda_id=banda_id)
 
+        albuns = albuns.order_by('data_lancamento')
+
         if pagination:
             if not per_page:
 
@@ -78,7 +80,8 @@ def get_file_type(base64_data, musica=False, imagen=True):
     data_type = base64_data[:10]
     if musica:
         if data_type == 'data:audio':
-            if base64_data[11:15] == 'mpeg':
+            audio_type = base64_data[11:15]
+            if audio_type == 'mpeg' or audio_type == 'mp3;':
                 return '.mp3'
             else:
                 return False
@@ -104,6 +107,10 @@ def decode_file(base64_data):
 
 def get_etag(request, id):
     user = request.user
+    bandas = models.Banda.objects.all().count()
+    albuns = models.Album.objects.all().count()
+    musicas = models.Musica.objects.all().count()
     return hashlib.sha1(
-        f"user_id: {user.id}, {id}".encode('utf-8')
+        f"user_id: {user.id}, {id}, \
+        {bandas}, {albuns}, {musicas}".encode('utf-8')
     ).hexdigest()

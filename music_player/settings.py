@@ -65,7 +65,7 @@ WSGI_APPLICATION = 'music_player.wsgi.application'
 default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 
 DATABASES = {
-    'default': config('DATABASE_URL', default=default_db_url)
+    'default': default=default_db_url
 }
 
 

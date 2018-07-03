@@ -5,16 +5,15 @@ function unlike(el) {
     type: 'DELETE',
     statusCode: {
       204: function() {
-          var el_pos = $(el).parent().attr('data-pos');
-          console.log(el_pos);
-          $(el).parent().remove();
+          var el_pos = parseInt($(el).parent().children('.music-info').children('.ordem').text());
           playlist.pop($(el).parent().attr('data-pos'));
           $("#playlist li").each( function () {
-            if($(this).attr('data-pos') >= el_pos){
+            if($(this).children('.music-info').children('.ordem').text() >= el_pos){
               var ordem = parseInt($(this).children('.music-info').children('.ordem').text());
               $(this).children('.music-info').children('.ordem').text(ordem - 1);
             }
-          })
+          });
+          $(el).parent().remove();
       },
       400: function(data) {
         data = JSON.parse(data.responseJSON);

@@ -37,6 +37,9 @@
 .mute {
   margin-bottom: 0.2rem;
 }
+.ordem {
+  display: inline;
+}
 
 .play:hover, .mute:hover, .volume:hover,
 .prev:hover, .next:hover, .pause:hover, .repeat:hover {

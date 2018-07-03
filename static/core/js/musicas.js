@@ -63,9 +63,10 @@ $(document).ready( function (){
           });
           if(response_musicas[i].duracao)
           {
-            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].nome + " <span class='badge badge-warning'>" + response_musicas[i].duracao.substr(3, 5) + "</div></li>");
+            console.log(response_musicas[i].ordem);
+            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>" + response_musicas[i].ordem + " - " + response_musicas[i].nome + " <span class='badge badge-warning'>" + response_musicas[i].duracao.substr(3, 5) + "</div></li>");
           } else {
-            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].ordem + " - " + response_musicas[i].nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
           }
 
           var _musicas = $("#playlist li");

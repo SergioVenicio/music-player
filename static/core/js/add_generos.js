@@ -1,21 +1,21 @@
 $(document).ready( function (){
-  $("#id_imagen").on({
+  $("#id_imagem").on({
     'change': function () {
-      var imagen = document.getElementById('id_imagen').files[0];
+      var imagem = document.getElementById('id_imagem').files[0];
       var reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
       }
-      reader.readAsDataURL(imagen);
+      reader.readAsDataURL(imagem);
     }
   });
   $("#btn-save").on({
     'click': function () {
       var descricao = $("#id_descricao").val();
-      var base_imagen = $("#file").val();
+      var base_imagem = $("#file").val();
       var genero = {
         'descricao': descricao,
-        'imagem': base_imagen
+        'imagem': base_imagem
       }
       $.ajax({
         url: '/api/v1/genero',

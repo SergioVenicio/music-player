@@ -36,9 +36,9 @@ $(document).ready( function (){
           });
           if(musicas[i].musica.duracao)
           {
-            $("#playlist").append("<li class='list-group-item' data-id='" + musicas[i].musica.id + "' data-pos='" + (i + 1) + "' like-id='" + data[i].id + "'><div class='like liked' onClick=unlike(this)><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'><div class='ordem'>" + (i + 1) + "</div> - " + musicas[i].musica.nome + " <span class='badge badge-warning'>" + musicas[i].musica.duracao.substr(3, 5) + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='" + musicas[i].musica.id + "' data-pos='" + i + "' like-id='" + data[i].id + "'><div class='like liked' onClick=unlike(this)><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'><div class='ordem'>" + (i + 1) + "</div> - " + musicas[i].musica.nome + " <span class='badge badge-warning'>" + musicas[i].musica.duracao.substr(3, 5) + "</div></li>");
           } else {
-            $("#playlist").append("<li class='list-group-item' data-id='" + musicas[i].musica.id +"' data-pos='"+ (i + 1) +"' like-id='" + data[i].id + "'><div onClick='changeSong(" + i + ")' class='music-info'><div class='like liked' onClick=unlike("+ i +","+ musicas[i].id +")><i class='fas fa-heart'></i></div><div class='ordem'>" + (i + 1) + "</div> - " + musicas[i].musica.nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='" + musicas[i].musica.id +"' data-pos='"+ i +"' like-id='" + data[i].id + "'><div onClick='changeSong(" + i + ")' class='music-info'><div class='like liked' onClick=unlike("+ i +","+ musicas[i].id +")><i class='fas fa-heart'></i></div><div class='ordem'>" + (i + 1) + "</div> - " + musicas[i].musica.nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
           }
       }
     }

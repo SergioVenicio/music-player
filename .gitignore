@@ -9,7 +9,7 @@ media/images/generos/*
 media/musics/*
 media/images/usuarios/*
 .vscode
-
+.idea/
 .pytest_cache/
 
 *music_player/core/migrations/*

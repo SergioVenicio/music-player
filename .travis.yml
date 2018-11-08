@@ -1,24 +1,34 @@
 env:
   global:
     - CC_TEST_REPORTER_ID=bfdc5c186d6b42439ca5a4db68f00925c051f232771376a6d0bf47b0f7ff7cf3
+
 language: python
+
 python:
   - 3.6
+
 services:
   postgresql
+
 addons:
   postgresql: '9.5'
+
 install:
   - pip install -q -r requirements-dev.txt codecov
-script:
-  - flake8
-  - pytest music_player --nomigrations --cov=music_player
+
 before_script:
   - psql -c "CREATE DATABASE testdb;" -U postgres
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-builds
+  - ./cc-test-reporter before-build
+
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+script:
+  - flake8
+  - pytest music_player --nomigrations --cov=music_player
+  - bundle exec rspec
+
 after_success:
   - codecov

@@ -5,6 +5,7 @@ This project is a open source web music player with python / django.
 [![Updates](https://pyup.io/repos/github/SergioVenicio21/music-player/shield.svg)](https://pyup.io/repos/github/SergioVenicio21/music-player/)
 [![Python 3](https://pyup.io/repos/github/SergioVenicio21/music-player/python-3-shield.svg)](https://pyup.io/repos/github/SergioVenicio21/music-player/)
 [![codecov](https://codecov.io/gh/SergioVenicio21/music-player/branch/master/graph/badge.svg)](https://codecov.io/gh/SergioVenicio21/music-player)
+[![Maintainability](https://api.codeclimate.com/v1/badges/85cc0bf39a18cc4cd2cf/maintainability)](https://codeclimate.com/github/SergioVenicio21/music-player/maintainability)
 
 # INSTALL UNIX
 ``` console

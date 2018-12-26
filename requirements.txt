@@ -4,7 +4,7 @@ django-webpack-loader==0.6.0
 djangorestframework==3.9.0
 django-rest-auth==0.9.3
 git+https://github.com/SergioVenicio21/eyeD3.git
-mutagen==1.41.1
+mutagen==1.42.0
 pathlib==1.0.1
 Pillow==5.3.0
 python-magic==0.4.15

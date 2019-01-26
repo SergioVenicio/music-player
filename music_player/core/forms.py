@@ -8,8 +8,7 @@ from .utils import get_albuns, get_generos, get_bandas
 class UsuarioAdmin(UserAdmin):
     model = models.Usuario
     fieldsets = (
-        (None,
-         {
+        (None, {
             'fields': ('email', 'nome', 'sobrenome', 'avatar', 'password')
          }),
     )

@@ -26,9 +26,6 @@
   color: #e80606!important;
 }
 
-.prev, .next {
-  padding-right: 0.5rem;
-}
 .volume, .mute {
     position: absolute;
     right: 6rem;
@@ -39,6 +36,9 @@
 }
 .ordem {
   display: inline;
+}
+.repeat {
+  margin-left: .65rem;
 }
 
 .play:hover, .mute:hover, .volume:hover,

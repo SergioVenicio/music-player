@@ -107,25 +107,33 @@
 #vol-control::-webkit-slider-thumb {
     -webkit-appearance: none;
     border: 1px solid #000000;
-    height: 16px;
-    width: 16px;
-    border-radius: 2px;
+    height: 13px;
+    width: 10px;
     background: #FFF;
     cursor: pointer;
-    margin-top: -0.24rem;
+    margin-top: -0.16rem;
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border-radius: 100%;
+    border-radius: 0;
+}
+
+#vol-control::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 7.5px;
+    cursor: pointer;
+    background: #FFF;
+    border: 0.2px solid #010101;
+    margin-bottom: 0.05rem;
 }
 
 #vol-control::-moz-range-thumb {
     box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
     border: 1px solid #000000;
-    height: 14px;
-    width: 14px;
-    border-radius: 2px;
+    height: 12px;
+    width: 9px;
     background: #FFF;
     cursor: pointer;
-    border-radius: 100%;
+    border-radius: 0!important;
+    margin-top: .2rem;
 }
 
 #vol-control::-ms-track {
@@ -134,20 +142,11 @@
     color: transparent;
 }
 
-#vol-control::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 7.5px;
-    cursor: pointer;
-    background: #FFF;
-    border-radius: 1.3px;
-    border: 0.2px solid #010101;
-    margin-bottom: 0.05rem;
-}
 #vol-control::-moz-range-track {
   width: 100%;
   height: 6px;
   cursor: pointer;
   background: #FFF;
-  border-radius: 1.3px;
   border: 0.1px solid #010101;
+  border-radius: 0!important;
 }

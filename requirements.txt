@@ -6,7 +6,7 @@ django-rest-auth==0.9.3
 git+https://github.com/SergioVenicio21/eyeD3.git
 mutagen==1.42.0
 pathlib==1.0.1
-Pillow==5.4.1
+Pillow==6.0.0
 python-magic==0.4.15
 pytz==2018.9
 six==1.12.0

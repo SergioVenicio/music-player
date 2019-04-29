@@ -1,7 +1,7 @@
 Django==2.1.7
 django-cors-headers==2.5.2
 django-webpack-loader==0.6.0
-djangorestframework==3.9.2
+djangorestframework==3.9.3
 django-rest-auth==0.9.3
 git+https://github.com/SergioVenicio21/eyeD3.git
 mutagen==1.42.0

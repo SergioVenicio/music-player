@@ -2,7 +2,7 @@ flake8==3.7.9
 pytest==5.2.2
 pytest-django==3.6.0
 pytest-cov==2.8.1
-coverage==4.5.4
+coverage==5.0.3
 django-debug-toolbar==2.0
 
 -r requirements.txt

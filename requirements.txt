@@ -1,6 +1,6 @@
 Django==3.0.2
 django-cors-headers==3.1.1
-django-webpack-loader==0.6.0
+django-webpack-loader==0.7.0
 djangorestframework==3.11.0
 django-rest-auth==0.9.5
 git+https://github.com/SergioVenicio21/eyeD3.git

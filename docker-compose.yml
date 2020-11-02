@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${PSQL_DB}
+      - POSTGRES_USER=${PSQL_USER}
+      - POSTGRES_PASSWORD=${PSQL_PWD}
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    restart: always

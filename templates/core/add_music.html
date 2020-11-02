@@ -1,23 +1,23 @@
-{% extends 'core/base.html' %}
-{% block title %}Adicionar músicas{% endblock %}
-{% load static %}
-{% block css %}
-  <link rel="stylesheet" href="{% static 'core/css/bootstrap-select.min.css' %}">
-{% endblock %}
-{% block body %}
+{% extends 'core/base.html' %} {% block title %}Adicionar músicas{% endblock %}
+{% load static %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{% static 'core/css/bootstrap-select.min.css' %}"
+/>
+{% endblock %} {% block body %}
 <div class="container-fluid">
   <div class="mt-5"></div>
   <div class="row justify-content-center">
     <div class="col-6">
       <form id="form_musica">
         {% for field in form %}
-          <div class="form-group">
-            <label for="{{ field.name }}">{{ field.name }}</label>
-            {{ field }}
-          </div>
+        <div class="form-group">
+          <label for="{{ field.name }}">{{ field.name }}</label>
+          {{ field }}
+        </div>
         {% endfor %}
         <div class="btn_wrapper text-center">
-          <input type="hidden" id="file">
+          <input type="hidden" id="file" />
           <button type="button" id="btn-save" class="btn btn-primary">
             <i class="fas fa-2x fa-save"></i>
           </button>
@@ -31,13 +31,18 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Adicionar musica</h5>
+        <h5 class="modal-title">New music</h5>
       </div>
       <div class="modal-body">
         <p id="modal-text" class="text-center"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" id="btn-close" class="btn text-center" data-dismiss="modal">
+        <button
+          type="button"
+          id="btn-close"
+          class="btn text-center"
+          data-dismiss="modal"
+        >
           <i class="fas fa-check"></i>
         </button>
       </div>
@@ -45,9 +50,8 @@
   </div>
 </div>
 
-{% endblock %}
-{% block js %}
-  <script src="{% static 'core/js/bootstrap-select.min.js' %}"></script>
-  <script src="{% static 'core/js/defaults-pt_BR.min.js' %}"></script>
-  <script src="{% static 'core/js/add_music.js' %}"></script>
+{% endblock %} {% block js %}
+<script src="{% static 'core/js/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'core/js/defaults-pt_BR.min.js' %}"></script>
+<script src="{% static 'core/js/add_music.js' %}"></script>
 {% endblock %}

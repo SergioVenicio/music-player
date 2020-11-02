@@ -44,27 +44,21 @@ $(document).ready( function (){
         dataType: 'json',
         statusCode: {
           201: function (data) {
-            data = JSON.parse(data);
             if(data.music) {
               $('#btn-close').removeClass('btn-danger');
               $('#btn-close').addClass('btn-success');
-              $("#modal-text").text('Música cadastrada com sucesso!');
-            } else {
-              $('#btn-close').removeClass('btn-success');
-              $('#btn-close').addClass('btn-danger');
-              $('#modal-text').text(data.erros.join(', '));
+              $("#modal-text").text('Music added with success!');
             }
             $('#addmusic').modal();
           },
-          400: function (data) {
-            data = JSON.parse(data.responseJSON);
+          400: function () {
             $('#btn-close').addClass('btn-danger');
-            $('#modal-text').text(data.erros.join(', '));
+            $('#modal-text').text('Error to save music, try again later');
             $('#addmusic').modal();
           },
           404: function () {
             $('#btn-close').addClass('btn-warning');
-            $('#modal-text').text('Erro ao acessar a api');
+            $('#modal-text').text('Error comminicate with api');
             $('#addmusic').modal();
           }
         }

@@ -32,8 +32,7 @@ class GenreViewSet(viewsets.ModelViewSet):
 
         try:
             decoded_image = file_decoder.execute(genre_image_raw, description)
-        except ValueError as e:
-            print(e)
+        except ValueError:
             return Response(data={
                 'status': 'error',
                 'error': 'Invalid file type!'
@@ -62,63 +61,55 @@ class BandViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def create(self, request, *args, **kwargs):
-        erros = []
-        nome = request.data.get('name', None)
-        genero_id = request.data.get('genre_id', None)
-        imagem = request.data.get('band_image', None)
+        file_decoder = FileDecoder()
 
-        if imagem:
-            tipo = get_file_type(imagem)
-            if tipo:
-                if tipo == '.jpg':
-                    imagem = imagem[23:]
-                elif tipo == '.png':
-                    imagem = imagem[22:]
-                imagem = ContentFile(
-                    decode_file(imagem), (nome + tipo)
-                )
-                if genero_id:
-                    banda = Band(
-                        name=nome,
-                        genre_id=genero_id,
-                        band_image=imagem
-                    )
-                    try:
-                        banda.save()
-                    except IntegrityError:
-                        erros.append('Já existe uma banda com esse nome')
-                    else:
-                        response = json.dumps({
-                            'genero': {
-                                'id': banda.id,
-                                'nome': banda.name,
-                                'imagem': banda.band_image.path
-                            }
-                        })
-                        return Response(response, status=201)
-                else:
-                    erros.append('O campo genero é obrigátorio')
-            else:
-                erros.append('Tipo de arquivo inválido')
-        else:
-            if genero_id:
-                banda = Band(name=nome, genre_id=genero_id)
-                try:
-                    banda.save()
-                except IntegrityError:
-                    erros.append('Já existe uma banda com esse nome')
-                else:
-                    response = json.dumps({
-                        'genero': {
-                            'id': banda.id,
-                            'nome': banda.name,
-                            'genero_id': genero_id
-                        }
-                    })
-                    return Response(response, status=201)
-            else:
-                erros.append('O campo genero é obrigátorio')
+        name = request.data.get('name', None)
+        genre_id = request.data.get('genre_id', None)
+        band_image_raw = request.data.get('band_image', None)
 
-        return Response(
-            json.dumps({'erros': erros}), status=400
+        if not name:
+            return Response(data={
+                'status': 'error',
+                'error': 'Band name fild is required!'
+            }, status=400)
+
+        if not genre_id:
+            return Response(data={
+                'status': 'error',
+                'error': 'Genre id fild is required!'
+            }, status=400)
+
+        if not band_image_raw:
+            return Response(data={
+                'status': 'error',
+                'error': 'Band image fild is required!'
+            }, status=400)
+
+        try:
+            band_image = file_decoder.execute(band_image_raw, name)
+        except ValueError:
+            return Response(data={
+                'status': 'error',
+                'error': 'Invalid image type!'
+            }, status=400)
+
+        band = Band(
+            name=name,
+            genre_id=genre_id,
+            band_image=band_image
         )
+        try:
+            band.save()
+        except IntegrityError:
+            return Response(data={
+                'status': 'error',
+                'error': 'This band already exists!'
+            }, status=400)
+
+        return Response(data={
+            'band': {
+                'id': band.id,
+                'name': band.name,
+                'band_image': band.band_image.path
+            }
+        }, status=201)

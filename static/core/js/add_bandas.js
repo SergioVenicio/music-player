@@ -18,14 +18,13 @@ $(document).ready( function (){
         'name': nome, 'band_image': base_imagen, 'genre_id': genero
       }
       $.ajax({
-        url: '/api/v1/banda',
+        url: '/api/v1/band',
         type: 'POST',
         dataType: 'json',
         data: banda ,
         statusCode: {
           201: function(data) {
-            data = JSON.parse(data);
-            if(data.genero) {
+            if(data.band) {
               $('#btn-close').removeClass('btn-danger');
               $('#btn-close').addClass('btn-success');
               $("#modal-text").text('Banda cadastrado com sucesso!');

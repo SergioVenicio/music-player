@@ -1,7 +1,7 @@
 $(document).ready( function (){
-  $("#id_imagem").on({
+  $("#id_genre_image").on({
     'change': function () {
-      var imagem = document.getElementById('id_imagem').files[0];
+      var imagem = document.getElementById('id_genre_image').files[0];
       var reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
@@ -11,11 +11,11 @@ $(document).ready( function (){
   });
   $("#btn-save").on({
     'click': function () {
-      var descricao = $("#id_descricao").val();
+      var description = $("#id_description").val();
       var base_imagem = $("#file").val();
       var genero = {
-        'descricao': descricao,
-        'imagem': base_imagem
+        'description': description,
+        'genre_image': base_imagem
       }
       $.ajax({
         url: '/api/v1/genero',

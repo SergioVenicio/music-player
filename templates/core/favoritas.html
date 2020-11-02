@@ -1,61 +1,65 @@
-{% extends 'core/base.html' %}
-{% load static %}
-{% block css %}
-  <link rel="stylesheet" href="{% static 'core/css/player.css' %}">
-{% endblock %}
-{% block body %}
+{% extends 'core/base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'core/css/player.css' %}" />
+{% endblock %} {% block body %}
 <div class="container-fluid">
   <div class="mt-5"></div>
   <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="card">
-            {% if album.capa %}
-              <img class="card-img-top" src="{{ MEDIA_URL }}{{ request.user.avatar.url }}">
-            {% else %}
-              <img class="card-img-top" style="background-color: #000" src="{% static 'logo/icon.png' %}" alt="Imagen não cadastrada">
-            {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">Músicas fávoritas</h5>
-            </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card">
+          {% if album.capa %}
+          <img
+            class="card-img-top"
+            src="{{ MEDIA_URL }}{{ request.user.avatar.url }}"
+          />
+          {% else %}
+          <img
+            class="card-img-top"
+            style="background-color: #000"
+            src="{% static 'logo/icon.png' %}"
+            alt="Imagen não cadastrada"
+          />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">Músicas fávoritas</h5>
           </div>
         </div>
-        <div class="col-sm-12 col-md-5 offset-md-4">
-            <ul id="playlist" class="list-group"></ul>
-            <div class="controls">
-                <div id='bg'>
-                  <audio id="audio" controls></audio>
-                </div>
-                <span class="prev">
-                  <i class="fas fa-step-backward"></i>
-                </span>
-                <span class="pause-play">
-                  <i class="fas fa-play play"></i>
-                  <i class="fas fa-pause pause"></i>
-                </span>
-                <span class="next">
-                  <i class="fas fa-step-forward"></i>
-                </span>
-                <span class="repeat">
-                  <i class="fas fa-redo-alt"></i>
-                </span>
-                <span class="random">
-                  <i class="fas fa-random"></i>
-                </span>
-                <p class="music-description"></p>
-                <div class="control-volume">
-                  <i class="fas fa-volume-up volume"></i>
-                  <i class="fas fa-volume-off mute"></i>
-                  <input id="vol-control" type="range" min="0" max="100" step="1" />
-                </div>
-            </div>
+      </div>
+      <div class="col-sm-12 col-md-5 offset-md-4">
+        <ul id="playlist" class="list-group"></ul>
+        <div class="controls">
+          <div id="bg">
+            <audio id="audio" controls></audio>
+          </div>
+          <span class="prev">
+            <i class="fas fa-step-backward"></i>
+          </span>
+          <span class="pause-play">
+            <i class="fas fa-play play"></i>
+            <i class="fas fa-pause pause"></i>
+          </span>
+          <span class="next">
+            <i class="fas fa-step-forward"></i>
+          </span>
+          <span class="repeat">
+            <i class="fas fa-redo-alt"></i>
+          </span>
+          <span class="random">
+            <i class="fas fa-random"></i>
+          </span>
+          <p class="music-description"></p>
+          <div class="control-volume">
+            <i class="fas fa-volume-up volume"></i>
+            <i class="fas fa-volume-off mute"></i>
+            <input id="vol-control" type="range" min="0" max="100" step="1" />
+          </div>
         </div>
       </div>
+    </div>
   </div>
 </div>
 
-{% endblock %}
-{% block js %}
+{% endblock %} {% block js %}
 <script>
   let usuario_id = {{ request.user.id }};
   let album_id = {{ request.user.id }};

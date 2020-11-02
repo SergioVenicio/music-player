@@ -10,7 +10,7 @@ SECRET_KEY = config('SECRET_KEY', get_random_string(50))
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', ['*'])
-AUTH_USER_MODEL = 'core.Usuario'
+AUTH_USER_MODEL = 'user.User'
 
 LOGIN_REDIRECT_URL = 'home'
 
@@ -21,13 +21,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'music_player.core',
-    'music_player.api',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
     'corsheaders',
     'collectfast',
+
+    'user',
+    'album',
+    'band',
+    'music',
+    'music_player.api',
 ]
 
 
@@ -64,8 +68,11 @@ WSGI_APPLICATION = 'music_player.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('PSQL_DB'),
+        'USER': config('PSQL_USER'),
+        'PASSWORD': config('PSQL_PWD'),
+        'HOST': config('PSQL_HOST')
     }
 }
 

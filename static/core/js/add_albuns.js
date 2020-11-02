@@ -1,7 +1,7 @@
 $(document).ready( function (){
-  $("#id_capa").on({
+  $("#id_cover_image").on({
     'change': function () {
-      var imagem = document.getElementById('id_capa').files[0];
+      var imagem = document.getElementById('id_cover_image').files[0];
       var reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
@@ -11,13 +11,15 @@ $(document).ready( function (){
   });
   $("#btn-save").on({
     'click': function () {
-      var nome = $("#id_nome").val();
-      var banda_id = $("#id_banda").val();
-      var data_lancamento = $("#id_data_lancamento").val();
+      var nome = $("#id_name").val();
+      var banda_id = $("#id_band").val();
+      var data_lancamento = $("#id_release_date").val();
       var base_imagen = $("#file").val();
       var album = {
-        'nome': nome, 'banda_id': banda_id,
-        'data_lancamento': data_lancamento, 'capa': base_imagen
+        'name': nome,
+        'band_id': banda_id,
+        'release_date': data_lancamento,
+        'cover_image': base_imagen
       }
       $.ajax({
         url: '/api/v1/album',

@@ -1,7 +1,7 @@
 $(document).ready( function (){
-  $("#id_imagem").on({
+  $("#id_band_image").on({
     'change': function () {
-      var imagem = document.getElementById('id_imagem').files[0];
+      var imagem = document.getElementById('id_band_image').files[0];
       var reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
@@ -11,11 +11,11 @@ $(document).ready( function (){
   });
   $("#btn-save").on({
     'click': function () {
-      var nome = $("#id_nome").val();
+      var nome = $("#id_name").val();
       var base_imagen = $("#file").val();
-      var genero = $("#id_genero").val();
+      var genero = $("#id_genre").val();
       var banda = {
-        'nome': nome, 'imagem': base_imagen, 'genero_id': genero
+        'name': nome, 'band_image': base_imagen, 'genre_id': genero
       }
       $.ajax({
         url: '/api/v1/banda',

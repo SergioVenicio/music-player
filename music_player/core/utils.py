@@ -1,13 +1,17 @@
 import base64
 import hashlib
-from music_player import settings
-from music_player.core import models
 from django.core.paginator import Paginator, EmptyPage
+
+from music_player import settings
+
+from album.models import Album
+from band.models import Band, Genre
+from music.models import Music
 
 
 def get_generos(genero_id=None, per_page=None, page=1, pagination=False):
     if genero_id is None:
-        generos = models.Genero.objects.all()
+        generos = Genre.objects.all()
         if pagination:
             if not per_page:
 
@@ -20,15 +24,15 @@ def get_generos(genero_id=None, per_page=None, page=1, pagination=False):
         else:
             return generos
     else:
-        return models.Genero.objects.get(pk=genero_id)
+        return Genre.objects.get(pk=genero_id)
 
 
 def get_bandas(banda_id=None, genero_id=None, per_page=None,
                page=1, pagination=False):
     if banda_id is None:
-        bandas = models.Banda.objects.all()
+        bandas = Band.objects.all()
         if genero_id is not None:
-            bandas = bandas.filter(genero_id=genero_id)
+            bandas = bandas.filter(genre_id=genero_id)
 
         if pagination:
             if not per_page:
@@ -42,17 +46,17 @@ def get_bandas(banda_id=None, genero_id=None, per_page=None,
         else:
             return bandas
     else:
-        return models.Banda.objects.get(pk=banda_id)
+        return Band.objects.get(pk=banda_id)
 
 
 def get_albuns(album_id=None, banda_id=None, per_page=None,
                page=1, pagination=False):
     if album_id is None:
-        albuns = models.Album.objects.all()
+        albuns = Album.objects.all()
         if banda_id is not None:
-            albuns = albuns.filter(banda_id=banda_id)
+            albuns = albuns.filter(band_id=banda_id)
 
-        albuns = albuns.order_by('data_lancamento')
+        albuns = albuns.order_by('release_date')
 
         if pagination:
             if not per_page:
@@ -66,14 +70,14 @@ def get_albuns(album_id=None, banda_id=None, per_page=None,
         else:
             return albuns
     else:
-        return models.Album.objects.get(pk=album_id)
+        return Album.objects.get(pk=album_id)
 
 
 def get_all_musics(album_id=None):
     if album_id is None:
-        return models.Musica.objects.all()
+        return Music.objects.all()
 
-    return models.Musica.objects.filter(album_id=album_id)
+    return Music.objects.filter(album_id=album_id)
 
 
 def get_file_type(base64_data, musica=False, imagen=True):
@@ -107,9 +111,9 @@ def decode_file(base64_data):
 
 def get_etag(request, id):
     user = request.user
-    bandas = models.Banda.objects.all().count()
-    albuns = models.Album.objects.all().count()
-    musicas = models.Musica.objects.all().count()
+    bandas = Band.objects.all().count()
+    albuns = Album.objects.all().count()
+    musicas = Music.objects.all().count()
     return hashlib.sha1(
         f"user_id: {user.id}, {id}, \
         {bandas}, {albuns}, {musicas}".encode('utf-8')

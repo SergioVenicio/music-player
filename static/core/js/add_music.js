@@ -1,9 +1,9 @@
 $(document).ready( function (){
   $("#id_album").selectpicker();
 
-  $("#id_arquivo").on({
+  $("#id_file").on({
     change: function () {
-      let arquivo = document.getElementById('id_arquivo').files[0];
+      let arquivo = document.getElementById('id_file').files[0];
       let reader = new FileReader();
       reader.onload = function () {
         $("#file").val(reader.result);
@@ -16,23 +16,25 @@ $(document).ready( function (){
       var nome = nome.split(r_ordem);
       if(nome.length > 1) {
         var ordem = parseInt(nome[1].replace('-', '').trim());
-        $("#id_nome").val(nome[2].trim());
-        $("#id_ordem").val(ordem);
+        $("#id_name").val(nome[2].trim());
+        $("#id_order").val(ordem);
       } else {
-        $("#id_nome").val(arquivo.name);
+        $("#id_name").val(arquivo.name);
       }
     }
   });
 
   $("#btn-save").on({
     'click': function () {
-      let nome = $("#id_nome").val();
+      let nome = $("#id_name").val();
       let album = $("#id_album").val();
-      let ordem = $("#id_ordem").val();
+      let ordem = $("#id_order").val();
       let base_arquivo = $("#file").val();
       let musica = {
-        'nome': nome, 'album': album,
-        'ordem': ordem, 'arquivo': base_arquivo
+        'name': nome,
+        'album': album,
+        'order': ordem,
+        'file': base_arquivo
       }
 
       $.ajax({

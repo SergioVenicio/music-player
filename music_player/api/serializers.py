@@ -1,68 +1,73 @@
-from music_player.core import models
 from rest_framework import serializers
+
+from album.models import Album
+from band.models import Band, Genre
+from music.models import Music
+from user.models import User, Like
 
 
 class GeneroSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = models.Genero
+        model = Genre
         fields = ('__all__')
 
 
 class BandaSerializer(serializers.HyperlinkedModelSerializer):
-    genero = serializers.ReadOnlyField(source='genero.descricao')
+    genre = serializers.ReadOnlyField(source='genre.description')
 
     class Meta:
-        model = models.Banda
+        model = Band
         fields = ('__all__')
 
 
 class AlbumSerializer(serializers.HyperlinkedModelSerializer):
-    banda = serializers.ReadOnlyField(source='banda.nome')
+    band = serializers.ReadOnlyField(source='band.name')
 
     class Meta:
-        model = models.Album
+        model = Album
         fields = ('__all__')
 
 
 class MusicaSerializer(serializers.HyperlinkedModelSerializer):
-    album = serializers.ReadOnlyField(source='album.nome')
+    album = serializers.ReadOnlyField(source='album.name')
 
     class Meta:
-        model = models.Musica
-        fields = ('nome', 'album', 'ordem', 'arquivo',)
+        model = Music
+        fields = ('name', 'album', 'order', 'file',)
 
 
 class MusicaSerializerList(serializers.HyperlinkedModelSerializer):
-    album = serializers.ReadOnlyField(source='album.nome')
+    album = serializers.ReadOnlyField(source='album.name')
 
     class Meta:
-        model = models.Musica
+        model = Music
         fields = (
-            'id', 'nome', 'album', 'ordem', 'arquivo',
-            'arquivo_tipo', 'duracao'
+            'id', 'name', 'album', 'order', 'file',
+            'file_type', 'duration'
         )
 
 
 class UsuarioSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Usuario
-        fields = ('id', 'email', 'nome', 'sobrenome', 'avatar')
+        model = User
+        fields = ('id', 'email', 'name', 'last_name', 'avatar')
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Like
+        model = Like
         fields = ('__all__')
 
 
 class LikeSerializerUsuario(serializers.ModelSerializer):
     class Meta:
-        model = models.Like
+        model = Like
         fields = ('__all__')
 
 
 class LikeSerializerMusica(serializers.ModelSerializer):
     class Meta:
-        model = models.Like
-        fields = ('id', 'musica', 'data',)
+        model = Like
+        fields = ('id', 'music', 'date',)
         depth = 1

@@ -57,14 +57,14 @@ $(document).ready( function (){
       response_musicas = data;
       for(var i = 0; i < data.length; i++) {
           playlist.push({
-            'src': response_musicas[i].arquivo,
-            'desc': response_musicas[i].nome
+            'src': response_musicas[i].file,
+            'desc': response_musicas[i].name
           });
-          if(response_musicas[i].duracao)
+          if(response_musicas[i].duration)
           {
-            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>" + response_musicas[i].ordem + " - " + response_musicas[i].nome + " <span class='badge badge-warning'>" + response_musicas[i].duracao.substr(3, 5) + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id +","+ response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>" + response_musicas[i].order + " - " + response_musicas[i].name + " <span class='badge badge-warning'>" + response_musicas[i].duration.substr(3, 5) + "</div></li>");
           } else {
-            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].ordem + " - " + response_musicas[i].nome + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
+            $("#playlist").append("<li class='list-group-item' data-id='"+ response_musicas[i].id +"' data-pos='"+ i +"'><div class='like' onClick=like("+ i +","+ usuario_id, response_musicas[i].id +")><i class='fas fa-heart'></i></div><div onClick='changeSong(" + i + ")' class='music-info'>"+ response_musicas[i].order + " - " + response_musicas[i].name + " <span class='badge badge-warning'>" + '00:00' + "</div></li>");
           }
 
           var _musicas = $("#playlist li");
@@ -75,7 +75,7 @@ $(document).ready( function (){
             success: function (data) {
               if(data.length > 0) {
                 for(let m = 0; m < _musicas.length; m++) {
-                  if($(_musicas[m]).attr('data-id') == data[0].musica) {
+                  if($(_musicas[m]).attr('data-id') == data[0].music) {
                     $(_musicas[m]).children('.like').addClass('liked');
                     $(_musicas[m]).attr('like-id', data[0].id);
                     $(_musicas[m]).children('.like').attr('onclick', "unlike(" + $(_musicas[m]).attr('data-pos') + ", " + data[0].id + ")");

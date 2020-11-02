@@ -2,10 +2,11 @@ from . import views
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
+from user.views import sign_up, user_avatar
 
 USER_URLS = [
     path('login', auth_views.LoginView.as_view(), name='login'),
-    path('sign_up', views.sign_up, name='sign_up'),
+    path('sign_up', sign_up, name='sign_up'),
     path(
         'logout',
         auth_views.LogoutView.as_view(
@@ -13,7 +14,7 @@ USER_URLS = [
         ),
         name='logout'
     ),
-    path('avatar/', views.user_avatar, name='avatar'),
+    path('avatar/', user_avatar, name='avatar'),
 ]
 
 urlpatterns = [

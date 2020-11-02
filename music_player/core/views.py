@@ -2,49 +2,11 @@
     Views básicas do projeto, music-player
 """
 
-from . import forms
 from . import utils
 from music_player import settings
-from django.shortcuts import render, redirect
-from django.views.decorators.http import etag
-from django.contrib.auth import login, authenticate
+from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-
-
-def sign_up(request):
-    if request.method == 'POST':
-        form = forms.UsuarioForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password1')
-            usuario = authenticate(email=email, password=password)
-            login(request, usuario)
-            return redirect('home')
-    else:
-        form = forms.UsuarioForm()
-    context = {'form': form}
-    return render(request, 'registration/signup.html', context)
-
-
-@login_required(login_url='/login')
-def user_avatar(request):
-    usuario = request.user
-    if request.method == 'GET':
-        form = forms.UsuarioEditAvatar(instance=usuario)
-    else:
-        form = forms.UsuarioEditAvatar(
-            request.POST, request.FILES, instance=usuario
-        )
-        if form.is_valid():
-            form.save()
-
-    context = {
-        'form': form,
-        'avatar': usuario.avatar
-    }
-    return render(request, 'registration/avatar.html', context)
 
 
 @login_required(login_url='/login')
@@ -66,10 +28,10 @@ def home(request):
         'per_page': per_page,
         'total_pages': generos.paginator.num_pages
     }
+
     return render(request, 'core/home.html', context)
 
 
-@etag(utils.get_etag)
 @login_required(login_url='/login')
 def bandas(request, id):
     page = request.GET.get('page', 1)
@@ -95,12 +57,12 @@ def bandas(request, id):
 
 @login_required(login_url='/login')
 def add_bandas(request):
-    form = forms.BandaForm()
+    from band.forms import BandForm
+    form = BandForm()
     context = {'form': form}
     return render(request, 'core/add_bandas.html', context)
 
 
-@etag(utils.get_etag)
 @login_required(login_url='/login')
 def albuns(request, id):
     page = request.GET.get('page', 1)
@@ -126,18 +88,19 @@ def albuns(request, id):
 
 @login_required(login_url='/login')
 def add_albuns(request):
-    form = forms.AlbumForm()
+    from album.forms import AlbumForm
+    form = AlbumForm()
     context = {'form': form}
     return render(request, 'core/add_albuns.html', context)
 
 
 @login_required(login_url='/login')
 def musicas(request, id):
-    """ Retorna as músicas cadastradas no sistema com base no album """
     context = {
         'musics': utils.get_all_musics(album_id=id),
         'album': utils.get_albuns(album_id=id)
     }
+    print(context)
     return render(request, 'core/musicas.html', context)
 
 
@@ -148,9 +111,10 @@ def favoritas(request):
 
 @login_required(login_url='/login')
 def add_musicas(request):
-    """ Adiciona musicas no banco de dados """
+    from music.forms import MusicForm
+
     if request.method == 'GET':
-        form = forms.MusicaForm()
+        form = MusicForm()
         context = {
             'form': form
         }
@@ -161,8 +125,9 @@ def add_musicas(request):
 
 @login_required(login_url='/login')
 def add_generos(request):
+    from band.forms import GernreForm
     if request.method == 'GET':
-        form = forms.GeneroForm()
+        form = GernreForm()
         context = {
             'form': form
         }

@@ -1,48 +1,51 @@
-{% extends 'core/base.html' %}
-{% load static %}
-{% block css %}
-  <link rel="stylesheet" href="{% static 'core/css/home.css' %}">
-{% endblock %}
-
-{% block body %}
+{% extends 'core/base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}" />
+{% endblock %} {% block body %}
 <div class="mt-5"></div>
 <div class="container-fluid">
-    <div class="container">
-      {% if albuns %}
-        <div class="row">
-          {% for album in albuns %}
-              <div class="col-md-4 mb-5">
-                  <div class="card">
-                    {% if album.capa %}
-                      <img class="card-img-top" src="{{ MEDIA_URL }}{{ album.capa.url }}">
-                    {% else %}
-                      <img class="card-img-top" style="background-color: #000" src="{% static 'logo/icon.png' %}" alt="Imagen não cadastrada">
-                    {% endif %}
-                    <div class="card-body">
-                      <h5 class="card-title">{{ album.nome }}</h5>
-                      <p class="card-text">{{ album.banda.nome }}</p>
-                      <a href="{% url 'musicas' album.id %}" class="btn btn-warning">
-                          Ouvir
-                          <i class="fas fa-headphones"></i>
-                      </a>
-                    </div>
-                  </div>
-              </div>
-          {% endfor %}
+  <div class="container">
+    {% if albuns %}
+    <div class="row">
+      {% for album in albuns %}
+      <div class="col-md-4 mb-5">
+        <div class="card">
+          {% if album.cover_image %}
+          <img
+            class="card-img-top"
+            src="{{ MEDIA_URL }}{{ album.cover_image.url }}"
+          />
+          {% else %}
+          <img
+            class="card-img-top"
+            style="background-color: #000"
+            src="{% static 'logo/icon.png' %}"
+            alt="Imagen não cadastrada"
+          />
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ album.nome }}</h5>
+            <p class="card-text">{{ album.banda.nome }}</p>
+            <a href="{% url 'musicas' album.id %}" class="btn btn-warning">
+              Ouvir
+              <i class="fas fa-headphones"></i>
+            </a>
+          </div>
         </div>
-        {% include 'core/pagination.html' %}
-      {% else %}
-              <div class="row">
-                <div class="col-12 text-center">
-                  <h4>Nenhum album encontrado</h4>
-                  <div class="btn-wrapper mt-5"></div>
-                  <a href="/" class="btn btn-danger">
-                    Voltar
-                    <i class="fas fa-home"></i>
-                  </a>
-                </div>
-              </div>
-      {% endif %}
+      </div>
+      {% endfor %}
     </div>
+    {% include 'core/pagination.html' %} {% else %}
+    <div class="row">
+      <div class="col-12 text-center">
+        <h4>Nenhum album encontrado</h4>
+        <div class="btn-wrapper mt-5"></div>
+        <a href="/" class="btn btn-danger">
+          Voltar
+          <i class="fas fa-home"></i>
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

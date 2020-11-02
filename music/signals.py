@@ -16,12 +16,10 @@ def change_music_type(sender, instance, **kwargs):
     file_type = os.path.splitext(instance.file.name)[1]
     parsed_file_type = file_type[1::].lower()
 
-    if parsed_file_type == ('mp3' or '.mp3'):
-        new_file_type = 'audio/mpeg'
-    else:
+    if parsed_file_type not in ('mpeg', 'mp3'):
         raise ValueError('File type not allowed!')
 
-    instance.file_type = new_file_type
+    instance.file_type = 'audio/mpeg'
 
 
 @receiver(post_save, sender=Music)

@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from ..models import Band, Genre
 from .serializer import BandSerializer, GenreSerializer
 
-from music_player.core.utils import get_file_type, decode_file
+from shared.file.services.FileDecoder import FileDecoder
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -19,40 +19,41 @@ class GenreViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def create(self, request, *args, **kwargs):
-        erros = []
         description = request.data['description']
+        genre_image_raw = request.data['genre_image']
 
-        imagem = request.data['genre_image']
-        tipo = get_file_type(imagem)
-        if tipo:
-            if tipo == '.jpg':
-                imagem = imagem[23:]
-            elif tipo == '.png':
-                imagem = imagem[22:]
-            imagem = ContentFile(
-                decode_file(imagem), (description + tipo)
-            )
-            print(imagem)
-            genero = Genre(description=description, genre_image=imagem)
-            try:
-                genero.save()
-            except IntegrityError:
-                erros.append('Já existe um genero com essa descrição')
-            else:
-                response = json.dumps({
-                    'genero': {
-                        'id': genero.id,
-                        'descricao': genero.description,
-                        'imagem': genero.genre_image.path
-                    }
-                })
-                return Response(response, status=201)
-        else:
-            erros.append('Tipo de arquivo inválido')
+        file_decoder = FileDecoder()
 
-        return Response(
-            json.dumps({'erros': erros}), status=400
-        )
+        if not genre_image_raw:
+            return Response(data={
+                'status': 'error',
+                'error': 'Genre image field is required!'
+            }, status=400)
+
+        try:
+            decoded_image = file_decoder.execute(genre_image_raw, description)
+        except ValueError as e:
+            print(e)
+            return Response(data={
+                'status': 'error',
+                'error': 'Invalid file type!'
+            }, status=400)
+
+        genero = Genre(description=description, genre_image=decoded_image)
+        try:
+            genero.save()
+            return Response(data=json.dumps({
+                'genre': {
+                    'id': genero.id,
+                    'description': genero.description,
+                    'genre_image': genero.genre_image.path
+                }
+            }), status=201)
+        except IntegrityError:
+            return Response(data={
+                'status': 'error',
+                'error': 'Invalid genre description!'
+            }, status=400)
 
 
 class BandViewSet(viewsets.ModelViewSet):

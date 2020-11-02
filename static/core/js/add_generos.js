@@ -18,14 +18,15 @@ $(document).ready( function (){
         'genre_image': base_imagem
       }
       $.ajax({
-        url: '/api/v1/genero',
+        url: '/api/v1/genre',
         type: 'POST',
         dataType: 'json',
         data: genero ,
         statusCode: {
           201: function(data) {
             data = JSON.parse(data);
-            if(data.genero) {
+            console.log(data)
+            if(data.genre) {
               $('#btn-close').removeClass('btn-danger');
               $('#btn-close').addClass('btn-success');
               $("#modal-text").text('Genero cadastrado com sucesso!');

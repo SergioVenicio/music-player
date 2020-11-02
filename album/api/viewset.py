@@ -2,13 +2,13 @@ import json
 
 from rest_framework import status
 from rest_framework.response import Response
-from django.core.files.base import ContentFile
 from rest_framework import viewsets
 
 from ..models import Album
 from .serializer import AlbumSerializer
 
-from music_player.core.utils import get_file_type, decode_file
+
+from shared.file.services.FileDecoder import FileDecoder
 
 
 class AlbumViewSet(viewsets.ModelViewSet):
@@ -17,6 +17,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post']
 
     def create(self, request, *args, **kwargs):
+        file_decoder = FileDecoder()
         name = request.data.get('name', None)
         band_id = request.data.get('band_id', None)
 
@@ -30,14 +31,14 @@ class AlbumViewSet(viewsets.ModelViewSet):
             )
 
         release_date = request.data.get('release_date', None)
-        cover_image = request.data.get('cover_image', None)
+        cover_image_raw = request.data.get('cover_image', None)
 
-        type_ = get_file_type(cover_image)
-        if type_ == '.jpg':
-            cover_image = cover_image[23:]
-        elif type_ == '.png':
-            cover_image = cover_image[22:]
-        else:
+        try:
+            cover_image = file_decoder.execute(
+                cover_image_raw,
+                name
+            )
+        except ValueError:
             return Response(
                 data={
                     'status': 'error',
@@ -46,9 +47,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        cover_image = ContentFile(
-            decode_file(cover_image), f'{name}{type_}'
-        )
         album = Album(
             name=name,
             band_id=band_id,

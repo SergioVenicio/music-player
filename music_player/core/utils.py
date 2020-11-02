@@ -93,16 +93,12 @@ def get_file_type(base64_data, musica=False, imagen=True):
     elif imagen:
         if data_type == 'data:image':
             if base64_data[11:14] == 'png':
-                return '.png'
+                return 'png'
             elif base64_data[11:15] == 'jpeg':
-                return '.jpg'
+                return 'jpg'
             else:
                 return False
         else:
             return False
 
     return False
-
-
-def decode_file(base64_data):
-    return base64.b64decode(base64_data)

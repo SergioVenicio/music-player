@@ -1,12 +1,11 @@
 import json
 from rest_framework import viewsets
 from rest_framework.response import Response
-from django.core.files.base import ContentFile
 
 from ..models import Music
 from .serializer import MusicSerializer, MusicSerializerList
 
-from music_player.core.utils import get_file_type, decode_file
+from shared.file.services.FileDecoder import FileDecoder
 
 
 class MusicViewSet(viewsets.ModelViewSet):
@@ -25,61 +24,56 @@ class MusicViewSet(viewsets.ModelViewSet):
         return queryset.filter(album_id=album_id)
 
     def create(self, request, *args, **kwargs):
-        erros = []
-        nome = request.data.get('name', None)
-        album = request.data.get('album', None)
+        file_decoder = FileDecoder()
+
+        name = request.data.get('name', None)
+        album_id = request.data.get('album_id', None)
         ordem = request.data.get('order', None)
+        file = request.data.get('file', None)
 
         if not ordem:
-            erros.append('O campo ordem é obrigatório')
+            return Response(data={
+                'status': 'error',
+                'error': 'The order field is required!'
+            }, status=400)
 
-        if not album:
-            erros.append('O campo album é obrigatório')
+        if not album_id:
+            return Response(data={
+                'status': 'error',
+                'error': 'The album_id field is required!'
+            }, status=400)
 
-        arquivo = request.data.get('file', None)
-        if arquivo:
-            tipo = get_file_type(arquivo, musica=True)
-            if not erros:
-                try:
-                    existe = Music.objects.get(
-                        order=ordem,
-                        album_id=album
-                    )
-                except Music.DoesNotExist:
-                    existe = False
-            else:
-                existe = False
+        if not file:
+            return Response(data={
+                'status': 'error',
+                'error': 'The album_id field is required!'
+            }, status=400)
 
-            if not existe and tipo and ordem and not erros:
-                arquivo = arquivo.replace('data:audio/mp3;base64,', '')
-                arquivo = arquivo.replace('data:audio/mpeg;base64,', '')
-                arquivo = ContentFile(decode_file(arquivo), (nome + tipo))
+        try:
+            decode_file = file_decoder.execute(
+                file,
+                name
+            )
+        except ValueError:
+            return Response(data={
+                'status': 'error',
+                'error': 'Invalid file type!'
+            }, status=400)
 
-                musica = Music(
-                    name=nome,
-                    album_id=album,
-                    order=ordem,
-                    file=arquivo
-                )
-                musica.save()
-                response = json.dumps({
-                    'musica': {
-                        'id': musica.id,
-                        'nome': musica.name,
-                        'ordem': musica.order,
-                        'tipo': musica.file_type,
-                        'arquivo': musica.file.path
-                    }
-                })
-                return Response(response, status=201)
-            else:
-                if existe:
-                    erros.append('Já existe uma música com essa ordem')
-                if not tipo:
-                    erros.append('Tipo de arquivo inválido')
-                if not ordem:
-                    erros.append('Ordem inválida')
-        else:
-            erros.append('O arquivo de música é obrigatório')
-        response = json.dumps({'erros': erros})
-        return Response(response, status=400)
+        music = Music(
+            name=name,
+            album_id=album_id,
+            order=ordem,
+            file=decode_file
+        )
+        music.save()
+
+        return Response(data=json.dumps({
+            'music': {
+                'id': music.id,
+                'name': music.name,
+                'order': music.order,
+                'file_type': music.file_type,
+                'file': music.file.path
+            }
+        }), status=201)

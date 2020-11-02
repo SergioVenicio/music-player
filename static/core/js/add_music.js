@@ -32,7 +32,7 @@ $(document).ready( function (){
       let base_arquivo = $("#file").val();
       let musica = {
         'name': nome,
-        'album': album,
+        'album_id': album,
         'order': ordem,
         'file': base_arquivo
       }
@@ -45,7 +45,7 @@ $(document).ready( function (){
         statusCode: {
           201: function (data) {
             data = JSON.parse(data);
-            if(data.musica) {
+            if(data.music) {
               $('#btn-close').removeClass('btn-danger');
               $('#btn-close').addClass('btn-success');
               $("#modal-text").text('Música cadastrada com sucesso!');

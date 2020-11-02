@@ -77,28 +77,3 @@ def get_all_musics(album_id=None):
         return Music.objects.all()
 
     return Music.objects.filter(album_id=album_id)
-
-
-def get_file_type(base64_data, musica=False, imagen=True):
-    data_type = base64_data[:10]
-    if musica:
-        if data_type == 'data:audio':
-            audio_type = base64_data[11:15]
-            if audio_type == 'mpeg' or audio_type == 'mp3;':
-                return '.mp3'
-            else:
-                return False
-        else:
-            return False
-    elif imagen:
-        if data_type == 'data:image':
-            if base64_data[11:14] == 'png':
-                return 'png'
-            elif base64_data[11:15] == 'jpeg':
-                return 'jpg'
-            else:
-                return False
-        else:
-            return False
-
-    return False

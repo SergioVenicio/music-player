@@ -23,8 +23,8 @@
           />
           {% endif %}
           <div class="card-body">
-            <h5 class="card-title">{{ album.nome }}</h5>
-            <p class="card-text">{{ album.banda.nome }}</p>
+            <h5 class="card-title">{{ album.name }}</h5>
+            <p class="card-text">{{ album.band.name }}</p>
             <a href="{% url 'musicas' album.id %}" class="btn btn-warning">
               Ouvir
               <i class="fas fa-headphones"></i>

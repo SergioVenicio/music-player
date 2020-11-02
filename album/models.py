@@ -1,11 +1,25 @@
 import os
 
 from django.db import models
-from django.dispatch import receiver
-from music_player.settings import BASE_DIR
-from django.db.models.signals import post_delete
 
 from band.models import Band
+
+
+def upload_cover_image(instance, filename):
+    from shared.file.services.LocalStorage import LocalStorage
+
+    storage = LocalStorage()
+
+    file_name, file_type = os.path.splitext(filename)
+
+    raw_name = ''.join([
+        instance.name,
+        instance.band.name,
+        instance.release_date,
+        file_name
+    ])
+
+    return storage.execute('images/covers', raw_name, file_type)
 
 
 class Album(models.Model):
@@ -23,7 +37,7 @@ class Album(models.Model):
     release_date = models.PositiveIntegerField(blank=False, null=False)
     cover_image = models.ImageField(
         ('Cover image'),
-        upload_to='images/covers'
+        upload_to=upload_cover_image
     )
 
     def __str__(self):
@@ -35,13 +49,3 @@ class Album(models.Model):
     class Meta:
         db_table = 'album'
         ordering = ('name', 'band', 'release_date',)
-
-
-@receiver(post_delete, sender=Album)
-def delete_cover_image(sender, instance, **kwargs):
-    if instance.cover_image:
-        _file = os.path.join(BASE_DIR, 'media', str(instance.cover_image))
-        try:
-            os.remove(_file)
-        except FileNotFoundError:
-            print(f'Arquivo não encontrado: {instance.cover_image.path}')

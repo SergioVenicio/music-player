@@ -38,7 +38,7 @@ $(document).ready( function (){
       }
 
       $.ajax({
-        url: '/api/v1/musicas',
+        url: '/api/v1/music',
         type: 'POST',
         data: musica,
         dataType: 'json',

@@ -1,7 +1,3 @@
-"""
-    Views básicas do projeto, music-player
-"""
-
 from . import utils
 from music_player import settings
 from django.shortcuts import render
@@ -100,7 +96,6 @@ def musicas(request, id):
         'musics': utils.get_all_musics(album_id=id),
         'album': utils.get_albuns(album_id=id)
     }
-    print(context)
     return render(request, 'core/musicas.html', context)
 
 

@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Music
+
+
+class MusicAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Music, MusicAdmin)

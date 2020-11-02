@@ -1,9 +1,5 @@
-from django.shortcuts import render
-from music_player import settings
 from django.shortcuts import render, redirect
-from django.views.decorators.http import etag
 from django.contrib.auth import login, authenticate
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
 from . import forms

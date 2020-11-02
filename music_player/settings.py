@@ -14,6 +14,8 @@ AUTH_USER_MODEL = 'user.User'
 
 LOGIN_REDIRECT_URL = 'home'
 
+APPEND_SLASH = False
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,7 +33,7 @@ INSTALLED_APPS = [
     'album',
     'band',
     'music',
-    'music_player.api',
+    'api',
 ]
 
 

@@ -25,18 +25,18 @@ def change_music_type(sender, instance, **kwargs):
 @receiver(post_save, sender=Music)
 def get_duration(sender, instance, **kwargs):
     try:
-        file = eyed3.load(instance.arquivo.path)
-        file.initTag()
+        music_file = eyed3.load(instance.file.path)
+        music_file.initTag()
     except AttributeError:
         print('Cant write file metadata!')
     else:
-        file.tag._se = None
-        file.tag.album = str(instance.album)
-        file.tag.artist = str(instance.album.band.name)
-        file.tag.genre = str(instance.album.band.genre)
-        file.tag.title = str(instance.name)
-        file.tag.track_num = str(instance.order)
-        file.tag.save()
+        music_file.tag._se = None
+        music_file.tag.album = str(instance.album)
+        music_file.tag.artist = str(instance.album.band.name)
+        music_file.tag.genre = str(instance.album.band.genre)
+        music_file.tag.title = str(instance.name)
+        music_file.tag.track_num = str(instance.order)
+        music_file.tag.save()
 
     if instance.file_type == 'audio/mpeg':
         duration = timedelta(seconds=MP3(instance.file.path).info.length)

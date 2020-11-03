@@ -2,7 +2,6 @@
 import json
 
 from django.db import IntegrityError
-from django.core.files.base import ContentFile
 
 from rest_framework import viewsets
 from rest_framework.response import Response

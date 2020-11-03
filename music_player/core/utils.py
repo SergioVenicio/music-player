@@ -1,4 +1,3 @@
-import base64
 from django.core.paginator import Paginator, EmptyPage
 
 from music_player import settings

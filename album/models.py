@@ -15,7 +15,7 @@ def upload_cover_image(instance, filename):
     raw_name = ''.join([
         instance.name,
         instance.band.name,
-        instance.release_date,
+        str(instance.release_date),
         file_name
     ])
 

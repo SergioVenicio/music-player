@@ -3,11 +3,10 @@ language: python
 python:
   - 3.6
 
-services:
-  postgresql
+services: postgresql
 
 addons:
-  postgresql: '9.5'
+  postgresql: "12.4"
 
 install:
   - pip install -q -r requirements-dev.txt codecov
@@ -17,7 +16,7 @@ before_script:
 
 script:
   - flake8
-  - pytest music_player --nomigrations --cov=music_player
+  - pytest music_player --nomigrations --cov
 
 after_success:
   - codecov

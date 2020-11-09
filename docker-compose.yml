@@ -1,6 +1,26 @@
-version: "3.7"
+version: "3.3"
 
 services:
+  web:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    depends_on:
+      - db
+    links:
+      - db
+    restart: always
+    environment:
+      - DEBUG=${DEBUG}
+      - POSTGRES_DB=${PSQL_DB}
+      - POSTGRES_USER=${PSQL_USER}
+      - POSTGRES_PASSWORD=${PSQL_PWD}
+    env_file:
+      - .env
   db:
     image: postgres:latest
     environment:

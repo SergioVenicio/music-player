@@ -48,4 +48,4 @@ class Album(models.Model):
 
     class Meta:
         db_table = 'album'
-        ordering = ('name', 'band', 'release_date',)
+        ordering = ('release_date', 'band', 'name')

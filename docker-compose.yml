@@ -27,7 +27,7 @@ services:
       - 8000:8000
     depends_on:
       - db
-    command: gunicorn -w 2 music_player.wsgi:application -b 0.0.0.0:8000
+    command: gunicorn -w 1 music_player.wsgi:application -b 0.0.0.0:8000
     restart: always
   db:
     image: postgres:latest

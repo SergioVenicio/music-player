@@ -5,24 +5,34 @@ services:
     build: .
     volumes:
       - .:/code
-    ports:
-      - 8000:8000
-    expose:
-      - 8000
-    depends_on:
-      - db
-    links:
-      - db
-    restart: always
+      - static_data:/var/www/music_player/static
+      - media_data:/var/www/music_player/media
+    env_file:
+      - ./.env
     environment:
       - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - AWS_ACCESS_KEY_ID=={AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY_ID={AWS_SECRET_ACCESS_KEY_ID}
+      - AWS_STORAGE_BUCKET_NAME={AWS_STORAGE_BUCKET_NAME}
+      - POSTGRES_HOST=${PSQL_HOST}
       - POSTGRES_DB=${PSQL_DB}
       - POSTGRES_USER=${PSQL_USER}
       - POSTGRES_PASSWORD=${PSQL_PWD}
-    env_file:
-      - .env
+    links:
+      - db
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    command: gunicorn -w 2 music_player.wsgi:application -b 0.0.0.0:8000
+    restart: always
   db:
     image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=${PSQL_DB}
       - POSTGRES_USER=${PSQL_USER}
@@ -32,3 +42,19 @@ services:
     expose:
       - 5432
     restart: always
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_data:/var/www/music_player/static
+      - media_data:/var/www/music_player/media
+    expose:
+      - 80
+    ports:
+      - 80:80
+    restart: always
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:

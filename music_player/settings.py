@@ -137,7 +137,11 @@ if DEBUG:
         os.path.join(BASE_DIR, 'static'),
     ]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = '/var/www/music_player/static'
+    MEDIA_ROOT = '/var/www/music_player/media'
+    STATICFILES_DIRS = [
+        '/var/www/music_player/static',
+    ]
 
 # Corsheaders
 CORS_ORIGIN_ALLOW_ALL = True

@@ -1,10 +1,7 @@
 #!/bin/bash
 
-cd code
-
 echo "Set up database"
-python manage.py makemigrations
-python manage.py migrate
+python manage.py makemigrations --noinput
+python manage.py migrate --noinput
 
-echo "Running server"
-python manage.py runserver 0.0.0.0:8000
+exec "$@"

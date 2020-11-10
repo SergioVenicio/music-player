@@ -1,11 +1,20 @@
 FROM python:3.9-alpine
+
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
+ENV PYTHONDONTWRITEBYTECODE 1
+
 WORKDIR /code
-RUN apk update \
-    && apk add \
-    build-base postgresql-dev gcc zlib-dev jpeg-dev
+
+RUN mkdir -p /var/www/music_player/static && mkdir -p /var/www/music_player/media \
+    && apk update && apk add build-base postgresql-dev gcc zlib-dev jpeg-dev
+
 COPY . /code/
-RUN chmod +x /code/entrypoint.sh
-RUN pip install --upgrade pip && pip install -r requirements.txt
-ENTRYPOINT ["sh", "/code/entrypoint.sh"]
+COPY ./static/ /var/www/music_player/static/
+COPY ./media/ /var/www/music_player/media/
+
+RUN chmod +x /code/entrypoint.sh && pip install --upgrade pip \
+    && pip install -r requirements.txt
+
+RUN addgroup -S app && adduser -S app -G app && chown -R app:app /code \ 
+    && chown -R app:app /var/www/music_player/
+

@@ -61,7 +61,6 @@ $(document).ready( function (){
     },
     success: function(data) {
       liked_songs = data['results'].map(({music}) => music.id);
-      console.log(liked_songs)
     }
   }).then(() => {
     $.ajax({

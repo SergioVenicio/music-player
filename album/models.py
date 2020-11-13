@@ -40,6 +40,15 @@ class Album(models.Model):
         upload_to=upload_cover_image
     )
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'band': self.band.to_dict(),
+            'release_date': self.release_date,
+            'cover_image': str(self.cover_image)
+        }
+
     def __str__(self):
         return self.name
 

@@ -43,6 +43,13 @@ class Genre(models.Model):
         blank=True
     )
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'description': self.description,
+            'genre_image': str(self.genre_image)
+        }
+
     def __str__(self):
         return self.description
 
@@ -60,6 +67,14 @@ class Band(models.Model):
     band_image = models.ImageField(
         ('Band'), upload_to=upload_band_image, blank=True
     )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'genre': self.genre.to_dict(),
+            'band_image': str(self.band_image)
+        }
 
     def __str__(self):
         return self.name

@@ -23,8 +23,6 @@ services:
       - db
     expose:
       - 8000
-    ports:
-      - 8000:8000
     depends_on:
       - db
     command: gunicorn -w 1 music_player.wsgi:application -b 0.0.0.0:8000
@@ -37,11 +35,17 @@ services:
       - POSTGRES_DB=${PSQL_DB}
       - POSTGRES_USER=${PSQL_USER}
       - POSTGRES_PASSWORD=${PSQL_PWD}
-    ports:
-      - 5432:5432
     expose:
       - 5432
     restart: always
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server --requirepass ${REDIS_PWD}
+    expose:
+      - 6379
+    volumes:
+      - redis_data:/var/lib/redis
 
   nginx:
     build: ./nginx
@@ -58,3 +62,4 @@ volumes:
   postgres_data:
   static_data:
   media_data:
+  redis_data:

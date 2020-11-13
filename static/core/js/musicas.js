@@ -60,7 +60,7 @@ $(document).ready( function (){
       'user_id': usuario_id
     },
     success: function(data) {
-      liked_songs = data.map(({music}) => music.id);
+      liked_songs = data['results'].map(({music}) => music.id);
       console.log(liked_songs)
     }
   }).then(() => {
@@ -71,8 +71,8 @@ $(document).ready( function (){
         album_id
       },
       success: function (data) {
-        response_musicas = data;
-        for(var i = 0; i < data.length; i++) {
+        response_musicas = data['results'];
+        for(var i = 0; i < response_musicas.length; i++) {
             playlist.push({
               'src': response_musicas[i].file,
               'desc': response_musicas[i].name

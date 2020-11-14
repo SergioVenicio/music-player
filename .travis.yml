@@ -13,7 +13,7 @@ before_script:
 
 script:
   - flake8
-  - pytest music_player --nomigrations --cov
+  - pytest --nomigrations --cov
 
 after_success:
   - codecov

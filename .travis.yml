@@ -5,9 +5,6 @@ python:
 
 services: postgresql
 
-addons:
-  postgresql: "12.4"
-
 install:
   - pip install -q -r requirements-dev.txt codecov
 

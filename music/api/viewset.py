@@ -6,6 +6,7 @@ from ..models import Music
 from .serializer import MusicSerializer, MusicSerializerList
 
 from shared.file.services.FileDecoder import FileDecoder
+from shared.redis.RedisService import RedisService
 
 
 class MusicViewSet(viewsets.ModelViewSet):
@@ -13,15 +14,35 @@ class MusicViewSet(viewsets.ModelViewSet):
     serializer_class = MusicSerializer
     http_method_names = ['get', 'post']
 
+    cache = RedisService()
+
     def get_queryset(self):
+        cache_key = 'musics'
         self.serializer_class = MusicSerializerList
         album_id = self.request.query_params.get('album_id')
 
-        queryset = Music.objects.all()
-        if album_id is None:
-            return queryset
+        if album_id is not None:
+            cache_key = f'musics@{album_id}'
 
-        return queryset.filter(album_id=album_id)
+        queryset = self.cache.get(cache_key)
+        if queryset is None:
+            if album_id is None:
+                queryset = Music.objects.all()
+            else:
+                queryset = Music.objects.filter(
+                    album_id=album_id
+                )
+
+            self.cache.set(
+                cache_key,
+                value=[
+                    music.to_dict()
+                    for music in queryset
+                ]
+            )
+
+
+        return queryset
 
     def create(self, request, *args, **kwargs):
         file_decoder = FileDecoder()

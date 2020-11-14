@@ -31,6 +31,17 @@ class Music(models.Model):
     file_type = models.CharField(max_length=10, blank=True)
     duration = models.DurationField(blank=True, null=True)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'album': self.album.to_dict(),
+            'order': self.order,
+            'file': str(self.file_type),
+            'file_type': self.file_type,
+            'duration': str(self.duration)
+        }
+
     def __str__(self):
         return self.name
 

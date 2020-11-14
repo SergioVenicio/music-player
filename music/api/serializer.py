@@ -19,6 +19,7 @@ class MusicSerializer(serializers.HyperlinkedModelSerializer):
 
 class MusicSerializerList(serializers.HyperlinkedModelSerializer):
     album = serializers.ReadOnlyField(source='album.name')
+    duration = serializers.CharField()
 
     class Meta:
         model = Music

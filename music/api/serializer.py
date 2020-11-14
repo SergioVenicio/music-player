@@ -5,6 +5,7 @@ from ..models import Music
 
 class MusicSerializer(serializers.HyperlinkedModelSerializer):
     album = serializers.ReadOnlyField(source='album.name')
+    file = serializers.CharField()
 
     class Meta:
         model = Music
@@ -19,6 +20,7 @@ class MusicSerializer(serializers.HyperlinkedModelSerializer):
 
 class MusicSerializerList(serializers.HyperlinkedModelSerializer):
     album = serializers.ReadOnlyField(source='album.name')
+    file = serializers.CharField()
     duration = serializers.CharField()
 
     class Meta:

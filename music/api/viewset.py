@@ -17,15 +17,16 @@ class MusicViewSet(viewsets.ModelViewSet):
     cache = RedisService()
 
     def get_queryset(self):
-        cache_key = 'musics'
         self.serializer_class = MusicSerializerList
+
+        cache_key = 'musics'
         album_id = self.request.query_params.get('album_id')
 
         if album_id is not None:
             cache_key = f'musics@{album_id}'
 
-        queryset = self.cache.get(cache_key)
-        if queryset is None:
+        data = self.cache.get(cache_key)
+        if data is None:
             if album_id is None:
                 queryset = Music.objects.all()
             else:
@@ -33,16 +34,17 @@ class MusicViewSet(viewsets.ModelViewSet):
                     album_id=album_id
                 )
 
+            data = [
+                music.to_dict()
+                for music in queryset
+            ]
+
             self.cache.set(
                 cache_key,
-                value=[
-                    music.to_dict()
-                    for music in queryset
-                ]
+                data
             )
 
-
-        return queryset
+        return data
 
     def create(self, request, *args, **kwargs):
         file_decoder = FileDecoder()

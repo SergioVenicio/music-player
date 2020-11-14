@@ -37,7 +37,7 @@ class Music(models.Model):
             'name': self.name,
             'album': self.album.to_dict(),
             'order': self.order,
-            'file': str(self.file_type),
+            'file': str(self.file),
             'file_type': self.file_type,
             'duration': str(self.duration)
         }

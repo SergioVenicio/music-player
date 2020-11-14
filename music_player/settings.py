@@ -71,10 +71,10 @@ WSGI_APPLICATION = 'music_player.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('PSQL_DB'),
-        'USER': config('PSQL_USER'),
-        'PASSWORD': config('PSQL_PWD'),
-        'HOST': config('PSQL_HOST')
+        'NAME': config('PSQL_DB', ''),
+        'USER': config('PSQL_USER', ''),
+        'PASSWORD': config('PSQL_PWD', ''),
+        'HOST': config('PSQL_HOST', '')
     }
 }
 

@@ -130,3 +130,7 @@ selenium-debug.log
 .sass-cache
 .editorconfig
 .babelrc
+
+# static
+static/rest_framework
+static/admin

@@ -78,10 +78,10 @@ DATABASES = {
     }
 }
 
-REDIS_HOST = config('REDIS_HOST')
-REDIS_PORT = config('REDIS_PORT')
-REDIS_PWD = config('REDIS_PWD')
-REDIS_DB = config('REDIS_DB')
+REDIS_HOST = config('REDIS_HOST', 'localhost')
+REDIS_PORT = config('REDIS_PORT', 6379)
+REDIS_PWD = config('REDIS_PWD', '')
+REDIS_DB = config('REDIS_DB', 0)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

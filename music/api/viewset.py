@@ -25,6 +25,7 @@ class MusicViewSet(viewsets.ModelViewSet):
         if album_id is not None:
             cache_key = f'musics@{album_id}'
 
+        self.cache.unset(cache_key)
         data = self.cache.get(cache_key)
         if data is None:
             if album_id is None:

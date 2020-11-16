@@ -71,6 +71,7 @@ $(document).ready( function (){
       },
       success: function (data) {
         response_musicas = data['results'];
+        console.log(response_musicas);
         for(var i = 0; i < response_musicas.length; i++) {
             playlist.push({
               'src': response_musicas[i].file,

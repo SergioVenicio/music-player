@@ -10,6 +10,7 @@ media/musics/*
 media/images/usuarios/*
 .vscode
 .idea/
+.vim/
 .pytest_cache/
 
 *music_player/core/migrations/*
@@ -134,3 +135,5 @@ selenium-debug.log
 # static
 static/rest_framework
 static/admin
+media/images/
+media/musics/

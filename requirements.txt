@@ -6,7 +6,7 @@ django-rest-auth==0.9.5
 eyeD3==0.9.5
 mutagen==1.42.0
 pathlib==1.0.1
-Pillow==8.0.0
+Pillow==8.0.1
 python-magic==0.4.18
 pytz==2020.4
 six==1.14.0

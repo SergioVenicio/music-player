@@ -3,11 +3,21 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
 
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+    TokenVerifyView
+)
+
+from music_player.core.jwToken.jwtViewSet import UserTokenView
+
 
 from api.urls import api_router
 
 
 urlpatterns = [
+    path('api/v1/token', UserTokenView.as_view()),
+    path('api/v1/token/refresh', TokenRefreshView.as_view()),
+    path('api/v1/token/verify', TokenVerifyView.as_view()),
     path('api/v1/', include(api_router.urls)),
     path('', include('music_player.core.urls')),
     path('admin/', admin.site.urls),

@@ -10,7 +10,7 @@ interface SignInCredentials {
 }
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
   avatar: string;
@@ -45,7 +45,7 @@ const AuthContextProviver: React.FC = ({ children }) => {
 
   const signIn = useCallback(
     async ({ email, password }: SignInCredentials): Promise<void> => {
-      const { data } = await api.post("/api/v1/auth/login/", {
+      const { data } = await api.post("/api/v1/token", {
         email,
         password,
       });

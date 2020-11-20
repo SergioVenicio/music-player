@@ -59,6 +59,14 @@ class BandViewSet(viewsets.ModelViewSet):
     serializer_class = BandSerializer
     http_method_names = ['get', 'post']
 
+    def get_queryset(self):
+        genre_id = self.request.query_params.get('genre_id')
+
+        if genre_id is None:
+            return self.queryset
+        return self.queryset.filter(genre_id=genre_id)
+
+
     def create(self, request, *args, **kwargs):
         file_decoder = FileDecoder()
 

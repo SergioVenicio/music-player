@@ -11,6 +11,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class BandSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
     genre = serializers.ReadOnlyField(source='genre.description')
 
     class Meta:

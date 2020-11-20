@@ -22,45 +22,48 @@ class AlbumViewSet(viewsets.ModelViewSet):
     cache = RedisService()
 
     def get_queryset(self):
-        cache_key = f'albuns'
+        cache_key = 'albuns'
+
+        band_id = self.request.query_params.get('band_id')
+        if band_id:
+            cache_key = f'albuns@{band_id}'
+
         data = self.cache.get(cache_key)
         if not data:
+            queryset = self.queryset
+            if band_id:
+                queryset = queryset.filter(
+                    band_id=band_id
+                )
             data = [
                 album.to_dict()
-                for album in self.queryset.all()
+                for album in queryset.all()
             ]
+            print(data)
             self.cache.set(cache_key, data)
 
         return data
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.paginate_queryset(
-            self.filter_queryset(
-                self.get_queryset()
-            )
-        )
-        return self.get_paginated_response(data=queryset)
-
     def retrieve(self, request, pk=None, *args, **kwargs):
         cache_key = f'album@{pk}'
-        response_data = self.cache.get(cache_key)
+        cache_data = self.cache.get(cache_key)
+        if cache_data:
+            return Response(cache_data)
 
-        if not response_data:
-            db_data = get_object_or_404(
-                self.get_queryset(),
-                pk=pk
-            )
+        db_data = get_object_or_404(
+            self.get_queryset(),
+            pk=pk
+        )
 
-            serializer = self.serializer_class(
-                db_data,
-                context={'request': request}
-            )
-            response_data = serializer.data
-            self.cache.set(
-                cache_key,
-                value=response_data
-            )
-
+        serializer = self.serializer_class(
+            db_data,
+            context={'request': request}
+        )
+        response_data = serializer.data
+        self.cache.set(
+            cache_key,
+            value=response_data
+        )
         return Response(data=response_data)
 
     def create(self, request, *args, **kwargs):

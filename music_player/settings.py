@@ -1,4 +1,6 @@
 import os
+from datetime import timedelta
+
 from decouple import config
 from django.utils.crypto import get_random_string
 
@@ -81,6 +83,11 @@ REDIS_HOST = config('REDIS_HOST', 'localhost')
 REDIS_PORT = config('REDIS_PORT', 6379)
 REDIS_PWD = config('REDIS_PWD', '')
 REDIS_DB = config('REDIS_DB', 0)
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2)
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

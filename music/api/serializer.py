@@ -3,9 +3,16 @@ from rest_framework import serializers
 from ..models import Music
 
 
-class MusicSerializer(serializers.HyperlinkedModelSerializer):
+class BaseMusicSerializer(serializers.HyperlinkedModelSerializer):
+    def get_file(self, music):
+        context = self.context.get('request')
+        file_path = music['file']
+        return context.build_absolute_uri(file_path)
+
+
+class MusicSerializer(BaseMusicSerializer):
     album = serializers.ReadOnlyField(source='album.name')
-    file = serializers.CharField()
+    file = serializers.SerializerMethodField()
 
     class Meta:
         model = Music
@@ -18,7 +25,7 @@ class MusicSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class MusicSerializerList(serializers.HyperlinkedModelSerializer):
+class MusicSerializerList(BaseMusicSerializer):
     album = serializers.ReadOnlyField(source='album.name')
     file = serializers.CharField()
     duration = serializers.CharField()

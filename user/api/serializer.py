@@ -20,4 +20,8 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = Like
-        fields = ('__all__')
+        fields = (
+            'id',
+            'user_id',
+            'music_id'
+        )

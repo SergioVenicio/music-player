@@ -13,8 +13,8 @@ COPY ./static/ /var/www/music_player/static/
 COPY ./media/ /var/www/music_player/media/
 
 RUN chmod +x /code/entrypoint.sh && pip install --upgrade pip \
-    && pip install -r requirements.txt
-
-RUN addgroup -S app && adduser -S app -G app && chown -R app:app /code \ 
+    && pip install -r requirements.txt \
+    && addgroup -S app && adduser -S app -G app \
+    && chown -R app:app /code \ 
     && chown -R app:app /var/www/music_player/
 

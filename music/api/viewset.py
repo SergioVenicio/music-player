@@ -17,8 +17,6 @@ class MusicViewSet(viewsets.ModelViewSet):
     cache = RedisService()
 
     def get_queryset(self):
-        self.serializer_class = MusicSerializerList
-
         cache_key = 'musics'
         album_id = self.request.query_params.get('album_id')
 

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
+import useAuthContext from '../../contexts/AuthContext';
 import usePlayerContext from '../../contexts/PlayerContext';
 
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -20,6 +21,7 @@ interface Album {
 interface PlayerProps {}
 
 const Player: React.FC<PlayerProps> = () => {
+    const { user } = useAuthContext();
     const { album, musics, favorites } = usePlayerContext(); 
     const [currentMusic, setCurrentMusic] = useState<IMusic>();
     const [isFavorite, setIsFavorite] = useState(false);
@@ -39,20 +41,24 @@ const Player: React.FC<PlayerProps> = () => {
         setCurrentMusic(firstMusic[0]);
     }, [musics])
 
-    return (
-        <Container>
-            <AlbumImage>
-                <img src={album.cover_image} alt={album.name} />
-            </AlbumImage>
-            <AlbumInfo>
-                <h5>{album.name}</h5> 
-                <Favorite isFavorite={isFavorite}>
-                    {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                </Favorite>
-                {currentMusic && <p>{currentMusic.name}</p>}
-            </AlbumInfo>    
-        </ Container>
-    );
+    const renderContainer = () => {
+        return !!user && currentMusic ? (
+            <Container>
+                <AlbumImage>
+                    <img src={album.cover_image} alt={album.name} />
+                </AlbumImage>
+                <AlbumInfo>
+                    <h5>{album.name}</h5> 
+                    <Favorite isFavorite={isFavorite}>
+                        {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                    </Favorite>
+                    {currentMusic && <p>{currentMusic.name}</p>}
+                </AlbumInfo>    
+            </ Container>
+        ): null;
+    }
+
+    return renderContainer()
 }
 
 export default Player;

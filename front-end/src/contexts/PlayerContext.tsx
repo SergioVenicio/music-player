@@ -74,6 +74,9 @@ const PlayerContextProvider: React.FC = ({ children }) => {
     }, [getMusics]);
 
     useEffect(() => {
+        if (!user) {
+            return;
+        }
         api.get('/api/v1/likes', { params: { user_id: user.id }}).then(({ data }) => {
             setFavorites(() => {
                 return data.results.map((like: ILike) => like) as ILike[];

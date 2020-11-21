@@ -14,6 +14,7 @@ export const Content = styled.header`
   background-color: #343a40;
 
   > img {
+    cursor: pointer;
     margin-left: 0.5em;
     height: 5em;
   }

@@ -29,6 +29,8 @@ interface PlayerContextState {
 
 interface ILike {
     id: number;
+    user_id: number;
+    music_id: number;
 }
 
 const PlayerContext = createContext<PlayerContextState>({} as PlayerContextState);

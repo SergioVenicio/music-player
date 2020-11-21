@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { FaRegPaperPlane, FaUserPlus } from 'react-icons/fa';
 
 import useAuthContext from "../../contexts/AuthContext";
 
 import Logo from '../../components/Logo';
 import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 import { Container, Form, FormWrapper, FormHeader, FormButtons } from './styles'
 
@@ -51,7 +53,16 @@ const SignIn: React.FC = () =>{
                     />
                 </Form>
                 <FormButtons>
-                    <button onClick={handleSign}>Cad</button>
+                    <Button
+                        onClick={handleSign}
+                    >
+                        <FaRegPaperPlane />
+                    </Button>
+                    <Button
+                        backgroundColor={'#4BBF73'}
+                    >
+                        <FaUserPlus />
+                    </Button>
                 </FormButtons>
             </FormWrapper>
         </Container>

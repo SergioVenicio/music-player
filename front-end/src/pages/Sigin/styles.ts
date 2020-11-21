@@ -60,10 +60,13 @@ export const Form = styled.form`
 
 export const FormButtons = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   border-top: 1px solid rgba(0,0,0,0.1);
   padding-top: 1rem;
   padding-bottom: 1rem;
+
+  & button {
+    margin-left: 0.5rem;
+  }
 `

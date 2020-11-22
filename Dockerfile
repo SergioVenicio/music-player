@@ -9,7 +9,6 @@ RUN mkdir -p /var/www/music_player/static && mkdir -p /var/www/music_player/medi
     && apk update && apk add build-base postgresql-dev gcc zlib-dev jpeg-dev
 
 COPY . /code/
-COPY ./static/ /var/www/music_player/static/
 COPY ./media/ /var/www/music_player/media/
 
 RUN chmod +x /code/entrypoint.sh && pip install --upgrade pip \

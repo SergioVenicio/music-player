@@ -38,11 +38,7 @@ interface IMusic {
     file: string;
     file_type: string;
 }
-interface Album {
-    name: string;
-    released_date: string;
-    cover_image: string;
-}
+
 interface PlayerProps {}
 
 const Player: React.FC<PlayerProps> = () => {
@@ -59,10 +55,7 @@ const Player: React.FC<PlayerProps> = () => {
 
     const handleNext = useCallback(() => {
         const musicOrder = musics.filter((music) => {
-            if (currentMusic === undefined) {
-                return;
-            }
-            return music.order === currentMusic.order + 1 ? music: false
+            return music.order === (currentMusic as IMusic).order + 1 ? music: false
         })
 
         if (musicOrder[0].id !== currentMusic?.id) {
@@ -72,10 +65,7 @@ const Player: React.FC<PlayerProps> = () => {
 
     const handlePreview = useCallback(() => {
         const musicOrder = musics.filter((music) => {
-            if (currentMusic === undefined) {
-                return;
-            }
-            return music.order === currentMusic.order - 1 ? music: false
+            return music.order === (currentMusic as IMusic).order - 1 ? music: false
         })
 
         if (musicOrder[0].id !== currentMusic?.id) {

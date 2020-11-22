@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from ..models import Music
-from .serializer import MusicSerializer, MusicSerializerList
+from .serializer import MusicSerializer
 
 from shared.file.services.FileDecoder import FileDecoder
 from shared.redis.RedisService import RedisService

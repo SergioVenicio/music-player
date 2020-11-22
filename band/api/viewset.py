@@ -66,7 +66,6 @@ class BandViewSet(viewsets.ModelViewSet):
             return self.queryset
         return self.queryset.filter(genre_id=genre_id)
 
-
     def create(self, request, *args, **kwargs):
         file_decoder = FileDecoder()
 

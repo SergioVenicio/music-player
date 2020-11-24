@@ -2,7 +2,7 @@ import os
 
 class LocalStorage:
     def __init__(self, hash_service):
-        self.hash_service = hash_service()
+        self.hash_service = hash_service
 
     def _clean_file_type(self, _type):
         return _type.replace('.', '').replace(',', '').replace(';', '')

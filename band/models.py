@@ -2,11 +2,17 @@ import os
 
 from django.db import models
 
+from dependency_injector.wiring import inject, Provide
+from music_player.containers import Container
 from shared.file.services.LocalStorage import LocalStorage
 
 
-def upload_band_image(instance, filename):
-    storage = LocalStorage()
+@inject
+def upload_band_image(
+    instance,
+    filename,
+    storage: LocalStorage = Provide[Container.file_service]
+):
 
     file_name, file_type = os.path.splitext(filename)
 
@@ -19,8 +25,12 @@ def upload_band_image(instance, filename):
     return storage.execute('images/bands', raw_name, file_type)
 
 
-def upload_genre_image(instance, filename):
-    storage = LocalStorage()
+@inject
+def upload_genre_image(
+    instance,
+    filename,
+    storage: LocalStorage = Provide[Container.file_service]
+):
 
     file_name, file_type = os.path.splitext(filename)
 

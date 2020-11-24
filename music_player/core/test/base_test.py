@@ -5,9 +5,14 @@ from rest_framework.test import APIClient
 
 from user.models import User
 
+from music_player.containers import Container
+from music_player import settings
+
 
 class BaseTest(TestCase):
     def setUp(self):
+        container = Container()
+        container.config.from_dict(settings.__dict__)
         self.user = User(
             email='test@test.com',
             name='test',

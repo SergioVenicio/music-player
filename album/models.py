@@ -4,11 +4,17 @@ from django.db import models
 
 from band.models import Band
 
+from dependency_injector.wiring import inject, Provide
+from music_player.containers import Container
+from shared.file.services.LocalStorage import LocalStorage
 
-def upload_cover_image(instance, filename):
-    from shared.file.services.LocalStorage import LocalStorage
 
-    storage = LocalStorage()
+@inject
+def upload_cover_image(
+    instance,
+    filename,
+    storage: LocalStorage = Provide[Container.file_service]
+):
 
     file_name, file_type = os.path.splitext(filename)
 

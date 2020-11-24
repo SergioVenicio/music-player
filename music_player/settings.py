@@ -14,6 +14,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', ['*'])
 AUTH_USER_MODEL = 'user.User'
 
+
 LOGIN_REDIRECT_URL = 'home'
 
 APPEND_SLASH = False

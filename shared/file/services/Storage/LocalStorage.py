@@ -1,5 +1,6 @@
 import os
 
+
 class LocalStorage:
     def __init__(self, hash_service):
         self.hash_service = hash_service

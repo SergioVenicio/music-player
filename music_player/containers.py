@@ -3,7 +3,7 @@ import hashlib
 from dependency_injector import containers, providers
 
 from shared.hash.services.MD5 import MD5
-from shared.redis.RedisService import RedisService
+from shared.cache.services.RedisService import RedisService
 from shared.file.services.FileDecoder import FileDecoder
 from shared.file.services.LocalStorage import LocalStorage
 

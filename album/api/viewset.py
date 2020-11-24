@@ -11,7 +11,7 @@ from .serializer import AlbumSerializer
 from dependency_injector.wiring import inject, Provide
 from music_player.containers import Container
 from shared.file.services.FileDecoder import FileDecoder
-from shared.redis.RedisService import RedisService
+from shared.cache.services.CacheService import CacheService
 
 
 class AlbumViewSet(viewsets.ModelViewSet):
@@ -22,7 +22,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     @inject
     def get_queryset(
         self,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = 'albuns'
 
@@ -52,7 +52,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
         self,
         request,
         pk=None,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = f'album@{pk}'
         cache_data = cache.get(cache_key)
@@ -82,7 +82,7 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        cache: RedisService = Provide[Container.cache_service],
+        cache: CacheService = Provide[Container.cache_service],
         file_decoder: FileDecoder = Provide[Container.file_decoder_service]
     ):
         name = request.data.get('name', None)

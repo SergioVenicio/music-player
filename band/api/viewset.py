@@ -12,7 +12,7 @@ from .serializer import BandSerializer, GenreSerializer
 
 from dependency_injector.wiring import inject, Provide
 from music_player.containers import Container
-from shared.redis.RedisService import RedisService
+from shared.cache.services.CacheService import CacheService
 from shared.file.services.FileDecoder import FileDecoder
 
 
@@ -24,7 +24,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     @inject
     def get_queryset(
         self,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = 'genres'
         data = cache.get(cache_key)
@@ -85,7 +85,7 @@ class BandViewSet(viewsets.ModelViewSet):
     @inject
     def get_queryset(
         self,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = 'bands'
         genre_id = self.request.query_params.get('genre_id')
@@ -113,7 +113,7 @@ class BandViewSet(viewsets.ModelViewSet):
         self,
         request,
         pk=None,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = f'album@{pk}'
         cache.unset(cache_key)

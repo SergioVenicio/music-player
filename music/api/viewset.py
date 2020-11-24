@@ -8,8 +8,8 @@ from .serializer import MusicSerializer
 from dependency_injector.wiring import inject, Provide
 
 from music_player.containers import Container
-from shared.redis.RedisService import RedisService
 from shared.file.services.FileDecoder import FileDecoder
+from shared.cache.services.CacheService import CacheService
 
 
 class MusicViewSet(viewsets.ModelViewSet):
@@ -20,7 +20,7 @@ class MusicViewSet(viewsets.ModelViewSet):
     @inject
     def get_queryset(
         self,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = 'musics'
         album_id = self.request.query_params.get('album_id')
@@ -54,7 +54,7 @@ class MusicViewSet(viewsets.ModelViewSet):
         self,
         request,
         pk=None,
-        cache: RedisService = Provide[Container.cache_service]
+        cache: CacheService = Provide[Container.cache_service]
     ):
         cache_key = f'music@{pk}'
         cache_data = cache.get(cache_key)

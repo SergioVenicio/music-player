@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import useAuthContext from '../../contexts/AuthContext';
 import usePlayerContext from '../../contexts/PlayerContext';
 
 import api from '../../services/api';
@@ -25,6 +26,8 @@ const Albums: React.FC = () => {
     const { band_id } = useParams<IUrlParams>();
     const { setPlayerAlbum } = usePlayerContext();
 
+    const { signOut } = useAuthContext();
+
     const handleChoiceAlbum = (album: IAlbum) => {
         setPlayerAlbum(album);
     }
@@ -45,8 +48,13 @@ const Albums: React.FC = () => {
                     }
                 }) as IAlbum[]
             });
+        }).catch((error) => {
+            if (error.response.status === 401) {
+                signOut();
+            }
+            console.error(error);
         });
-    }, [band_id]);
+    }, [band_id, signOut]);
 
     const showCards = () => {
         return albums && albums.map(album => {

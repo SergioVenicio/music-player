@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import api from '../../services/api';
+import useAuthContext from '../../contexts/AuthContext';
 
 import Card from '../../components/Card';
 
@@ -21,7 +22,9 @@ const Bands: React.FC = () => {
     const [bands, setBands] = useState<IBand[]>();
     const { genre_id } = useParams<IUrlParams>();
 
+    const { signOut } = useAuthContext();
     const history = useHistory();
+
     const navigateToAlbumPage = (band_id: number) => {
         history.push(`/albums/${band_id}`);
     }
@@ -42,8 +45,13 @@ const Bands: React.FC = () => {
                     }
                 }) as IBand[]
             });
+        }).catch((error) => {
+            if (error.response.status === 401) {
+                signOut();
+            }
+            console.error(error);
         });
-    }, [genre_id]);
+    }, [genre_id, signOut]);
 
     const showCards = () => {
         return bands && bands.map(band => {

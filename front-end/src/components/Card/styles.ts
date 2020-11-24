@@ -12,7 +12,7 @@ export const Container = styled.div`
     }
 
     & img {
-        width: 325px;
+        width: 300px;
         max-height: 10.5rem;
     }
 `;

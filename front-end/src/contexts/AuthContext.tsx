@@ -1,4 +1,9 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useState
+} from "react";
 
 import jwt_decode from "jwt-decode";
 
@@ -15,6 +20,12 @@ interface User {
   email: string;
   avatar: string;
 }
+
+interface JWToken {
+  user_id: number;
+  user: User
+}
+
 interface AuthContextState {
   user: User;
   signIn({ email, password }: SignInCredentials): Promise<void>;
@@ -51,17 +62,22 @@ const AuthContextProviver: React.FC = ({ children }) => {
       });
 
       const { access } = data;
-
-      const user = jwt_decode(access) as User;
-
-      setData({
-        user,
-        token: access,
-      });
+      const { user_id, user }  = jwt_decode(access) as JWToken;
 
       api.defaults.headers.authorization = `Bearer ${access}`;
       localStorage.setItem("@MUSIC_PLAYER:token", access);
-      localStorage.setItem("@MUSIC_PLAYER:user", JSON.stringify(user));
+      localStorage.setItem("@MUSIC_PLAYER:user", JSON.stringify({
+        ...user,
+        id: user_id
+      }));
+
+      setData({
+        user: {          
+          ...user,
+          id: user_id,
+        } as User,
+        token: access,
+      });
     },
     []
   );

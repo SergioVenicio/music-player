@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
+import useAuthContext from '../../contexts/AuthContext';
 
 import Card from '../../components/Card';
 
@@ -16,7 +17,9 @@ interface IGenre {
 const Genres: React.FC = () => {
     const [genres, setGenres] = useState<IGenre[]>();
 
+    const { signOut } = useAuthContext();
     const history = useHistory();
+
     const navigateToBandPage = (genre_id: number) => {
         history.push(`/bands/${genre_id}`)
     }
@@ -30,8 +33,13 @@ const Genres: React.FC = () => {
                     }
                 }) as IGenre[]
             });
+        }).catch((error) => {
+            if (error.response.status === 401) {
+                signOut();
+            }
+            console.error(error);
         });
-    }, []);
+    }, [signOut]);
 
     const showCards = () => {
         return genres && genres.map(genre => {

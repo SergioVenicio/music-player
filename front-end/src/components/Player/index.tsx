@@ -27,7 +27,8 @@ import {
     FowardBtn,
     BackFowardBtn,
     PlayBtn,
-    VolumeBar
+    VolumeBar,
+    TimerSlider
 } from './styles';
 
 interface IMusic {
@@ -43,13 +44,20 @@ interface PlayerProps {}
 
 const Player: React.FC<PlayerProps> = () => {
     const { user } = useAuthContext();
-    const { album, musics, favorites } = usePlayerContext(); 
+    const {
+        album,
+        musics,
+        favorites,
+        addFavorite,
+        removeFavorite
+    } = usePlayerContext(); 
 
     const [currentMusic, setCurrentMusic] = useState<IMusic>();
 
     const [volume, setVolume] = useState(1.0);
     const [isFavorite, setIsFavorite] = useState(false);
     const [isPaused, setIsPause] = useState(true);
+    const [timeElapsed, setTimeElapsed] = useState(0);
 
     const playerRef = useRef<HTMLAudioElement>(null);
 
@@ -57,8 +65,9 @@ const Player: React.FC<PlayerProps> = () => {
         const musicOrder = musics.filter((music) => {
             return music.order === (currentMusic as IMusic).order + 1 ? music: false
         })
-
-        if (musicOrder[0].id !== currentMusic?.id) {
+        if (!musicOrder) {
+            setIsPause(true);
+        } else if (musicOrder[0] && musicOrder[0].id !== currentMusic?.id) {
             setCurrentMusic(musicOrder[0]);
         }
     }, [currentMusic, musics])
@@ -78,6 +87,24 @@ const Player: React.FC<PlayerProps> = () => {
         setIsPause(!isPaused)
     }
 
+    const toggleFavorite = useCallback(() => {
+        if (isFavorite) {
+            const currentFavorite = favorites.find((like) => {
+                return like.music_id === currentMusic?.id
+            });
+            currentFavorite && removeFavorite(currentFavorite.id);
+        } else {
+            currentMusic && addFavorite(currentMusic.id)
+        }
+    }, [isFavorite, currentMusic, favorites, addFavorite, removeFavorite])
+
+    const toggleTimeChange = useCallback((time: number) => {
+        if (playerRef.current) {
+            playerRef.current.currentTime = time;
+        }
+        setTimeElapsed(time);
+    }, []);
+
     useEffect(() => {
         const currentId = currentMusic?.id;
         const favoritesId = favorites?.map(({ music_id }) => music_id);
@@ -94,7 +121,7 @@ const Player: React.FC<PlayerProps> = () => {
     }, [musics])
 
     useEffect(() => {
-        if (!currentMusic) {
+        if (!currentMusic || playerRef?.current?.src === currentMusic.file) {
             return;
         }
         const player = (playerRef.current as HTMLAudioElement);
@@ -117,6 +144,15 @@ const Player: React.FC<PlayerProps> = () => {
         }
     }, [playerRef, volume])
 
+    useEffect(() => {
+        if (!playerRef.current) {
+            return;
+        }
+        playerRef.current.ontimeupdate = () => {
+            setTimeElapsed(playerRef.current?.currentTime || 0);
+        }
+    }, [playerRef.current?.src])
+
     const renderPauseBtn = () => {
         return (
             <FaRegPauseCircle size={50} onClick={togglePause} />
@@ -137,7 +173,10 @@ const Player: React.FC<PlayerProps> = () => {
                 </AlbumImage>
                 <AlbumInfo>
                     <h5>{album.name}</h5> 
-                    <Favorite isFavorite={isFavorite}>
+                    <Favorite
+                        isFavorite={isFavorite}
+                        onClick={toggleFavorite}
+                    >
                         {isFavorite ? <FaHeart /> : <FaRegHeart />}
                     </Favorite>
                     {currentMusic && <p>{currentMusic.name}</p>}
@@ -168,6 +207,15 @@ const Player: React.FC<PlayerProps> = () => {
                         onChange={(e) => setVolume(Number(e.target.value))}
                     />
                 </VolumeBar>
+
+                <TimerSlider>
+                    <input
+                        type="range"
+                        min="0" max={playerRef.current?.duration}
+                        value={timeElapsed}
+                        onChange={(e) => toggleTimeChange(Number(e.target.value))}
+                    />
+                </TimerSlider>
 
                     <audio ref={playerRef} onEnded={handleNext} />
             </ Container>

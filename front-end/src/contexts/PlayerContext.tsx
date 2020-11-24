@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState, useEffect } from 'react';
+import React, {
+    createContext,
+    useCallback,
+    useContext,
+    useState,
+    useEffect
+} from 'react';
 
 import useAuthContext from './AuthContext';
 
@@ -25,6 +31,8 @@ interface PlayerContextState {
     favorites: ILike[];
     album: IAlbum;
     setPlayerAlbum: (album: IAlbum) => Promise<void>;
+    addFavorite: (music_id: number) => Promise<void>;
+    removeFavorite: (like_id: number) => Promise<void>;
 }
 
 interface ILike {
@@ -40,7 +48,7 @@ const PlayerContextProvider: React.FC = ({ children }) => {
     const musicKey = '@MUSIC_PLAYER::PLAYER:musics';
 
     const [favorites, setFavorites] = useState<ILike[]>(() => []);
-    const { user } = useAuthContext();
+    const { user, signOut } = useAuthContext();
 
     const [musics, setMusics] = useState<IMusic[]>(() => {
         const musics = localStorage.getItem(musicKey);
@@ -62,7 +70,9 @@ const PlayerContextProvider: React.FC = ({ children }) => {
                 }
             );
             setMusics(() => {
-                const musics = data.results.map((music: IMusic) => music) as IMusic[];
+                const musics = data.results.map(
+                    (music: IMusic) => music
+                ) as IMusic[];
                 localStorage.setItem(musicKey, JSON.stringify(musics));
                 return musics;
             });
@@ -75,20 +85,71 @@ const PlayerContextProvider: React.FC = ({ children }) => {
         localStorage.setItem(albumKey, JSON.stringify(album));
     }, [getMusics]);
 
+    const getLikes = useCallback(async () => {
+        try {
+            const { data } = await api.get(
+                '/api/v1/likes', { params: { user_id: user.id }}
+            )
+            setFavorites(() => {
+                return data.results.map((like: ILike) => like) as ILike[];
+            })
+        } catch(error) {
+            if (error.response.status === 401) {
+                signOut();
+            }
+            console.error(error);
+        }
+    }, [user, signOut]);
+
+    const addFavorite = useCallback(async (music_id: number) => {
+        try {
+            await api.post(
+                '/api/v1/likes',
+                { user_id: user.id, music_id}
+            )
+            await getLikes();
+        } catch(error) {
+            if (error.response.status === 401) {
+                signOut();
+            }
+            console.error(error)
+        }
+    }, [signOut, user, getLikes]);
+
+
+    const removeFavorite = useCallback(async (like_id: number) => {
+        try {
+            await api.delete(`/api/v1/likes/${like_id}`);
+            setFavorites((favorites) => {
+                return favorites.filter((fav) => {
+                    return fav.id !== like_id ? fav : false
+                });
+            })
+        } catch(error) {
+            if (error.response.status === 401) {
+                signOut();
+            }
+            console.error(error)
+        }
+    }, [signOut]);
+
     useEffect(() => {
         if (!user) {
             return;
         }
-        api.get('/api/v1/likes', { params: { user_id: user.id }}).then(({ data }) => {
-            setFavorites(() => {
-                return data.results.map((like: ILike) => like) as ILike[];
-            })
-        });
-    }, [user, musics]);
+        getLikes();
+    }, [user, musics, signOut, getLikes]);
 
     return (
         <PlayerContext.Provider
-            value={{ musics, album, favorites, setPlayerAlbum }}
+            value={{
+                musics,
+                album,
+                favorites,
+                setPlayerAlbum,
+                addFavorite,
+                removeFavorite
+            }}
         >
                 {children}
         </PlayerContext.Provider>

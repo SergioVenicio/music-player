@@ -47,7 +47,7 @@ class Genre(models.Model):
         return {
             'id': self.id,
             'description': self.description,
-            'genre_image': str(self.genre_image)
+            'genre_image': str(self.genre_image.url)
         }
 
     def __str__(self):

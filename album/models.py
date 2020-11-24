@@ -45,7 +45,7 @@ class Album(models.Model):
             'id': self.id,
             'name': self.name,
             'band': self.band.to_dict(),
-            'release_date': self.release_date,
+            'release_date': str(self.release_date),
             'cover_image': str(self.cover_image.url)
         }
 

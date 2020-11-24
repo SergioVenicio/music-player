@@ -2,6 +2,7 @@
 import json
 
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -9,6 +10,9 @@ from rest_framework.response import Response
 from ..models import Band, Genre
 from .serializer import BandSerializer, GenreSerializer
 
+from dependency_injector.wiring import inject, Provide
+from music_player.containers import Container
+from shared.redis.RedisService import RedisService
 from shared.file.services.FileDecoder import FileDecoder
 
 
@@ -17,11 +21,30 @@ class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = GenreSerializer
     http_method_names = ['get', 'post']
 
-    def create(self, request, *args, **kwargs):
+    @inject
+    def get_queryset(
+        self,
+        cache: RedisService = Provide[Container.cache_service]
+    ):
+        cache_key = 'genres'
+        data = cache.get(cache_key)
+
+        if not data:
+            data = [
+                album.to_dict()
+                for album in self.queryset.all()
+            ]
+            cache.set(cache_key, data)
+
+        return data
+
+    def create(
+        self,
+        request,
+        file_decoder: FileDecoder = Provide[Container.file_decoder_service]
+    ):
         description = request.data['description']
         genre_image_raw = request.data['genre_image']
-
-        file_decoder = FileDecoder()
 
         if not genre_image_raw:
             return Response(data={
@@ -59,16 +82,67 @@ class BandViewSet(viewsets.ModelViewSet):
     serializer_class = BandSerializer
     http_method_names = ['get', 'post']
 
-    def get_queryset(self):
+    @inject
+    def get_queryset(
+        self,
+        cache: RedisService = Provide[Container.cache_service]
+    ):
+        cache_key = 'bands'
         genre_id = self.request.query_params.get('genre_id')
 
-        if genre_id is None:
-            return self.queryset
-        return self.queryset.filter(genre_id=genre_id)
+        if genre_id:
+            cache_key = f'bands:genre_id@{genre_id}'
 
-    def create(self, request, *args, **kwargs):
-        file_decoder = FileDecoder()
+        data = cache.get(cache_key)
+        if not data:
+            queryset = self.queryset
+            if genre_id:
+                queryset = queryset.filter(
+                    genre_id=genre_id
+                )
+            data = [
+                album.to_dict()
+                for album in queryset.all()
+            ]
+            cache.set(cache_key, data)
 
+        return data
+
+    @inject
+    def retrieve(
+        self,
+        request,
+        pk=None,
+        cache: RedisService = Provide[Container.cache_service]
+    ):
+        cache_key = f'album@{pk}'
+        cache.unset(cache_key)
+        cache_data = cache.get(cache_key)
+        if cache_data:
+            return Response(cache_data)
+
+        db_data = get_object_or_404(
+            self.get_queryset(),
+            pk=pk
+        )
+
+        serializer = self.serializer_class(
+            db_data,
+            context={'request': request}
+        )
+        response_data = serializer.data
+        cache.set(
+            cache_key,
+            value=response_data
+        )
+        return Response(data=response_data)
+
+    @inject
+    def create(
+        self,
+        request,
+        file_decoder: FileDecoder = Provide[Container.file_decoder_service]
+    ):
         name = request.data.get('name', None)
         genre_id = request.data.get('genre_id', None)
         band_image_raw = request.data.get('band_image', None)

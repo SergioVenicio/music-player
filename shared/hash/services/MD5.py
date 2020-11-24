@@ -1,8 +1,5 @@
-import hashlib
-
-
 class MD5:
-    def __init__(self, hasher=hashlib.md5):
+    def __init__(self, hasher):
         self.hasher = hasher
 
     def execute(self, text):

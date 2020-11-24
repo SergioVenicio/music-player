@@ -1,10 +1,7 @@
 import os
 
-from shared.hash.services.MD5 import MD5
-
-
 class LocalStorage:
-    def __init__(self, hash_service=MD5):
+    def __init__(self, hash_service):
         self.hash_service = hash_service()
 
     def _clean_file_type(self, _type):

@@ -5,8 +5,11 @@ from rest_framework.response import Response
 from ..models import Music
 from .serializer import MusicSerializer
 
-from shared.file.services.FileDecoder import FileDecoder
+from dependency_injector.wiring import inject, Provide
+
+from music_player.containers import Container
 from shared.redis.RedisService import RedisService
+from shared.file.services.FileDecoder import FileDecoder
 
 
 class MusicViewSet(viewsets.ModelViewSet):
@@ -14,17 +17,18 @@ class MusicViewSet(viewsets.ModelViewSet):
     serializer_class = MusicSerializer
     http_method_names = ['get', 'post']
 
-    cache = RedisService()
-
-    def get_queryset(self):
+    @inject
+    def get_queryset(
+        self,
+        cache: RedisService = Provide[Container.cache_service]
+    ):
         cache_key = 'musics'
         album_id = self.request.query_params.get('album_id')
 
         if album_id is not None:
             cache_key = f'musics@{album_id}'
 
-        self.cache.unset(cache_key)
-        data = self.cache.get(cache_key)
+        data = cache.get(cache_key)
         if data is None:
             if album_id is None:
                 queryset = Music.objects.all()
@@ -38,16 +42,50 @@ class MusicViewSet(viewsets.ModelViewSet):
                 for music in queryset
             ]
 
-            self.cache.set(
+            cache.set(
                 cache_key,
                 data
             )
 
         return data
 
-    def create(self, request, *args, **kwargs):
-        file_decoder = FileDecoder()
+    @inject
+    def retrieve(
+        self,
+        request,
+        pk=None,
+        cache: RedisService = Provide[Container.cache_service]
+    ):
+        cache_key = f'music@{pk}'
+        cache_data = cache.get(cache_key)
+        if cache_data:
+            return Response(cache_data)
 
+        def filter_id(music: dict):
+            music_id = music.get(('id'))
+            return music_id is not None and str(music_id) == str(pk)
+
+        db_data = list(filter(filter_id, self.get_queryset()))
+        if not db_data:
+            return Response(data={}, status=404)
+
+        serializer = self.serializer_class(
+            db_data[0],
+            context={'request': request}
+        )
+        response_data = serializer.data
+        cache.set(
+            cache_key,
+            value=response_data
+        )
+        return Response(data=response_data)
+
+    @inject
+    def create(
+            self,
+            request,
+            file_decoder: FileDecoder = Provide[Container.file_decoder_service],
+    ):
         name = request.data.get('name', None)
         album_id = request.data.get('album_id', None)
         ordem = request.data.get('order', None)

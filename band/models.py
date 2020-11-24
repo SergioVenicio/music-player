@@ -73,7 +73,7 @@ class Band(models.Model):
             'id': self.id,
             'name': self.name,
             'genre': self.genre.to_dict(),
-            'band_image': str(self.band_image)
+            'band_image': str(self.band_image.url)
         }
 
     def __str__(self):

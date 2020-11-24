@@ -8,8 +8,8 @@ class GenreSerializer(serializers.ModelSerializer):
     genre_image = serializers.SerializerMethodField()
 
     def get_genre_image(self, genre):
-        image_path = genre.genre_image.url
-        return f'http://localhost:8000{image_path}'
+        image_path = genre['genre_image']
+        return f'http://localhost:8000/{image_path}'
 
     class Meta:
         model = Genre
@@ -23,7 +23,23 @@ class GenreSerializer(serializers.ModelSerializer):
 class BandSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     genre = serializers.ReadOnlyField(source='genre.description')
+    band_image = serializers.SerializerMethodField()
+
+    def get_band_image(self, band):
+        image_path = band.get('band_image')
+
+        print(band)
+
+        if image_path is None:
+            return ''
+
+        return f'http://localhost:8000/{image_path}'
 
     class Meta:
         model = Band
-        fields = ('__all__')
+        fields = (
+            'id',
+            'name',
+            'genre',
+            'band_image'
+        )

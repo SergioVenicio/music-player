@@ -6,7 +6,7 @@ from album.models import Album
 
 
 def music_upload(instance, filename):
-    from shared.file.services.LocalStorage import LocalStorage
+    from shared.file.services.Storage.LocalStorage import LocalStorage
 
     album = instance.album
 

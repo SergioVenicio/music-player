@@ -6,7 +6,7 @@ from band.models import Band
 
 from dependency_injector.wiring import inject, Provide
 from music_player.containers import Container
-from shared.file.services.LocalStorage import LocalStorage
+from shared.file.services.Storage.LocalStorage import LocalStorage
 
 
 @inject

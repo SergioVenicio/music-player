@@ -24,7 +24,7 @@ class BaseTest(TestCase):
         self.user.delete()
 
     def _get_image(self):
-        from shared.file.services.FileDecoder import FileDecoder
+        from shared.file.services.FileDecoder.FileDecoder import FileDecoder
 
         file_decoder = FileDecoder()
 

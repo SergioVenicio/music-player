@@ -18,6 +18,7 @@ services:
       - POSTGRES_DB=${PSQL_DB}
       - POSTGRES_USER=${PSQL_USER}
       - POSTGRES_PASSWORD=${PSQL_PWD}
+      - DJANGO_SETTINGS_MODULE="music_player.settings"
     links:
       - db
       - redis

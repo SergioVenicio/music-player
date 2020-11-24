@@ -150,9 +150,6 @@ if DEBUG:
 else:
     STATIC_ROOT = '/var/www/music_player/static'
     MEDIA_ROOT = '/var/www/music_player/media'
-    STATICFILES_DIRS = [
-        '/var/www/music_player/static',
-    ]
 
 # Corsheaders
 CORS_ORIGIN_ALLOW_ALL = True

@@ -13,4 +13,3 @@ class BandConfig(AppConfig):
         from . import models
 
         container.wire(packages=[api], modules=[models])
-

@@ -12,8 +12,8 @@ from .serializer import BandSerializer, GenreSerializer
 
 from dependency_injector.wiring import inject, Provide
 from music_player.containers import Container
-from shared.cache.services.CacheService import CacheService
-from shared.file.services.FileDecoder import FileDecoder
+from shared.cache.services import ABCCacheService
+from shared.file.services.FileDecoder import ABCFileDecoder
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -24,7 +24,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     @inject
     def get_queryset(
         self,
-        cache: CacheService = Provide[Container.cache_service]
+        cache: ABCCacheService = Provide[Container.cache_service]
     ):
         cache_key = 'genres'
         data = cache.get(cache_key)
@@ -41,7 +41,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: FileDecoder = Provide[Container.file_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service]
     ):
         description = request.data['description']
         genre_image_raw = request.data['genre_image']
@@ -60,14 +60,14 @@ class GenreViewSet(viewsets.ModelViewSet):
                 'error': 'Invalid file type!'
             }, status=400)
 
-        genero = Genre(description=description, genre_image=decoded_image)
+        genre = Genre(description=description, genre_image=decoded_image)
         try:
-            genero.save()
+            genre.save()
             return Response(data=json.dumps({
                 'genre': {
-                    'id': genero.id,
-                    'description': genero.description,
-                    'genre_image': genero.genre_image.path
+                    'id': genre.id,
+                    'description': genre.description,
+                    'genre_image': genre.genre_image.path
                 }
             }), status=201)
         except IntegrityError:
@@ -85,7 +85,7 @@ class BandViewSet(viewsets.ModelViewSet):
     @inject
     def get_queryset(
         self,
-        cache: CacheService = Provide[Container.cache_service]
+        cache: ABCCacheService = Provide[Container.cache_service]
     ):
         cache_key = 'bands'
         genre_id = self.request.query_params.get('genre_id')
@@ -113,7 +113,7 @@ class BandViewSet(viewsets.ModelViewSet):
         self,
         request,
         pk=None,
-        cache: CacheService = Provide[Container.cache_service]
+        cache: ABCCacheService = Provide[Container.cache_service]
     ):
         cache_key = f'album@{pk}'
         cache.unset(cache_key)
@@ -141,7 +141,7 @@ class BandViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: FileDecoder = Provide[Container.file_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service]
     ):
         name = request.data.get('name', None)
         genre_id = request.data.get('genre_id', None)

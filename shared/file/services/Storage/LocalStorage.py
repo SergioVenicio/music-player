@@ -1,7 +1,9 @@
 import os
 
+from . import ABCStorage
 
-class LocalStorage:
+
+class LocalStorage(ABCStorage):
     def __init__(self, hash_service):
         self.hash_service = hash_service
 

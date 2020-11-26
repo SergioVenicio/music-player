@@ -6,14 +6,14 @@ from band.models import Band
 
 from dependency_injector.wiring import inject, Provide
 from music_player.containers import Container
-from shared.file.services.Storage.LocalStorage import LocalStorage
+from shared.file.services.Storage import ABCStorage
 
 
 @inject
 def upload_cover_image(
     instance,
     filename,
-    storage: LocalStorage = Provide[Container.file_service]
+    storage: ABCStorage = Provide[Container.file_service]
 ):
 
     file_name, file_type = os.path.splitext(filename)

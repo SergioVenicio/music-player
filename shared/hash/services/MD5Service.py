@@ -1,4 +1,4 @@
-class MD5:
+class MD5Service:
     def __init__(self, hasher):
         self.hasher = hasher
 

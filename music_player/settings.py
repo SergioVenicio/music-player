@@ -136,21 +136,18 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
 if DEBUG:
-    """
-    # Django tool bar config
-    INSTALLED_APPS.append('debug_toolbar')
-    MIDDLEWARE.insert(
-        0, 'debug_toolbar.middleware.DebugToolbarMiddleware'
-    )
-    INTERNAL_IPS = '127.0.0.1'
-    """
-
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static'),
     ]
 else:
-    STATIC_ROOT = '/var/www/music_player/static'
-    MEDIA_ROOT = '/var/www/music_player/media'
+    STATIC_ROOT = config(
+        'STATIC_ROOT',
+        '/var/www/music_player/static'
+    )
+    MEDIA_ROOT = config(
+        'MEDIA_ROOT',
+        '/var/www/music_player/media'
+    )
 
 # Corsheaders
 CORS_ORIGIN_ALLOW_ALL = True

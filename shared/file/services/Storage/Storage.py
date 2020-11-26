@@ -1,11 +1,7 @@
 from abc import ABC, abstractclassmethod
 
 
-class FileDecoder(ABC):
+class ABCStorage(ABC):
     @abstractclassmethod
-    def execute(self, raw_file, file_name):
-        raise NotImplementedError()
-
-    @abstractclassmethod
-    def analyse_file(self, raw_file):
+    def execute(self, path, file_name, file_type):
         raise NotImplementedError()

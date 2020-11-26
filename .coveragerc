@@ -1,0 +1,8 @@
+[run]
+omit =
+    tests/
+    music/migrations/*
+    album/migrations/*
+    band/migrations/*
+    user/migrations/*
+    music_player/wsgi.py

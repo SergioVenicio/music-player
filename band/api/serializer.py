@@ -28,8 +28,6 @@ class BandSerializer(serializers.HyperlinkedModelSerializer):
     def get_band_image(self, band):
         image_path = band.get('band_image')
 
-        print(band)
-
         if image_path is None:
             return ''
 

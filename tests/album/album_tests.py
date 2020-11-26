@@ -5,7 +5,7 @@ from rest_framework import status
 from band.models import Band, Genre
 from album import models
 
-from music_player.core.test.base_test import BaseTest, HttpBaseClass
+from tests.baseTests.base_test import BaseTest, HttpBaseClass
 
 
 class AlbumBaseTest(BaseTest):
@@ -22,7 +22,6 @@ class AlbumBaseTest(BaseTest):
             band_image=self._get_image()
         )
 
-        self.user.save()
         self.genre.save()
         self.band.save()
 
@@ -78,8 +77,11 @@ class TestAlbumView(AlbumBaseTest, HttpBaseClass):
         self.url = self.get_url('/api/v1/album')
 
     def test_request_get(self):
+        self.get_new_album()
         response = self.api_client.get(self.url)
+
         assert status.is_success(response.status_code)
+        assert response.json()['results'][0].get('cover_image') is not None
 
     def test_request_post(self):
         cover_image = self._get_raw_image()

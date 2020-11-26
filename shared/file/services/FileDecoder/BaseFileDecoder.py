@@ -1,7 +1,7 @@
 from abc import ABC, abstractclassmethod
 
 
-class FileDecoder(ABC):
+class ABCFileDecoder(ABC):
     @abstractclassmethod
     def execute(self, raw_file, file_name):
         raise NotImplementedError()

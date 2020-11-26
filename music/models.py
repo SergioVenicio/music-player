@@ -4,13 +4,18 @@ from django.db import models
 
 from album.models import Album
 
+from dependency_injector.wiring import inject, Provide
+from music_player.containers import Container
+from shared.file.services.Storage import ABCStorage
 
-def music_upload(instance, filename):
-    from shared.file.services.Storage.LocalStorage import LocalStorage
 
+@inject
+def music_upload(
+    instance,
+    filename,
+    storage: ABCStorage = Provide[Container.file_service]
+):
     album = instance.album
-
-    storage = LocalStorage()
     file_name, file_type = os.path.splitext(filename)
     raw_name = ''.join([
         instance.name,

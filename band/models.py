@@ -5,14 +5,15 @@ from django.db import models
 from dependency_injector.wiring import inject, Provide
 
 from music_player.containers import Container
-from shared.file.services.Storage.LocalStorage import LocalStorage
+from shared.file.services.Storage import ABCStorage
+from shared.file.services.FileDecoder import ABCFileDecoder
 
 
 @inject
 def upload_band_image(
     instance,
     filename,
-    storage: LocalStorage = Provide[Container.file_service]
+    storage: ABCStorage = Provide[Container.file_service]
 ):
 
     file_name, file_type = os.path.splitext(filename)
@@ -30,7 +31,7 @@ def upload_band_image(
 def upload_genre_image(
     instance,
     filename,
-    storage: LocalStorage = Provide[Container.file_service]
+    storage: ABCFileDecoder = Provide[Container.file_service]
 ):
 
     file_name, file_type = os.path.splitext(filename)

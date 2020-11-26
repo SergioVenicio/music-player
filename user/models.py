@@ -7,11 +7,17 @@ from .managers import UserManager
 from music.models import Music
 
 
-def upload_avatar(instance, filename):
-    from shared.file.services.LocalStorage import LocalStorage
+from dependency_injector.wiring import inject, Provide
+from music_player.containers import Container
+from shared.file.services.Storage import ABCStorage
 
-    storage = LocalStorage()
 
+@inject
+def upload_avatar(
+    instance,
+    filename,
+    storage: ABCStorage = Provide[Container.file_service]
+):
     file_name, file_type = os.path.splitext(filename)
     raw_text = ''.join([
         instance.name,

@@ -15,7 +15,7 @@ before_script:
 
 script:
   - flake8
-  - pytest --nomigrations --cov
+  - pytest --cov-config=.coveragerc --cov=. --nomigrations tests/
 
 after_success:
   - codecov

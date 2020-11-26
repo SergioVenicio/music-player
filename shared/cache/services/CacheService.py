@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class CacheService(ABC):
+class ABCCacheService(ABC):
     @abstractmethod
     def get(self, key: str):
         raise NotImplementedError()

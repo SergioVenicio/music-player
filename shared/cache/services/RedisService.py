@@ -1,5 +1,4 @@
 import json
-from logging import exception
 
 from django.conf import settings
 

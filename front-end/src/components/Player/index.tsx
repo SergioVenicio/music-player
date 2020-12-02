@@ -121,7 +121,8 @@ const Player: React.FC<PlayerProps> = () => {
     }, [musics])
 
     useEffect(() => {
-        if (!currentMusic || playerRef?.current?.src === currentMusic.file) {
+        if (!currentMusic || !playerRef.current ||
+                playerRef?.current?.src === currentMusic.file) {
             return;
         }
         const player = (playerRef.current as HTMLAudioElement);

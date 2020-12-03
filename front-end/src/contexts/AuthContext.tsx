@@ -9,6 +9,8 @@ import jwt_decode from "jwt-decode";
 
 import api from "../services/api";
 
+import useToastContext from './ToastContext';
+
 interface SignInCredentials {
   email: string;
   password: string;
@@ -39,6 +41,7 @@ interface AuthState {
   user: User;
 }
 const AuthContextProviver: React.FC = ({ children }) => {
+  const { addToast } = useToastContext();
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem("@MUSIC_PLAYER:token");
     const user = localStorage.getItem("@MUSIC_PLAYER:user");
@@ -78,8 +81,13 @@ const AuthContextProviver: React.FC = ({ children }) => {
         } as User,
         token: access,
       });
+
+      addToast({
+        title: 'Sigin success',
+        type: 'success'
+      });
     },
-    []
+    [addToast]
   );
 
   const signOut = useCallback(() => {

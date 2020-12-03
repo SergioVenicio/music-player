@@ -10,9 +10,9 @@ const Header: React.FC = () => {
 
   return (
     <Container>
-        <Content onClick={() => history.push('/')} >
-                <Logo />
-        </Content>
+      <Content onClick={() => history.push('/')} >
+        <Logo />
+      </Content>
     </Container>
   )
 }

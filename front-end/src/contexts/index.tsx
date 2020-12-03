@@ -1,14 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import { AuthContextProviver } from "./AuthContext";
-import { PlayerContextProvider } from "./PlayerContext";
+import { AuthContextProviver } from './AuthContext';
+import { ToastContextProvider } from './ToastContext';
+import { PlayerContextProvider } from './PlayerContext';
 
 const AppProvider: React.FC = ({ children }) => (
+  <ToastContextProvider>
     <AuthContextProviver>
-        <PlayerContextProvider>
-            {children}
-        </PlayerContextProvider>
+      <PlayerContextProvider>
+        {children}
+      </PlayerContextProvider>
     </AuthContextProviver>
+  </ToastContextProvider>
 );
 
 export default AppProvider;

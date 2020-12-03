@@ -115,7 +115,8 @@ const Player: React.FC<PlayerProps> = () => {
   }, [musics])
 
   useEffect(() => {
-    if (!user || !currentMusic || currentMusic.file === playerRef?.current?.src) {
+    if (!user || isPaused || !currentMusic ||
+        currentMusic.file === playerRef?.current?.src) {
       return;
     }
     addToast({
@@ -124,7 +125,7 @@ const Player: React.FC<PlayerProps> = () => {
       image: album.cover_image,
       type: 'music'
     });
-  }, [currentMusic, album, addToast, user])
+  }, [currentMusic, album, addToast, user, isPaused])
 
   useEffect(() => {
     if (!currentMusic || !playerRef.current ||

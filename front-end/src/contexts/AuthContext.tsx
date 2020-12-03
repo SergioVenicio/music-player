@@ -92,8 +92,7 @@ const AuthContextProviver: React.FC = ({ children }) => {
 
   const signOut = useCallback(() => {
     setData({} as AuthState);
-    localStorage.removeItem("@MUSIC_PLAYER:token");
-    localStorage.removeItem("@MUSIC_PLAYER:user");
+    localStorage.clear();
   }, []);
 
   const updateUser = useCallback(

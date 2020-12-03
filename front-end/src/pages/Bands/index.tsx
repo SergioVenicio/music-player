@@ -42,7 +42,7 @@ const Bands: React.FC = () => {
 				}) as IBand[]
 			});
 		}).catch((error) => {
-			if (error.response.status === 401) {
+			if (error?.response?.status === 401) {
 				signOut();
 				addToast({
 					title: 'Session Expired',

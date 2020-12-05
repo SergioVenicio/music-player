@@ -53,7 +53,7 @@ const SignIn: React.FC = () =>{
         })
       }
     }
-  }, [name, lastName, email, password, addToast]);
+  }, [name, lastName, email, password, addToast, history]);
 
 	return (
 		<Container>

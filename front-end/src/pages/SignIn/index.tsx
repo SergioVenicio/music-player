@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaRegPaperPlane, FaUserPlus } from 'react-icons/fa';
 
+import { useHistory } from 'react-router-dom';
 import useAuthContext from "../../contexts/AuthContext";
 
 import Logo from '../../components/Logo';
@@ -10,6 +11,7 @@ import Button from '../../components/Button';
 import { Container, Form, FormWrapper, FormHeader, FormButtons } from './styles'
 
 const SignIn: React.FC = () =>{
+  const history = useHistory();
 	const { signIn } = useAuthContext();
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
@@ -60,6 +62,7 @@ const SignIn: React.FC = () =>{
 						</Button>
 						<Button
 							backgroundColor={'#4BBF73'}
+              onClick={() => history.push('signup')}
 						>
 							<FaUserPlus />
 						</Button>

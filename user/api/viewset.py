@@ -1,6 +1,6 @@
 import json
 
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 
 from ..models import User, Like
@@ -10,7 +10,13 @@ from .serializer import LikeSerializer, UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+
+        return [permissions.IsAuthenticated()]
 
 
 class LikesViewSet(viewsets.ModelViewSet):

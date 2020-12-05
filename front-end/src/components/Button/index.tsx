@@ -8,7 +8,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 const Button: React.FC<ButtonProps> = ({
-    type, backgroundColor, color, children, onClick
+    type, backgroundColor, color, children, onClick, disabled
 }) => {
 	return (
 		<Container
@@ -16,6 +16,7 @@ const Button: React.FC<ButtonProps> = ({
 			backgroundColor={backgroundColor}
 			color={color}
 			onClick={onClick}
+      disabled={disabled}
 		>
 			{ children }
 		</Container>

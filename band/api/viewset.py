@@ -173,11 +173,20 @@ class BandViewSet(viewsets.ModelViewSet):
                 'error': 'Invalid image type!'
             }, status=400)
 
+        try:
+            genre = Genre.objects.get(pk=genre_id)
+        except Genre.DoesNotExist:
+            return Response(data={
+                'status': 'error',
+                'error': 'Invalid Genre id!'
+            }, status=400)
+
         band = Band(
             name=name,
-            genre_id=genre_id,
+            genre_id=genre.id,
             band_image=band_image
         )
+
         try:
             band.save()
         except IntegrityError:

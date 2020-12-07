@@ -3,8 +3,8 @@ import os
 from django.db import models
 
 from dependency_injector.wiring import inject, Provide
-
 from music_player.containers import Container
+
 from shared.file.services.Storage import ABCStorage
 from shared.file.services.FileDecoder import ABCFileDecoder
 
@@ -17,7 +17,6 @@ def upload_band_image(
 ):
 
     file_name, file_type = os.path.splitext(filename)
-
     raw_name = ''.join([
         instance.name,
         instance.genre.description,
@@ -77,7 +76,9 @@ class Band(models.Model):
     name = models.CharField(max_length=250, unique=True)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     band_image = models.ImageField(
-        ('Band'), upload_to=upload_band_image, blank=True
+        ('Band'),
+        upload_to=upload_band_image,
+        blank=True
     )
 
     def to_dict(self):

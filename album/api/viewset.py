@@ -82,7 +82,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        cache: ABCCacheService = Provide[Container.cache_service],
         file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service]
     ):
         name = request.data.get('name', None)
@@ -121,10 +120,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
             cover_image=cover_image
         )
         album.save()
-        cache.set(
-            f'album@{album.id}',
-            album.to_dict()
-        )
 
         response = json.dumps({
             'album': {
@@ -135,4 +130,4 @@ class AlbumViewSet(viewsets.ModelViewSet):
                 'cover_image': album.cover_image.path
             }
         })
-        return Response(response, status=201)
+        return Response(data=response, status=201)

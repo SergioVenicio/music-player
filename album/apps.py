@@ -5,10 +5,12 @@ class AlbumConfig(AppConfig):
     name = 'album'
 
     def ready(self):
-        import album.signals  # noqa
-
+        from . import signals
         from . import api
         from . import models
         from music_player import container
 
-        container.wire(packages=[api], modules=[models])
+        container.wire(
+            packages=[api],
+            modules=[models, signals]
+        )

@@ -79,6 +79,20 @@ class TestBandView(BandBaseTest, HttpBaseClass):
 
         assert response.status_code == 201
 
+    def test_request_with_invalid_genre(self):
+        data = {
+            'name': 'test_request',
+            'genre_id': self.genre.id + 122,
+            'band_image': self._get_raw_image()
+        }
+        response = self.api_client.post(
+            self.url,
+            data,
+            format='json'
+        )
+
+        assert response.status_code == 400
+
     def test_request_post_with_anonymous_user(self):
         data = {
             'name': 'test_request',

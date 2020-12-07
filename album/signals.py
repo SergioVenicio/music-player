@@ -12,7 +12,7 @@ from shared.cache.services import ABCCacheService
 from .models import Album
 
 
-@receiver(post_save)
+@receiver(post_save, sender=Album)
 @inject
 def reset_cache(
     sender,

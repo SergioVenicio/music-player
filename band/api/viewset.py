@@ -147,7 +147,8 @@ class BandViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service],
+        cache: ABCCacheService = Provide[Container.cache_service]
     ):
         name = request.data.get('name', None)
         genre_id = request.data.get('genre_id', None)
@@ -200,6 +201,8 @@ class BandViewSet(viewsets.ModelViewSet):
                 'status': 'error',
                 'error': 'This band already exists!'
             }, status=400)
+
+        cache.unset(f'bands:genre_id@{genre.id}')
 
         return Response(data={
             'band': {

@@ -89,8 +89,13 @@ const AddMusic: React.FC = () => {
         return;
       }
       const orders = data.results.map(({order}: MusicOrder) => order)
-      const lastOrder = Math.max(...orders);
+
+      var lastOrder = 0;
+      if (!orders.length) {
+        lastOrder = Math.max(...orders);
+      }
       setOrder(lastOrder + 1);
+
     }).catch(({response}) => {
       if (response.status === 401) {
         signOut();

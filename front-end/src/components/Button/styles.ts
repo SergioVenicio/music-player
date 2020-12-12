@@ -11,6 +11,7 @@ export const Container = styled.button<ContainerProps>`
     bortder-radius: 0;
     font-size: 0.75rem;
     cursor: pointer;
+    font-weight: 600;
 
     background-color: ${
         (props) => props?.backgroundColor ? props.backgroundColor : '#1a1a1a'

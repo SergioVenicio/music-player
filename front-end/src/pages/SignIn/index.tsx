@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { FaRegPaperPlane, FaUserPlus } from 'react-icons/fa';
 
 import { useHistory } from 'react-router-dom';
-import useAuthContext from "../../contexts/AuthContext";
+
+import useToastContext from '../../contexts/ToastContext'
+import useAuthContext from '../../contexts/AuthContext';
 
 import Logo from '../../components/Logo';
 import Input from '../../components/Input';
@@ -13,14 +15,23 @@ import { Container, Form, FormWrapper, FormHeader, FormButtons } from './styles'
 const SignIn: React.FC = () =>{
   const history = useHistory();
 	const { signIn } = useAuthContext();
+  const { addToast } = useToastContext();
+
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 
 	const handleSign = async () => {
-		await signIn({
-			email: email as string,
-			password: password as string,
-		});
+    try {
+      await signIn({
+        email: email as string,
+        password: password as string,
+      });
+    } catch (e) {
+      addToast({
+        title: 'Invalid credentials',
+        type: 'error'
+      })
+    }
 	}
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

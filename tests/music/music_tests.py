@@ -109,6 +109,42 @@ class TestMusicView(MusicBaseTest, HttpBaseClass):
 
         assert response.status_code == 201
 
+    def test_request_post_with_a_repeated_order(self):
+        data = {
+            'name': 'test_request.mp3',
+            'album_id': self.album.id,
+            'order': 1,
+            'file': self._get_raw_mp3()
+        }
+        response = self.api_client.post(
+            self.url,
+            data,
+            format='json'
+        )
+
+        response = self.api_client.post(
+            self.url,
+            data,
+            format='json'
+        )
+
+        assert response.status_code == 400
+
+    def test_request_post_with_a_invalid_file(self):
+        data = {
+            'name': 'test_request.jpeg',
+            'album_id': self.album.id,
+            'order': 1,
+            'file': self._get_raw_image()
+        }
+        response = self.api_client.post(
+            self.url,
+            data,
+            format='json'
+        )
+
+        assert response.status_code == 400
+
     def test_request_post_with_anonymous_user(self):
         data = {
             'name': 'test_request',

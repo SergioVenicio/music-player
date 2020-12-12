@@ -5,8 +5,8 @@ from django.core.files.base import ContentFile
 from .BaseFileDecoder import ABCFileDecoder
 
 
-class FileDecoder(ABCFileDecoder):
-    valid_types = ('jpg', 'jpeg', 'png', 'mp3', 'mpeg')
+class AudioDecoder(ABCFileDecoder):
+    valid_types = ('mp3', 'mpeg')
     parsed_types = {
         'mpeg': 'mp3'
     }

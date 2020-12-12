@@ -4,15 +4,22 @@ from dependency_injector import containers, providers
 
 from shared.hash.services import MD5Service
 from shared.file.services.Storage import LocalStorage
-from shared.file.services.FileDecoder import FileDecoder
 from shared.cache.services.RedisService import RedisService
+from shared.file.services.FileDecoder import (
+    AudioDecoder,
+    ImageDecoder
+)
 
 
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
 
-    file_decoder_service = providers.Singleton(
-        FileDecoder
+    audio_decoder_service = providers.Singleton(
+        AudioDecoder
+    )
+
+    image_decoder_service = providers.Singleton(
+        ImageDecoder
     )
 
     cache_service = providers.Singleton(

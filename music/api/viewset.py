@@ -83,9 +83,10 @@ class MusicViewSet(viewsets.ModelViewSet):
 
     @inject
     def create(
-            self,
-            request,
-            file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service],
+        self,
+        request,
+        file_decoder: ABCFileDecoder = Provide[Container.audio_decoder_service],
+        cache: ABCCacheService = Provide[Container.cache_service]
     ):
         name = request.data.get('name', None)
         album_id = request.data.get('album_id', None)
@@ -121,6 +122,17 @@ class MusicViewSet(viewsets.ModelViewSet):
                 'error': 'Invalid file type!'
             }, status=400)
 
+        order_already_exists = Music.objects.filter(
+            album_id=album_id,
+            order=order
+        ).count()
+
+        if order_already_exists > 0:
+            return Response(data={
+                'status': 'error',
+                'error': 'Invalid order!'
+            }, status=400)
+
         music = Music(
             name=name,
             album_id=album_id,
@@ -128,6 +140,7 @@ class MusicViewSet(viewsets.ModelViewSet):
             file=decode_file
         )
         music.save()
+        cache.unset(f'musics@{album_id}')
 
         return Response(data=json.dumps({
             'music': {

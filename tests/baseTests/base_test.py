@@ -33,9 +33,9 @@ class BaseTest(TestCase):
         self.cache.flushall()
 
     def _get_image(self):
-        from shared.file.services.FileDecoder import FileDecoder
+        from shared.file.services.FileDecoder import ImageDecoder
 
-        file_decoder = FileDecoder()
+        file_decoder = ImageDecoder()
 
         return file_decoder.execute(
             self._get_raw_image(),

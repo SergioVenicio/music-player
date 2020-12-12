@@ -56,3 +56,4 @@ class Music(models.Model):
     class Meta:
         db_table = 'music'
         ordering = ('album', 'order',)
+        unique_together = ('album', 'order')

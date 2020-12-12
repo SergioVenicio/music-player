@@ -100,6 +100,23 @@ class TestAlbumView(AlbumBaseTest, HttpBaseClass):
 
         assert response.status_code == 201
 
+    def test_request_post_with_invalid_relea_date(self):
+        cover_image = self._get_raw_image()
+
+        data = {
+            'name': 'test_request',
+            'band_id': self.band.id,
+            'release_date': 'fff',
+            'cover_image': cover_image
+        }
+        response = self.api_client.post(
+            self.url,
+            data,
+            format='json'
+        )
+
+        assert response.status_code == 400
+
     def test_request_post_with_anonymous_user(self):
         cover_image = self._get_raw_image()
 

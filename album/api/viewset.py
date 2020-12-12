@@ -82,10 +82,11 @@ class AlbumViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service]
     ):
         name = request.data.get('name', None)
         band_id = request.data.get('band_id', None)
+        release_date = request.data.get('release_date', None)
 
         if not band_id:
             return Response(
@@ -96,7 +97,19 @@ class AlbumViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        release_date = request.data.get('release_date', None)
+        try:
+            release_date = int(release_date)
+            if (release_date) < 0:
+                raise ValueError
+        except ValueError:
+            return Response(
+                data={
+                    'status': 'error',
+                    'error': 'release_date field is a positive integer!'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         cover_image_raw = request.data.get('cover_image', None)
 
         try:

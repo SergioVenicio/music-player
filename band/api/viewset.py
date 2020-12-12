@@ -41,10 +41,16 @@ class GenreViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service]
     ):
-        description = request.data['description']
-        genre_image_raw = request.data['genre_image']
+        description = request.data.get('description')
+        genre_image_raw = request.data.get('genre_image')
+
+        if not description:
+            return Response(data={
+                'status': 'error',
+                'error': 'Description field is required!'
+            }, status=400)
 
         if not genre_image_raw:
             return Response(data={
@@ -141,7 +147,7 @@ class BandViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: ABCFileDecoder = Provide[Container.file_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service]
     ):
         name = request.data.get('name', None)
         genre_id = request.data.get('genre_id', None)

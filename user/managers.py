@@ -8,12 +8,12 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, name, last_name, password, avatar=None):
         if not email:
-            raise ValueError('O e-mail é obrigatorio!')
+            raise ValueError('The Email is required!')
 
         if not password:
-            raise ValueError('A senha é obrigatória!')
+            raise ValueError('The password is required!')
         elif len(password) < 6:
-            raise ValueError('A senha deve ter pelo menos 6 caracteres!')
+            raise ValueError('The password must be at least 6 characters!')
 
         user = models.User(
             email=self.normalize_email(email),

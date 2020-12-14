@@ -41,7 +41,8 @@ class GenreViewSet(viewsets.ModelViewSet):
     def create(
         self,
         request,
-        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service]
+        file_decoder: ABCFileDecoder = Provide[Container.image_decoder_service],
+        cache: ABCCacheService = Provide[Container.cache_service]
     ):
         description = request.data.get('description')
         genre_image_raw = request.data.get('genre_image')
@@ -67,6 +68,8 @@ class GenreViewSet(viewsets.ModelViewSet):
             }, status=400)
 
         genre = Genre(description=description, genre_image=decoded_image)
+        cache.unset('genres')
+
         try:
             genre.save()
             return Response(data=json.dumps({

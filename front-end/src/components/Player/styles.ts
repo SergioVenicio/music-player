@@ -15,6 +15,7 @@ export const AlbumImage = styled.div`
     margin-top: 0.3em;
     margin-left: 0.3em;
     width: auto;
+    max-width: 8rem;
 
     & img {
         height: 100%;

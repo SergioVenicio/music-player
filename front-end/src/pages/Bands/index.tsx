@@ -8,7 +8,7 @@ import useToastContext from '../../contexts/ToastContext';
 
 import Card from '../../components/Card';
 
-import { Container, CardContainer } from './styles';
+import { Container } from './styles';
 
 interface IBand {
 	id: number;
@@ -60,15 +60,12 @@ const Bands: React.FC = () => {
 	const showCards = () => {
 		return bands && bands.map(band => {
 			return (
-				<CardContainer
-					key={band.id}
-					onClick={() => navigateToAlbumPage(band.id)}
-				>
-					<Card
-						description={band.name}
-						image={band.band_image}
-					/>
-				</ CardContainer>
+        <Card
+          key={band.id}
+          onClick={() => navigateToAlbumPage(band.id)}
+          description={band.name}
+          image={band.band_image}
+        />
 			)
 		})
 	}

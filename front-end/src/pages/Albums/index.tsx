@@ -9,7 +9,7 @@ import api from '../../services/api';
 
 import Card from '../../components/Card';
 
-import { Container, CardContainer } from './styles';
+import { Container } from './styles';
 
 interface IAlbum {
 	id: number;
@@ -62,15 +62,11 @@ const Albums: React.FC = () => {
 	const showCards = () => {
 		return albums && albums.map(album => {
 			return (
-				<CardContainer
-					key={album.id}
-					onClick={() => handleChoiceAlbum(album)}
-				>
-					<Card
-						description={album.name}
-						image={album.cover_image}
-					/>
-				</ CardContainer>
+        <Card
+          onClick={() => handleChoiceAlbum(album)}
+          description={album.name}
+          image={album.cover_image}
+        />
 			)
 		})
 	}

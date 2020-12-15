@@ -8,7 +8,7 @@ import useToastContext from '../../contexts/ToastContext';
 
 import Card from '../../components/Card';
 
-import { Container, CardContainer } from './styles';
+import { Container } from './styles';
 
 interface IGenre {
     id: number;
@@ -53,15 +53,12 @@ const Genres: React.FC = () => {
     const showCards = () => {
 			return genres && genres.map(genre => {
 				return (
-					<CardContainer
-						key={genre.id}
-						onClick={() => navigateToBandPage(genre.id)}
-					>
-						<Card
-							description={genre.description}
-							image={genre.genre_image}
-						/>
-					</ CardContainer>
+          <Card
+            key={genre.id}
+            onClick={() => navigateToBandPage(genre.id)}
+            description={genre.description}
+            image={genre.genre_image}
+          />
 				)
 			})
 		}

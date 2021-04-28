@@ -1,6 +1,6 @@
 flake8==3.9.0
 pytest==6.2.3
-pytest-django==4.1.0
+pytest-django==4.2.0
 pytest-cov==2.11.1
 coverage==5.5
 django-debug-toolbar==3.2.1

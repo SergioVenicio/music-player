@@ -1,6 +1,6 @@
 Django==3.2.4
 django-cors-headers==3.7.0
-django-webpack-loader==0.7.0
+django-webpack-loader==1.0.0
 djangorestframework==3.12.4
 django-rest-auth==0.9.5
 eyeD3==0.9.5

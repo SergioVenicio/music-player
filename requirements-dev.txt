@@ -1,4 +1,4 @@
-flake8==3.9.1
+flake8==3.9.2
 pytest==6.2.4
 pytest-django==4.2.0
 pytest-cov==2.12.1

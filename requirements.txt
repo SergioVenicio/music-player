@@ -7,7 +7,7 @@ eyeD3==0.9.6
 mutagen==1.45.1
 pathlib==1.0.1
 Pillow==8.4.0
-python-magic==0.4.24
+python-magic==0.4.25
 pytz==2021.3
 six==1.16.0
 python-decouple==3.5

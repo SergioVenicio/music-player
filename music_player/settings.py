@@ -11,7 +11,7 @@ SECRET_KEY = config('SECRET_KEY', get_random_string(50))
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', ['*'])
+ALLOWED_HOSTS = list(config('ALLOWED_HOSTS', '*'))
 AUTH_USER_MODEL = 'user.User'
 
 
@@ -122,8 +122,6 @@ LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 

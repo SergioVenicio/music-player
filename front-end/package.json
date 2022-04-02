@@ -13,6 +13,7 @@
     "@types/uuid": "^8.3.0",
     "axios": "^0.21.0",
     "dotenv": "^8.2.0",
+    "follow-redirects": "^1.14.9",
     "jwt-decode": "^3.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

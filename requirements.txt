@@ -17,4 +17,4 @@ dj-database-url==0.5.0
 psycopg2-binary==2.9.3
 redis==4.2.1
 djangorestframework-simplejwt==5.1.0
-dependency-injector==4.39.1
+dependency-injector==4.40.0

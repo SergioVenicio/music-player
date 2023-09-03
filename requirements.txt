@@ -4,7 +4,7 @@ django-webpack-loader==1.4.1
 djangorestframework==3.13.1
 django-rest-auth==0.9.5
 eyeD3==0.9.6
-mutagen==1.45.1
+mutagen==1.47.0
 pathlib==1.0.1
 Pillow==9.1.0
 python-magic==0.4.25
